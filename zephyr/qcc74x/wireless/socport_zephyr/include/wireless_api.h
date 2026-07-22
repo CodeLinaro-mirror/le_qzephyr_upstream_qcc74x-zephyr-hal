@@ -1,0 +1,12 @@
+#ifndef __WIRELESS_API_H__
+#define __WIRELESS_API_H__
+#if defined(CONFIG_WIFI_QCC74X)
+#if defined(CONFIG_BOARD_QCC74X_DEVKITP)
+#define WIRELESS_VERSION     "20260317_7266e6782b75"
+#else
+#define WIRELESS_VERSION     "20260317_7266e6782b75"
+#endif
+#else
+#define WIRELESS_VERSION     "20260317_bcb451c167c2"
+#endif
+#endif

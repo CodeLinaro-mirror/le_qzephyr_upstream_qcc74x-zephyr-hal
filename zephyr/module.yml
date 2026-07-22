@@ -1,0 +1,232 @@
+# Copyright (c) 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
+# SPDX-License-Identifier: BSD-3-Clause
+
+name: hal_qcom
+build:
+  cmake: zephyr
+  kconfig: zephyr/Kconfig
+  settings:
+    dts_root: .
+blobs:
+  # ── Firmware images ───────────────────────────────────────────────────────
+
+  - path: qcc74x/bin/qcc74x_lp_fw.bin
+    sha256: dcd4d077a7a46603efee1732f0017ca789dd09e69419ec26dcd62d544eb1c575
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/bin/qcc74x_lp_fw.bin
+    description: "QCC743 LP firmware image for PDS15 Wi-Fi low power mode"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/bin/boot2_qcc743_isp_release_v8.1.9.bin
+    sha256: 289ba1cdf5cdca2e0fc79b67a34c04eee08f1bffaaf6146e8ec9f6b6da40a65f
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/bin/boot2_qcc743_isp_release_v8.1.9.bin
+    description: "QCC743 ISP boot2 bootloader image v8.1.9"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/bin/flash_para.bin
+    sha256: 002c41f38bb652bdaf89136183aaef70ae11abbf85f554a59d7242748f32e1e0
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/bin/flash_para.bin
+    description: "QCC74x flash parameter data for QConn_Flash tool"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── Wi-Fi prebuilt libraries ──────────────────────────────────────────────
+
+  - path: qcc74x/lib/default/libqcc743_wifi_macsw.a
+    sha256: 40a97852ba186f285703c9f49304325511a7c99f3eea00ece597c3de6942a835
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/default/libqcc743_wifi_macsw.a
+    description: "QCC743 Wi-Fi MAC SW prebuilt library (default)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/lib/lp/libqcc743_wifi_macsw.a
+    sha256: e8c4f295732e2d403de0ec8b9ced648d5753b3e32f31c3746a94379b3e4413c7
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/lp/libqcc743_wifi_macsw.a
+    description: "QCC743 Wi-Fi MAC SW prebuilt library (low power)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/lib/default/libqcc743_wifi_fhost.a
+    sha256: d8725955b4ccda4840004031fbe43320689544b099d56576c5563a41dad1b828
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/default/libqcc743_wifi_fhost.a
+    description: "QCC743 Wi-Fi fhost prebuilt library (default)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/lib/lp/libqcc743_wifi_fhost.a
+    sha256: de2c19aea6fe2785a6d58c912bfa63c5993181dd3a489e4682115ee4fb3e8743
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/lp/libqcc743_wifi_fhost.a
+    description: "QCC743 Wi-Fi fhost prebuilt library (low power)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── BT/BLE prebuilt library ───────────────────────────────────────────────
+
+  - path: qcc74x/lib/libbtblecontroller.a
+    sha256: 22ebb825852755756f102c826dc41b97f7b7a1d2e2f060f6655d8931f7e2b06f
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/libbtblecontroller.a
+    description: "QCC743 BT/BLE controller prebuilt library"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── PHY RF prebuilt libraries ─────────────────────────────────────────────
+
+  - path: qcc74x/lib/libqcc743_phyrf.a
+    sha256: 8a8d82cf5563f7205c32d7eeec646ba9c7d94efae70fa4b4aa392e32eea944e4
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/libqcc743_phyrf.a
+    description: "QCC743 PHY RF prebuilt library (default)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/lib/libqcc743_lpphyrf.a
+    sha256: e352a3896e88727e9783ca41c6d92cbf91267d6eac4ffaaf4fae7900a13cfddf
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/libqcc743_lpphyrf.a
+    description: "QCC743 PHY RF prebuilt library (low power)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/lib/libqcc743_phyrf4mfg.a
+    sha256: dba76e40ed7118ac693d72d9c9f20a92ca5a0ac881e57cdf83deb861698bebf8
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/libqcc743_phyrf4mfg.a
+    description: "QCC743 PHY RF prebuilt library (manufacturing)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── DSP prebuilt library ──────────────────────────────────────────────────
+
+  - path: qcc74x/lib/libcsi_xt900p32f_dsp.a
+    sha256: cf37fcab5009a569eecf09d74fbf1feb5334555cc962ce2b12f8d6ce08f12936
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/lib/libcsi_xt900p32f_dsp.a
+    description: "T-Head XT900P32F DSP prebuilt library"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── OpenOCD host tools ────────────────────────────────────────────────────
+
+  - path: qcc74x/tool/openocd.exe
+    sha256: 89130dea11b2b4beb1f136dae95c474d316ab5cd77e125b190ff70bcfd6145de
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/openocd.exe
+    description: "OpenOCD host tool for Windows x86_64"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/openocd-linux
+    sha256: 7a69f3e20d758af0aa9bc96f6bf8a7889173b7abeca3d4e7933320f63d2211f1
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/openocd-linux
+    description: "OpenOCD host tool for Linux x86_64"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── QConn_Flash host tools ────────────────────────────────────────────────
+
+  - path: qcc74x/tool/QConn_Flash.exe
+    sha256: 91a572dbe304e4a13e2c9dba3ee25ac3f75e6f547d46c4222c770616ea575010
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Flash.exe
+    description: "QConn Flash GUI tool for Windows"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Flash_Cmd.exe
+    sha256: 7d32bbb555971cdbde241572ba39397e470a7e3b7e2a79dfe238d5d34cc2b84f
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Flash_Cmd.exe
+    description: "QConn Flash command-line tool for Windows"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Flash-ubuntu
+    sha256: ee90714f995152064d6711c747050ccf678f84a4ce887e68cb4ae3ac177a0731
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Flash-ubuntu
+    description: "QConn Flash GUI tool for Linux (Ubuntu)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Flash_Cmd-ubuntu
+    sha256: ae9631da150a0bae011d9396f01b4146d4063826417445e8b1ee457993e9a426
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Flash_Cmd-ubuntu
+    description: "QConn Flash command-line tool for Linux (Ubuntu)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Flash-macos
+    sha256: c586d34560ccc8bcaf7d7f7b8ed57c1e748847f7228665714e3b2bb8360c268a
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Flash-macos
+    description: "QConn Flash GUI tool for macOS"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Flash_Cmd-macos
+    sha256: 9227dade842d72a59e6b08e863b6670a87877e8c4f439b8f60b1d33f07a97712
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Flash_Cmd-macos
+    description: "QConn Flash command-line tool for macOS"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  # ── QConn_Secure host tools ───────────────────────────────────────────────
+
+  - path: qcc74x/tool/QConn_Secure.exe
+    sha256: 6dcaab6e727c747f2b3b56071e774d61fdd1b58064ff677bb6baaadbef998e8b
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Secure.exe
+    description: "QConn Secure tool for Windows"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Secure-ubuntu
+    sha256: 0576e066a6e4fd25befff59fd17b29320cc33867ef8877857fe9f59483d7c5b9
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Secure-ubuntu
+    description: "QConn Secure tool for Linux (Ubuntu)"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
+
+  - path: qcc74x/tool/QConn_Secure-macos
+    sha256: 244e2289423d293c7d76001ac87efec65f46025d859ea674149c922e544170b5
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://raw.githubusercontent.com/ccwiot/qcc74x-bin/c8e36e435b8d55542ead13032e95d4524c940729/tool/QConn_Secure-macos
+    description: "QConn Secure tool for macOS"
+    doc-url: https://github.com/ccwiot/qcc74x-bin
