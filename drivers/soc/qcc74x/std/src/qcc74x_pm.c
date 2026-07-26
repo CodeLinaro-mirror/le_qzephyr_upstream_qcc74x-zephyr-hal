@@ -772,9 +772,10 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
     __WFI();
 
 /******************************* Wakeup Flow *******************************/
-#if PM_PDS_PLL_POWER_OFF
-    GLB_Power_On_XTAL_And_PLL_CLK(GLB_XTAL_40M, GLB_PLL_WIFIPLL);
+#if 0
+    GLB_Power_On_XTAL_And_PLL_CLK(GLB_XTAL_40M, GLB_PLL_WIFIPLL | GLB_PLL_AUPLL);
     GLB_Set_MCU_System_CLK(GLB_MCU_SYS_CLK_TOP_WIFIPLL_320M);
+    HBN_Set_MCU_XCLK_Sel(HBN_MCU_XCLK_XTAL);
 #endif
 
 #if PM_PDS_FLASH_POWER_OFF
