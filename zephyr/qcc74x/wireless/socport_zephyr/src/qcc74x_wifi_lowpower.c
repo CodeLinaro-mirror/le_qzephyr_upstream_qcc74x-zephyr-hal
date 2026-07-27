@@ -1,5 +1,6 @@
 /*
- * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include <errno.h>
@@ -242,18 +243,30 @@ int qcc74x_wifi_lowpower_prepare(qc7xx_lp_fw_cfg_t *cfg,
 
 	qc7xx_lp_fw_bcn_loss_cfg_dtim_default(cfg->dtim_origin);
 
-	if (rwnxl_connected_enter_ops() != 0) {
-		status.reason = QCC74X_WIFI_LOWPOWER_REASON_ENTER_OPS_FAILED;
-		session->status = status;
-		qcc74x_wifi_lowpower_store_status(&status);
-		return -EIO;
+	{
+		int rw1_rc;
+
+		rw1_rc = rwnxl_connected_enter_ops();
+
+		if (rw1_rc != 0) {
+			status.reason = QCC74X_WIFI_LOWPOWER_REASON_ENTER_OPS_FAILED;
+			session->status = status;
+			qcc74x_wifi_lowpower_store_status(&status);
+			return -EIO;
+		}
 	}
 
-	if (rwnxl_pds_wifi_config(cfg) != 0) {
-		status.reason = QCC74X_WIFI_LOWPOWER_REASON_CONFIG_FAILED;
-		session->status = status;
-		qcc74x_wifi_lowpower_store_status(&status);
-		return -EIO;
+	{
+		int rw2_rc;
+
+		rw2_rc = rwnxl_pds_wifi_config(cfg);
+
+		if (rw2_rc != 0) {
+			status.reason = QCC74X_WIFI_LOWPOWER_REASON_CONFIG_FAILED;
+			session->status = status;
+			qcc74x_wifi_lowpower_store_status(&status);
+			return -EIO;
+		}
 	}
 
 	if (qc7xx_lp_fw_enter_check_allow() == 0) {
@@ -303,7 +316,6 @@ void qcc74x_wifi_lowpower_resume(
 	if ((session == NULL) || (cfg == NULL) || !session->resume_needed) {
 		return;
 	}
-
 	rwnxl_resume_wifi_not_isr(cfg);
 	qc7xx_wifi_irq_resume_enable();
 }
