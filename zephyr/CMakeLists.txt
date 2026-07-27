@@ -26,6 +26,20 @@ macro(qcc74x_copy_tool SRC DST)
   endif()
 endmacro()
 
+# Populate blobs from the proprietary binary drop (prop/qcc74x-bin) if present,
+# so builds can pick up binaries without requiring "west blobs fetch".
+set(QCC74X_BIN_BASE "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../prop/qcc74x-bin")
+if(EXISTS ${QCC74X_BIN_BASE})
+  if(NOT EXISTS ${QCC74X_BLOB_BASE})
+    file(MAKE_DIRECTORY ${QCC74X_BLOB_BASE})
+    file(COPY ${QCC74X_BIN_BASE}/bin ${QCC74X_BIN_BASE}/lib ${QCC74X_BIN_BASE}/tool
+         DESTINATION ${QCC74X_BLOB_BASE})
+  else()
+    message(STATUS "qcc74x binaries existed, skip the copy")
+    message(STATUS "If require to replace: please run prop_blobs_fetch.py manually")
+  endif()
+endif()
+
 if(CMAKE_HOST_WIN32)
   qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/openocd.exe         ${QCC74X_TOOLS_DIR}/openocd/openocd.exe)
   qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash.exe     ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash.exe)
