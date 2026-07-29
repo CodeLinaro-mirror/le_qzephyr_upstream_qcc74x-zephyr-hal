@@ -1,3 +1,9 @@
+# Release v2.1.6
+## Features
+- feat: tx buffer alloc support timeout config
+## Bug Fixes
+- None
+
 # Release v2.1.5
 ## Features
 - feat: support reset from interface

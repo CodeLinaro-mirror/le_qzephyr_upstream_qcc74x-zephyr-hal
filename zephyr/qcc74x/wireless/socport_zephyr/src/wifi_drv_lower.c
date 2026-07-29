@@ -295,18 +295,12 @@ void net_al_tx_buf_init()
 //                      result in return 0.)
 void *net_al_tx_buf_alloc(int32_t timeout)
 {
-#if 1
-    for (int i = 0; i < TX_BUF_CNT; i++) {
-        if(fhost_tx_buf_length[i] == 0) {
-            fhost_tx_buf_length[i] = 1;
-            return &fhost_tx_buf[i][400];
-        }
-    }
-#else
-    volatile int wait_flag = 0;
-    uint64_t start, cur;
+    int64_t end_time = 0;
 
-    start = qc7xx_mtimer_get_time_us();
+    if (timeout > 0) {
+        end_time = k_uptime_get() + timeout;
+    }
+
     while (1) {
         for (int i = 0; i < TX_BUF_CNT; i++) {
             if(fhost_tx_buf_length[i] == 0) {
@@ -315,39 +309,38 @@ void *net_al_tx_buf_alloc(int32_t timeout)
             }
         }
 
-        if (wait_flag) {
+        if (timeout == 0) {
             return 0;
         }
 
-        if (timeout > 0) {
-            rtos_semaphore_wait(dnld_txbuf_semaphore, timeout);
-            cur = qc7xx_mtimer_get_time_us();
-            if ((cur - start) > ((timeout - 1) * 1000)) {
-                wait_flag = 1;
-            } else {
-                timeout -= (cur - start)/1000;
-                if (timeout <= 0) {
-                    printf("it's a error!!!\r\n");
-                }
-            }
-        } if (timeout == 0) {
-            return 0;
-        } else {
+        if (timeout < 0) {
             rtos_semaphore_wait(dnld_txbuf_semaphore, -1);
+            continue;
+        }
+
+        int64_t wait_ms = end_time - k_uptime_get();
+
+        if (wait_ms <= 0) {
+            return 0;
+        }
+
+        if (rtos_semaphore_wait(dnld_txbuf_semaphore, (int)wait_ms) != 0) {
+            return 0;
         }
     }
-#endif
-    return 0;
 }
 
 void net_al_tx_buf_free(void *buf)
 {
     for (int i = 0; i < TX_BUF_CNT; i++) {
         if(buf == &fhost_tx_buf[i][400]) {
-            fhost_tx_buf_length[i] = 0;
+            if (fhost_tx_buf_length[i] != 0) {
+                fhost_tx_buf_length[i] = 0;
+                rtos_semaphore_signal(dnld_txbuf_semaphore, false);
+            }
+            return;
         }
     }
-    rtos_semaphore_signal(dnld_txbuf_semaphore, false);
 }
 
 void net_al_tx_buf_get(uint32_t *tot, uint32_t *used)
