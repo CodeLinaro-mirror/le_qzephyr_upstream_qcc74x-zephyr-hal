@@ -1,3 +1,10 @@
+# Release v2.1.7
+## Features
+- optimize keyram dump and fix 256-bit key display.
+- optimise ble lowpower
+## Bug Fixes
+- None
+
 # Release v2.1.6
 ## Features
 - feat: tx buffer alloc support timeout config

@@ -43,7 +43,7 @@ blobs:
   # ── Wi-Fi prebuilt libraries ──────────────────────────────────────────────
 
   - path: qcc74x/lib/default/libqcc743_wifi_macsw.a
-    sha256: 40a97852ba186f285703c9f49304325511a7c99f3eea00ece597c3de6942a835
+    sha256: 2e9b55f1b50e0631ef40079989c9095cdeaf2d94478f156427ef512edb94ceee
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -53,7 +53,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_macsw.a
-    sha256: e8c4f295732e2d403de0ec8b9ced648d5753b3e32f31c3746a94379b3e4413c7
+    sha256: ef4a9773a49518882091c25aa4cebcf5c9becb24f329660e2494b563d6e9c910
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -63,7 +63,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/default/libqcc743_wifi_fhost.a
-    sha256: 87e1f74cecf0bc2d6c53c5ea93789a66ae165ddde3c25a1f07015bdba06c65cf
+    sha256: e9b83acb16e5e34a8ac1d313544eb19f006c6762ce5b09f2b6ff2ba632bb0405
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -73,7 +73,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_fhost.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_fhost.a
-    sha256: 704e9ab92dd9eb3514ea8bf21315812405d80c76353797200fd42248a9d01c12
+    sha256: 7319cbc1b49bc3acbfeee3a9eb098bfe3fc17e609cde263333fb6f0588818226
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -85,7 +85,7 @@ blobs:
   # ── BT/BLE prebuilt library ───────────────────────────────────────────────
 
   - path: qcc74x/lib/libbtblecontroller.a
-    sha256: 22ebb825852755756f102c826dc41b97f7b7a1d2e2f060f6655d8931f7e2b06f
+    sha256: cca1885d88eeef5bca1b1d7f6fcfc0170c3570b196e1a14b8b07a08e924b5a0e
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
