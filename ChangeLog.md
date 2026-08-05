@@ -1,3 +1,9 @@
+# Release v2.1.8
+## Features
+- feat: support wram reset for qcc74x
+## Bug Fixes
+- None
+
 # Release v2.1.7
 ## Features
 - optimize keyram dump and fix 256-bit key display.

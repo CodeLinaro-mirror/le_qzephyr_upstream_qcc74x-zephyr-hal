@@ -163,7 +163,7 @@ blobs:
   # ── QConn_Flash host tools ────────────────────────────────────────────────
 
   - path: qcc74x/tool/QConn_Flash.exe
-    sha256: 91a572dbe304e4a13e2c9dba3ee25ac3f75e6f547d46c4222c770616ea575010
+    sha256: f4c6999297195f0937d9c58e2596e29146b5ff68627ae38ee99c35fe9e44f5e2
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -173,7 +173,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash.exe
 
   - path: qcc74x/tool/QConn_Flash_Cmd.exe
-    sha256: 7d32bbb555971cdbde241572ba39397e470a7e3b7e2a79dfe238d5d34cc2b84f
+    sha256: 8434ec9817fcc59a05485ab0623788d3303fe68431918452565779a53f0153e3
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -183,7 +183,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd.exe
 
   - path: qcc74x/tool/QConn_Flash-ubuntu
-    sha256: ee90714f995152064d6711c747050ccf678f84a4ce887e68cb4ae3ac177a0731
+    sha256: b828905d858a6b3020f9b1091819f9f597188c10c01b1d6bcf82ee62ee574546
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -193,7 +193,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash-ubuntu
 
   - path: qcc74x/tool/QConn_Flash_Cmd-ubuntu
-    sha256: ae9631da150a0bae011d9396f01b4146d4063826417445e8b1ee457993e9a426
+    sha256: 01d6458b36196499ea4b253d1e763f9bef85855bd2298ab2c840a32e974bfd33
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -203,7 +203,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd-ubuntu
 
   - path: qcc74x/tool/QConn_Flash-macos
-    sha256: c586d34560ccc8bcaf7d7f7b8ed57c1e748847f7228665714e3b2bb8360c268a
+    sha256: 0cdc91c75074fbfb5626b3133c13e07c2dd162c73ceeed1a8b4703a404a51085
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -213,7 +213,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash-macos
 
   - path: qcc74x/tool/QConn_Flash_Cmd-macos
-    sha256: 9227dade842d72a59e6b08e863b6670a87877e8c4f439b8f60b1d33f07a97712
+    sha256: 732164f9fb40e6312031b5a2a0b7369e74cc2c82e61ba4821cdca6895464c132
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
