@@ -1258,9 +1258,10 @@ int crypto_ec_point_mul(struct crypto_ec *e, const struct crypto_ec_point *p,
                         const struct crypto_bignum *b,
                         struct crypto_ec_point *res)
 {
-    int ret;
-    mbedtls_entropy_context entropy;
-    mbedtls_ctr_drbg_context ctr_drbg;
+	int ret;
+#if defined(MBEDTLS_ENTROPY_C)
+	mbedtls_entropy_context entropy;
+	mbedtls_ctr_drbg_context ctr_drbg;
 
     mbedtls_entropy_init(&entropy);
     mbedtls_ctr_drbg_init(&ctr_drbg);
@@ -1275,9 +1276,18 @@ int crypto_ec_point_mul(struct crypto_ec *e, const struct crypto_ec_point *p,
                 mbedtls_ctr_drbg_random,
                 &ctr_drbg));
 cleanup:
-    mbedtls_ctr_drbg_free(&ctr_drbg);
-    mbedtls_entropy_free(&entropy);
-    return ret ? -1 : 0;
+	mbedtls_ctr_drbg_free(&ctr_drbg);
+	mbedtls_entropy_free(&entropy);
+#else
+	/* MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG: use NULL f_rng (no blinding needed
+	 * when PSA manages entropy externally). */
+	ret = mbedtls_ecp_mul(&e->group,
+				(mbedtls_ecp_point *) res,
+				(const mbedtls_mpi *)b,
+				(const mbedtls_ecp_point *)p,
+				NULL, NULL);
+#endif
+	return ret ? -1 : 0;
 }
 
 
