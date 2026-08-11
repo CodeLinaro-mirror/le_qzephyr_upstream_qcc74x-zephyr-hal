@@ -18,6 +18,9 @@ typedef struct k_msgq* btblecontroller_QueueHandle_t;
 typedef void (*btblecontroller_TaskFunction_t)(void *);
 static struct k_thread controller_tread;
 static btblecontroller_TaskFunction_t g_func;
+static bool dm_irq_connected = false;
+static bool ble_irq_connected = false;
+static bool bt_irq_connected = false;
 static void controller_thread_func(void *dummy1, void *dummy2, void *dummy3)
 {
     g_func(dummy1);
@@ -128,21 +131,30 @@ void btblecontroller_free(void *buf)
 void btblecontroller_ble_irq_init(void *handler)
 {
     qc7xx_irq_clear_pending(BLE_IRQn);
-    irq_connect_dynamic(BLE_IRQn, 0, handler, NULL, 0);
+    if (!ble_irq_connected) {
+        irq_connect_dynamic(BLE_IRQn, 0, handler, NULL, 0);
+        ble_irq_connected = true;
+    }
     irq_enable(BLE_IRQn);
 }
 
 void btblecontroller_bt_irq_init(void *handler)
 {
     qc7xx_irq_clear_pending(BT_IRQn);
-    irq_connect_dynamic(BT_IRQn, 0, handler, NULL, 0);
+    if (!bt_irq_connected) {
+        irq_connect_dynamic(BT_IRQn, 0, handler, NULL, 0);
+        bt_irq_connected = true;
+    }
     irq_enable(BT_IRQn);
 }
 
 void btblecontroller_dm_irq_init(void *handler)
 {
     qc7xx_irq_clear_pending(DM_IRQn);
-    irq_connect_dynamic(DM_IRQn, 0, handler, NULL, 0);
+    if (!dm_irq_connected) {
+        irq_connect_dynamic(DM_IRQn, 0, handler, NULL, 0);
+        dm_irq_connected = true;
+    }
     irq_enable(DM_IRQn);
 }
 
