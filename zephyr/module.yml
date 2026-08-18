@@ -138,28 +138,6 @@ blobs:
     description: "T-Head XT900P32F DSP prebuilt library"
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libcsi_xt900p32f_dsp.a
 
-  # ── OpenOCD host tools ────────────────────────────────────────────────────
-
-  - path: qcc74x/tool/openocd.exe
-    sha256: 89130dea11b2b4beb1f136dae95c474d316ab5cd77e125b190ff70bcfd6145de
-    type: img
-    version: '1.0.0'
-    license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/openocd.exe?format=TEXT
-    fetcher: gitiles
-    description: "OpenOCD host tool for Windows x86_64"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/openocd.exe
-
-  - path: qcc74x/tool/openocd-linux
-    sha256: 7a69f3e20d758af0aa9bc96f6bf8a7889173b7abeca3d4e7933320f63d2211f1
-    type: img
-    version: '1.0.0'
-    license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/openocd-linux?format=TEXT
-    fetcher: gitiles
-    description: "OpenOCD host tool for Linux x86_64"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/openocd-linux
-
   # ── QConn_Flash host tools ────────────────────────────────────────────────
 
   - path: qcc74x/tool/QConn_Flash.exe

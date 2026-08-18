@@ -1,0 +1,25 @@
+tools/qc7xx_tools/QConn_Flash/chips/qcc74x/eflash_loader/eflash_loader_cfg.ini
+tools/qc7xx_tools/QConn_Flash/chips/qcc74x/img_create/whole_flash_data.bin
+tools/qc7xx_tools/QConn_Flash/chips/qcc74x/img_create/whole_flash_data.bin.hash
+tools/qc7xx_tools/QConn_Flash/chips/qcc74x/img_create/whole_img.pack
+
+# Tool directories: track config/script files, exclude blob-managed binaries
+tools/qc7xx_tools/*
+!tools/qc7xx_tools/QConn_Secure/
+!tools/qc7xx_tools/QConn_Secure/*
+tools/qc7xx_tools/QConn_Secure/QConn_Secure*
+!tools/qc7xx_tools/QConn_Flash/
+!tools/qc7xx_tools/QConn_Flash/*
+tools/qc7xx_tools/QConn_Flash/QConn_Flash*
+tools/qc7xx_tools/QConn_Flash/chips/qcc74x/efuse_bootheader/flash_para.bin
+!tools/qc7xx_tools/openocd/
+!tools/qc7xx_tools/openocd/*
+tools/qc7xx_tools/openocd/openocd
+tools/qc7xx_tools/openocd/openocd.exe
+tools/qc7xx_tools/openocd/libhidapi-0.dll
+tools/qc7xx_tools/openocd/libusb-1.0.dll
+
+# Blob download directories (managed by west blobs fetch hal_qcom)
+zephyr/blobs/qcc74x/bin/
+zephyr/blobs/qcc74x/lib/
+zephyr/blobs/qcc74x/tool/

@@ -1,0 +1,2 @@
+tools/qc7xx_tools/openocd/fetch_ch347.ps1  -filter diff merge text eol=crlf
+tools/qc7xx_tools/openocd/99-openocd.rules -filter diff merge text eol=lf
