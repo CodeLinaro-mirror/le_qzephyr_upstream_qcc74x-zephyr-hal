@@ -26,6 +26,7 @@
 #include <qcc74x_clock.h>
 #include <qcc74x_tzc_sec.h>
 #include "qcc74x_sys.h"
+#include "qc7xx_hbn_system.h"
 // #include <utils_crc.h>
 #include "qc7xx_sec_sha.h"
 
@@ -1859,33 +1860,13 @@ void qc7xx_lp_get_hbn_wakeup_acomp_bits(uint8_t *acomp_bits, uint8_t *acomp_edge
 
 void qc7xx_lp_hbn_init(uint8_t wdt_en, uint8_t feed_wdt_pin, uint8_t feed_wdt_type, uint32_t feed_wdt_max_continue_times)
 {
-    memset((void *)IOT2BOOT2_PARA_ADDR, 0, sizeof(iot2boot2_para_t));
-
-    if (wdt_en != 0) {
-        iot2boot2_para->wdt_pattern = 0xAAAA5555;
-        iot2boot2_para->feed_wdt_io = feed_wdt_pin;
-        iot2boot2_para->feed_wdt_type = feed_wdt_type;
-        iot2boot2_para->feed_wdt_max_continue_times = feed_wdt_max_continue_times;
-        iot2boot2_para->feed_wdt_continue_times = 0;
-    } else {
-        iot2boot2_para->wdt_pattern = 0x0;
-        iot2boot2_para->feed_wdt_io = 0xFF;
-        iot2boot2_para->feed_wdt_type = 0;
-        iot2boot2_para->feed_wdt_max_continue_times = 0;
-        iot2boot2_para->feed_wdt_continue_times = 0;
-    }
+	qc7xx_hbn_boot2_init(wdt_en, feed_wdt_pin, feed_wdt_type,
+			       feed_wdt_max_continue_times);
 }
 
 int qc7xx_lp_hbn_enter(qc7xx_lp_hbn_fw_cfg_t *qc7xx_lp_hbn_fw_cfg)
 {
-    // uint32_t time_s=10;
-
-    /* clean wake bits */
-    iot2boot2_para->wkup_io_bits = 0;
-    iot2boot2_para->wkup_acomp_bits = 0;
-    iot2boot2_para->wkup_io_edge_bits = 0;
-    iot2boot2_para->wkup_acomp_edge_bits = 0;
-    iot2boot2_para->wakeup_reason = 0;
+	qc7xx_hbn_entry_begin();
 
     if (gp_lp_io_cfg) {
         g_lp_io_cfg_bak = *gp_lp_io_cfg;
@@ -1899,17 +1880,8 @@ int qc7xx_lp_hbn_enter(qc7xx_lp_hbn_fw_cfg_t *qc7xx_lp_hbn_fw_cfg)
         qc7xx_lp_acomp_wakeup_init(&g_lp_acomp_cfg_bak);
     }
 
-    iot2boot2_para->feed_wdt_continue_times = 0;
-    iot2boot2_para->hbn_level = qc7xx_lp_hbn_fw_cfg->hbn_level;
-    iot2boot2_para->hbn_sleep_period = qc7xx_lp_hbn_fw_cfg->hbn_sleep_cnt;
-    iot2boot2_para->hbn_pattern = 0x55AAAA55;
-    iot2boot2_para->wkup_rtc_cnt = (qc7xx_rtc_get_time(NULL) + qc7xx_lp_hbn_fw_cfg->hbn_sleep_cnt) & 0xFFFFFFFFFF;
-    HBN_Set_Ldo11_Rt_Vout(0xA);
-    HBN_Set_Ldo11_Soc_Vout(0xA);
-    AON_Output_Pulldown_DCDC18();
-    qc7xx_sys_rstinfo_set(QC7XX_RST_HBN);
-    pm_hbn_mode_enter(iot2boot2_para->hbn_level, iot2boot2_para->hbn_sleep_period);
-    return 0;
+	qc7xx_hbn_system_enter(qc7xx_lp_hbn_fw_cfg->hbn_level,
+				qc7xx_lp_hbn_fw_cfg->hbn_sleep_cnt);
 }
 
 int qc7xx_lp_fw_enter_check_allow(void)
