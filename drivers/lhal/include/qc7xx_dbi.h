@@ -16,7 +16,7 @@
   * @{
   */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define DBI_QSPI_SUPPORT        1
 #define DBI_YUV_SUPPORT         1
 #define DBI_WRITE_DATA_BYTE_MAX 256

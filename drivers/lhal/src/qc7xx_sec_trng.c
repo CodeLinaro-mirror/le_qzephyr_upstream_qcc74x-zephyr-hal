@@ -16,7 +16,7 @@
 
 #if defined(QCC74X)
 #define QC7XX_SEC_ENG_BASE ((uint32_t)0x20004000)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_SEC_ENG_BASE ((uint32_t)0x20080000)
 #endif
 

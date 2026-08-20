@@ -19,7 +19,7 @@
 #define I2C_PRD_START_OFFSET     (0x10) /* i2c_prd_start */
 #define I2C_PRD_STOP_OFFSET      (0x14) /* i2c_prd_stop */
 #define I2C_PRD_DATA_OFFSET      (0x18) /* i2c_prd_data */
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define I2C_PKT_LEN_OFFSET       (0x1C) /* i2c_pkt_len */
 #endif
 #define I2C_FIFO_CONFIG_0_OFFSET (0x80) /* i2c_fifo_config_0 */
@@ -37,11 +37,11 @@
 #define I2C_CR_I2C_SUB_ADDR_EN       (1 << 4U)
 #define I2C_CR_I2C_SUB_ADDR_BC_SHIFT (5U)
 #define I2C_CR_I2C_SUB_ADDR_BC_MASK  (0x3 << I2C_CR_I2C_SUB_ADDR_BC_SHIFT)
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define I2C_CR_I2C_10B_ADDR_EN    (1 << 7U)
 #define I2C_CR_I2C_SLV_ADDR_SHIFT (8U)
 #define I2C_CR_I2C_SLV_ADDR_MASK  (0x3ff << I2C_CR_I2C_SLV_ADDR_SHIFT)
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define I2C_CR_I2C_PKT_LEN_SHIFT  (20U)
 #define I2C_CR_I2C_PKT_LEN_MASK   (0xff << I2C_CR_I2C_PKT_LEN_SHIFT)
 #endif
@@ -122,7 +122,7 @@
 #define I2C_CR_I2C_PRD_D_PH_3_SHIFT (24U)
 #define I2C_CR_I2C_PRD_D_PH_3_MASK  (0xff << I2C_CR_I2C_PRD_D_PH_3_SHIFT)
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 /* 0x1C : i2c_pkt_len */
 #define I2C_CR_I2C_PKT_LEN_SHIFT (0U)
 #define I2C_CR_I2C_PKT_LEN_MASK  (0xfff << I2C_CR_I2C_PKT_LEN_SHIFT)

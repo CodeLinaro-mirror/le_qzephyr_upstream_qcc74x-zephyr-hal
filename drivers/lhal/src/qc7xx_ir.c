@@ -229,7 +229,7 @@ void qc7xx_ir_swm_send(struct qc7xx_device_s *dev, uint16_t *data, uint32_t leng
     uint32_t pwval = 0;
     uint32_t i, j;
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     if (length > 65536) {
         length = 65536;
     }
@@ -239,7 +239,7 @@ void qc7xx_ir_swm_send(struct qc7xx_device_s *dev, uint16_t *data, uint32_t leng
     }
 #endif
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     count = (length + 1) / 2;
 #else
     count = (length + 3) / 4;
@@ -271,7 +271,7 @@ void qc7xx_ir_swm_send(struct qc7xx_device_s *dev, uint16_t *data, uint32_t leng
     for (i = 0; i < count; i++) {
         pwval = 0;
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
         if (i < count - 1) {
             /* Put every two pulse width together as a 32-bit value to tx fifo */
             for (j = 0; j < 2; j++) {

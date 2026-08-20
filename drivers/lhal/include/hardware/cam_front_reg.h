@@ -12,7 +12,7 @@
 
 /* Register offsets *********************************************************/
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define CAM_FRONT_MM_MISC_CTRL_OFFSET                           (0x0)/* mm_misc_ctrl */
 #define CAM_FRONT_CONFIG_OFFSET                                 (0x4)/* config */
 #define CAM_FRONT_DVP_AS_REGB_OFFSET                            (0x8)/* dvp_as_regb */
@@ -36,7 +36,7 @@
 
 /* Register Bitfield definitions *****************************************************/
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 /* 0x0 : mm_misc_ctrl */
 #define CAM_FRONT_REG_FORCE_VSYNC_SH                            (1<<0U)
 #define CAM_FRONT_CR_DVP_S2P_HS_INV                             (1<<1U)
@@ -52,7 +52,7 @@
 #define CAM_FRONT_RG_DVPAS_ENABLE                               (1<<0U)
 #define CAM_FRONT_RG_DVPAS_HS_INV                               (1<<1U)
 #define CAM_FRONT_RG_DVPAS_VS_INV                               (1<<2U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define CAM_FRONT_CR_TG_EN_AS                                   (1<<3U)
 #define CAM_FRONT_RG_DVPAS_FIFO_TH_SHIFT                        (4U)
 #define CAM_FRONT_RG_DVPAS_FIFO_TH_MASK                         (0xfff<<CAM_FRONT_RG_DVPAS_FIFO_TH_SHIFT)
@@ -64,7 +64,7 @@
 #define CAM_FRONT_RG_DVPAS_FIFO_TH_MASK                         (0x7ff<<CAM_FRONT_RG_DVPAS_FIFO_TH_SHIFT)
 #endif
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 /* 0x8 : dvp_as_regb */
 #define CAM_FRONT_CR_ACT_PIXEL_WIDTH_AS_SHIFT                   (0U)
 #define CAM_FRONT_CR_ACT_PIXEL_WIDTH_AS_MASK                    (0xffff<<CAM_FRONT_CR_ACT_PIXEL_WIDTH_AS_SHIFT)
@@ -147,7 +147,7 @@
 #define CAM_FRONT_REG_SF_HARB_MODE                              (1<<4U)
 #endif
 
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 /* 0x14 : isp_id_yuv */
 #define CAM_FRONT_REG_YUV_IDGEN_RST                             (1<<0U)
 #define CAM_FRONT_REG_YUV_IDGEN_EDGE                            (1<<1U)

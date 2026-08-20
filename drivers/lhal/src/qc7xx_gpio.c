@@ -5,7 +5,11 @@
 
 #include "qc7xx_gpio.h"
 #include "hardware/gpio_reg.h"
+#if !defined(QCC75X) && !defined(QCR373) || defined(CPU_MODEL_A0) || defined(CPU_LP)
 #include <csi_core.h>
+#else
+#include <nmsis_core.h>
+#endif
 
 struct qc7xx_gpio_irq_callback {
     void (*handler)(uint8_t pin);
@@ -13,7 +17,7 @@ struct qc7xx_gpio_irq_callback {
 
 #if defined(QCC74X)
 struct qc7xx_gpio_irq_callback g_gpio_irq_callback[35] = { 0 };
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 struct qc7xx_gpio_irq_callback g_gpio_irq_callback[53] = { 0 };
 #endif
 
@@ -50,7 +54,7 @@ void qc7xx_gpio_init(struct qc7xx_device_s *dev, uint8_t pin, uint32_t cfgset)
     }
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     cfg_address = reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2);
     cfg = 0;
     cfg |= GLB_REG_GPIO_0_INT_MASK;
@@ -126,7 +130,7 @@ void qc7xx_gpio_pin0_31_output(struct qc7xx_device_s *dev, uint32_t value)
 #ifdef romapi_qc7xx_gpio_pin0_31_output
     romapi_qc7xx_gpio_pin0_31_output(dev, value);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #if defined(QCC74X)
     uint32_t pin;
     for (pin = 0; pin < 32; pin++) {
@@ -140,7 +144,7 @@ void qc7xx_gpio_pin0_31_output(struct qc7xx_device_s *dev, uint32_t value)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void qc7xx_gpio_pin32_63_output(struct qc7xx_device_s *dev, uint32_t value)
 {
 #ifdef romapi_qc7xx_gpio_pin32_63_output
@@ -164,7 +168,7 @@ void qc7xx_gpio_set(struct qc7xx_device_s *dev, uint8_t pin)
 #ifdef romapi_qc7xx_gpio_set
     romapi_qc7xx_gpio_set(dev, pin);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #if defined(QCC74X)
     qc7xx_gpio_pad_check(pin);
 #endif
@@ -178,7 +182,7 @@ void qc7xx_gpio_pin0_31_set(struct qc7xx_device_s *dev, uint32_t value)
 #ifdef romapi_qc7xx_gpio_pin0_31_set
     romapi_qc7xx_gpio_pin0_31_set(dev, value);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #if defined(QCC74X)
     uint32_t pin;
     for (pin = 0; pin < 32; pin++) {
@@ -192,7 +196,7 @@ void qc7xx_gpio_pin0_31_set(struct qc7xx_device_s *dev, uint32_t value)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void qc7xx_gpio_pin32_63_set(struct qc7xx_device_s *dev, uint32_t value)
 {
 #ifdef romapi_qc7xx_gpio_pin32_63_set
@@ -216,7 +220,7 @@ void qc7xx_gpio_reset(struct qc7xx_device_s *dev, uint8_t pin)
 #ifdef romapi_qc7xx_gpio_reset
     romapi_qc7xx_gpio_reset(dev, pin);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #if defined(QCC74X)
     qc7xx_gpio_pad_check(pin);
 #endif
@@ -230,7 +234,7 @@ void qc7xx_gpio_pin0_31_reset(struct qc7xx_device_s *dev, uint32_t value)
 #ifdef romapi_qc7xx_gpio_pin0_31_reset
     romapi_qc7xx_gpio_pin0_31_reset(dev, value);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #if defined(QCC74X)
     uint32_t pin;
     for (pin = 0; pin < 32; pin++) {
@@ -244,7 +248,7 @@ void qc7xx_gpio_pin0_31_reset(struct qc7xx_device_s *dev, uint32_t value)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void qc7xx_gpio_pin32_63_reset(struct qc7xx_device_s *dev, uint32_t value)
 {
 #ifdef romapi_qc7xx_gpio_pin32_63_reset
@@ -268,7 +272,7 @@ bool qc7xx_gpio_read(struct qc7xx_device_s *dev, uint8_t pin)
 #ifdef romapi_qc7xx_gpio_read
     return romapi_qc7xx_gpio_read(dev, pin);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #if defined(QCC74X)
     qc7xx_gpio_pad_check(pin);
 #endif
@@ -282,13 +286,13 @@ uint32_t qc7xx_gpio_pin0_31_read(struct qc7xx_device_s *dev)
 #ifdef romapi_qc7xx_gpio_pin0_31_read
     return romapi_qc7xx_gpio_pin0_31_read(dev);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     return (getreg32(dev->reg_base + GLB_GPIO_CFG128_OFFSET));
 #endif
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 uint32_t qc7xx_gpio_pin32_63_read(struct qc7xx_device_s *dev)
 {
 #ifdef romapi_qc7xx_gpio_pin32_63_read
@@ -313,7 +317,7 @@ void qc7xx_gpio_int_init(struct qc7xx_device_s *dev, uint8_t pin, uint8_t trig_m
     qc7xx_gpio_int_mask(dev, pin, true);
     qc7xx_gpio_int_clear(dev, pin);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     cfg_address = reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2);
     regval = getreg32(cfg_address);
     regval &= ~GLB_REG_GPIO_0_INT_MODE_SET_MASK;
@@ -333,7 +337,7 @@ void qc7xx_gpio_int_mask(struct qc7xx_device_s *dev, uint8_t pin, bool mask)
     uint32_t regval;
 
     reg_base = dev->reg_base;
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     cfg_address = reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2);
 
     regval = getreg32(cfg_address);
@@ -352,7 +356,7 @@ bool qc7xx_gpio_get_intstatus(struct qc7xx_device_s *dev, uint8_t pin)
 #ifdef romapi_qc7xx_gpio_get_intstatus
     return romapi_qc7xx_gpio_get_intstatus(dev, pin);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     return (getreg32(dev->reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2)) & GLB_GPIO_0_INT_STAT);
 #endif
 #endif
@@ -363,7 +367,7 @@ uint32_t qc7xx_gpio_get_intstatus_pin0_31(struct qc7xx_device_s *dev)
 #ifdef romapi_qc7xx_gpio_get_intstatus_pin0_31
     return romapi_qc7xx_gpio_get_intstatus_pin0_31(dev);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t status = 0;
     uint32_t index = 0;
     int pin_count = 0;
@@ -382,7 +386,7 @@ uint32_t qc7xx_gpio_get_intstatus_pin0_31(struct qc7xx_device_s *dev)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 uint32_t qc7xx_gpio_get_intstatus_pin32_63(struct qc7xx_device_s *dev)
 {
 #ifdef romapi_qc7xx_gpio_get_intstatus_pin32_63
@@ -416,7 +420,7 @@ void qc7xx_gpio_int_clear(struct qc7xx_device_s *dev, uint8_t pin)
     uint32_t regval;
 
     reg_base = dev->reg_base;
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     cfg_address = reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2);
 
     regval = getreg32(cfg_address);
@@ -438,7 +442,7 @@ void qc7xx_gpio_int_clear_pin0_31(struct qc7xx_device_s *dev, uint32_t pins)
     uint32_t regval;
 
     reg_base = dev->reg_base;
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     for (int pin = 0; pin < 32; pin++) {
         if (pins & (1 << pin)) {
             cfg_address = reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2);
@@ -453,7 +457,7 @@ void qc7xx_gpio_int_clear_pin0_31(struct qc7xx_device_s *dev, uint32_t pins)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void qc7xx_gpio_int_clear_pin32_63(struct qc7xx_device_s *dev, uint32_t pins)
 {
 #ifdef romapi_qc7xx_gpio_int_clear_pin32_63
@@ -494,7 +498,7 @@ void qc7xx_gpio_uart_init(struct qc7xx_device_s *dev, uint8_t pin, uint8_t uart_
 #if defined(QCC74X)
     qc7xx_gpio_pad_check(pin);
 #endif
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GLB_UART_CFG1_OFFSET (0x154)
 #define GLB_UART_CFG2_OFFSET (0x158)
     uint32_t regval2;
@@ -573,7 +577,7 @@ int qc7xx_gpio_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
     reg_base = dev->reg_base;
     switch (cmd) {
         case GPIO_CMD_GET_GPIO_FUN:
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
             regval = getreg32(reg_base + GLB_GPIO_CFG0_OFFSET + (pin << 2)) & GLB_REG_GPIO_0_FUNC_SEL_MASK;
             regval >>= GLB_REG_GPIO_0_FUNC_SEL_SHIFT;
 #endif

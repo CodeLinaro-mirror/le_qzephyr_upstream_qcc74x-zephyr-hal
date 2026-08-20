@@ -52,7 +52,7 @@
 #define IR_CR_IRTX_FRM_FRAME_SIZE_SHIFT (14U)
 #define IR_CR_IRTX_FRM_FRAME_SIZE_MASK  (0x3 << IR_CR_IRTX_FRM_FRAME_SIZE_SHIFT)
 #define IR_CR_IRTX_DATA_NUM_SHIFT       (16U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define IR_CR_IRTX_DATA_NUM_MASK        (0xffff << IR_CR_IRTX_DATA_NUM_SHIFT)
 #else
 #define IR_CR_IRTX_DATA_NUM_MASK        (0x7f << IR_CR_IRTX_DATA_NUM_SHIFT)
@@ -135,7 +135,7 @@
 
 /* 0x50 : irrx_data_count */
 #define IR_STS_IRRX_DATA_CNT_SHIFT (0U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define IR_STS_IRRX_DATA_CNT_MASK  (0xffff << IR_STS_IRRX_DATA_CNT_SHIFT)
 #else
 #define IR_STS_IRRX_DATA_CNT_MASK  (0x7f << IR_STS_IRRX_DATA_CNT_SHIFT)

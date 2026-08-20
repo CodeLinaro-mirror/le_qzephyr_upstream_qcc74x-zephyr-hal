@@ -8,7 +8,7 @@
 
 #if defined(QCC74X)
 #define SDH_STD_V3
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define SDH_STD_V3_SMIH
 #endif
 

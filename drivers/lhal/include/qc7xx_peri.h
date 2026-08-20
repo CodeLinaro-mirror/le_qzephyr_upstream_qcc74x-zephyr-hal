@@ -49,7 +49,7 @@
 #define QC7XX_PERIPHERAL_PDS                    (42)
 #endif
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define QC7XX_PERIPHERAL_CPU                    (0)
 #define QC7XX_PERIPHERAL_SDU0                   (1)
 #define QC7XX_PERIPHERAL_SEC0                   (2)
@@ -100,5 +100,14 @@
 #define QC7XX_PERIPHERAL_CAM0                   (47)
 #define QC7XX_PERIPHERAL_EMI_MISC               (48)
 #define QC7XX_PERIPHERAL_PEC                    (49)
+/* QCR373-specific extras */
+#if defined(QCR373)
+#define QC7XX_PERIPHERAL_SPI2                   (50)
+#define QC7XX_PERIPHERAL_SPI3                   (51)
+#define QC7XX_PERIPHERAL_TIMER1                 (52)
+#define QC7XX_PERIPHERAL_TIMER2                 (53)
+#define QC7XX_PERIPHERAL_TIMER3                 (54)
+#define QC7XX_PERIPHERAL_PWM1                   (55)
+#endif
 #endif
 

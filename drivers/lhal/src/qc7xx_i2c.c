@@ -95,14 +95,14 @@ static inline void qc7xx_i2c_set_datalen(struct qc7xx_device_s *dev, uint16_t da
 
     reg_base = dev->reg_base;
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     regval = getreg32(reg_base + I2C_PKT_LEN_OFFSET);
 #else
     regval = getreg32(reg_base + I2C_CONFIG_OFFSET);
 #endif
     regval &= ~I2C_CR_I2C_PKT_LEN_MASK;
     regval |= ((data_len - 1) << I2C_CR_I2C_PKT_LEN_SHIFT) & I2C_CR_I2C_PKT_LEN_MASK;
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     putreg32(regval, reg_base + I2C_PKT_LEN_OFFSET);
 #else
     putreg32(regval, reg_base + I2C_CONFIG_OFFSET);
@@ -498,7 +498,7 @@ int qc7xx_i2c_transfer(struct qc7xx_device_s *dev, struct qc7xx_i2c_msg_s *msgs,
             subaddr_size = 0;
             qc7xx_i2c_addr_config(dev, msgs[i].addr, msgs[i].buffer, subaddr_size, is_addr_10bit);
         }
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
         if (msgs[i].length > 4096) {
 #else
         if (msgs[i].length > 256) {

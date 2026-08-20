@@ -13,7 +13,7 @@ struct qc7xx_sec_irq_callback {
 
 #if defined(QCC74X)
 #define QC7XX_SEC_ENG_BASE ((uint32_t)0x20004000)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_SEC_ENG_BASE ((uint32_t)0x20080000)
 #endif
 
@@ -145,7 +145,7 @@ void qc7xx_sec_irq_attach(uint8_t sec_type, void (*callback)(void *arg), void *a
     qc7xx_irq_enable(26);
     qc7xx_irq_enable(27);
     qc7xx_irq_enable(28);
-#elif defined(QCC74X) || defined(QCC75X)
+#elif defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     qc7xx_irq_attach(25, sec_eng_isr, NULL);
     qc7xx_irq_attach(26, sec_eng_isr, NULL);
     qc7xx_irq_attach(27, sec_eng_isr, NULL);

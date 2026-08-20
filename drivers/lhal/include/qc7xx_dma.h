@@ -105,7 +105,7 @@
   * @}
   */
 
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 /** @defgroup DMA_PERIPHERAL_REGBASE dma peripheral data register address definition
   * @{
   */

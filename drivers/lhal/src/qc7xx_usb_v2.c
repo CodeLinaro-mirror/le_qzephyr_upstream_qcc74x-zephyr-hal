@@ -22,7 +22,7 @@
 #define QC7XX_USB_IRQ_NUM        37
 #define PDS_USB_CTL_OFFSET      (0x500) /* usb_ctl */
 #define PDS_USB_PHY_CTRL_OFFSET (0x504) /* usb_phy_ctrl */
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_USB_BASE            ((uint32_t)0x20087000)
 #define QC7XX_PDS_BASE            ((uint32_t)0x2008E000)
 #define QC7XX_USB_IRQ_NUM         19
@@ -52,10 +52,10 @@
 #define PDS_REG_PU_USB20_PSW         (1 << 6U)
 #endif
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 /* 0x500 : usb_ctl */
 #define PDS_REG_USB_SW_RST_N (1 << 0U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define PDS_REG_USB_IDDIG (1 << 1U)
 #endif
 #define PDS_REG_USB_L1_WAKEUP            (1 << 2U)
@@ -134,7 +134,7 @@ static void qc7xx_usb_phy_init(void)
 
     qc7xx_mtimer_delay_ms(2);
 
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 
     regval = getreg32(QC7XX_PDS_BASE + PDS_USB_CTL_OFFSET);
     regval |= PDS_REG_PU_USB20_PSW;
@@ -255,7 +255,7 @@ uint8_t usbh_get_port_speed(const uint8_t port)
 #define USB_FIFO_F1 1
 #define USB_FIFO_F2 2
 #define USB_FIFO_F3 3
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define USB_FIFO_F4 4
 #define USB_FIFO_F5 5
 #define USB_FIFO_F6 6
@@ -275,7 +275,7 @@ uint8_t usbh_get_port_speed(const uint8_t port)
 #define USB_MAX_EP_EXCLUDE_EP0  4
 #define USB_NUM_BIDIR_ENDPOINTS 5
 #endif
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define USB_MAX_EP_WITH_EP0     9
 #define USB_MAX_EP_EXCLUDE_EP0  8
 #define USB_NUM_BIDIR_ENDPOINTS 9
@@ -766,7 +766,7 @@ int usb_dc_init(uint8_t busid)
     /* enable vdma cmplt and error irq in source group3 */
     regval = 0xffffffff;
     regval &= ~(USB_MVDMA_CMPLT_CXF |
-#if (defined(QCC75X))
+#if (defined(QCC75X) || defined(QCR373))
                 USB_MVDMA_CMPLT_F4 |
                 USB_MVDMA_CMPLT_F5 |
                 USB_MVDMA_CMPLT_F6 |
@@ -929,7 +929,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
     if ((ep_idx > 4) && (ep_idx < 9)) {
         return 0;
     }
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     if ((ep_idx > 8) && (ep_idx < 16)) {
         return 0;
     }
@@ -953,7 +953,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
         if (USB_GET_MAXPACKETSIZE(ep->wMaxPacketSize) > 512) {
             qc7xx_usb_set_ep_fifomap(1, USB_FIFO_F0);
             qc7xx_usb_set_ep_fifomap(2, USB_FIFO_F2);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_ep_fifomap(3, USB_FIFO_F4);
             qc7xx_usb_set_ep_fifomap(4, USB_FIFO_F6);
 #endif
@@ -962,7 +962,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F1, 1, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F2, 2, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F3, 2, USB_FIFO_DIR_BID);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F4, 3, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F5, 3, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F6, 4, USB_FIFO_DIR_BID);
@@ -974,7 +974,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             } else if (ep_idx == 2) {
                 qc7xx_usb_fifo_config(USB_FIFO_F2, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 1, true);
                 qc7xx_usb_fifo_config(USB_FIFO_F3, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 1, false);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             } else if (ep_idx == 3) {
                 qc7xx_usb_fifo_config(USB_FIFO_F4, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 1, true);
                 qc7xx_usb_fifo_config(USB_FIFO_F5, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 1, false);
@@ -990,7 +990,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             qc7xx_usb_set_ep_fifomap(2, USB_FIFO_F1);
             qc7xx_usb_set_ep_fifomap(3, USB_FIFO_F2);
             qc7xx_usb_set_ep_fifomap(4, USB_FIFO_F3);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_ep_fifomap(5, USB_FIFO_F4);
             qc7xx_usb_set_ep_fifomap(6, USB_FIFO_F5);
             qc7xx_usb_set_ep_fifomap(7, USB_FIFO_F6);
@@ -1001,7 +1001,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F1, 2, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F2, 3, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F3, 4, USB_FIFO_DIR_BID);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F4, 5, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F5, 6, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F6, 7, USB_FIFO_DIR_BID);
@@ -1015,7 +1015,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
                 qc7xx_usb_fifo_config(USB_FIFO_F2, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 1, true);
             } else if (ep_idx == 4) {
                 qc7xx_usb_fifo_config(USB_FIFO_F3, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 1, true);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             } else if (ep_idx == 5) {
                 qc7xx_usb_fifo_config(USB_FIFO_F4, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 1, true);
             } else if (ep_idx == 6) {
@@ -1037,7 +1037,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F1, 1, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F2, 1, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F3, 1, USB_FIFO_DIR_BID);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F4, 2, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F5, 2, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F6, 2, USB_FIFO_DIR_BID);
@@ -1048,7 +1048,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
                 qc7xx_usb_fifo_config(USB_FIFO_F1, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 2, false);
                 qc7xx_usb_fifo_config(USB_FIFO_F2, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 2, false);
                 qc7xx_usb_fifo_config(USB_FIFO_F3, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 2, false);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             } else if (ep_idx == 2) {
                 qc7xx_usb_fifo_config(USB_FIFO_F4, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 2, true);
                 qc7xx_usb_fifo_config(USB_FIFO_F5, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 1024, 2, false);
@@ -1061,7 +1061,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
         } else {
             qc7xx_usb_set_ep_fifomap(1, USB_FIFO_F0);
             qc7xx_usb_set_ep_fifomap(2, USB_FIFO_F2);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_ep_fifomap(3, USB_FIFO_F4);
             qc7xx_usb_set_ep_fifomap(4, USB_FIFO_F6);
 #endif
@@ -1069,7 +1069,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F1, 1, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F2, 2, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F3, 2, USB_FIFO_DIR_BID);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F4, 3, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F5, 3, USB_FIFO_DIR_BID);
             qc7xx_usb_set_fifo_epmap(USB_FIFO_F6, 4, USB_FIFO_DIR_BID);
@@ -1081,7 +1081,7 @@ int usbd_ep_open(uint8_t busid, const struct usb_endpoint_descriptor *ep)
             } else if (ep_idx == 2) {
                 qc7xx_usb_fifo_config(USB_FIFO_F2, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 2, true);
                 qc7xx_usb_fifo_config(USB_FIFO_F3, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 2, false);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             } else if (ep_idx == 3) {
                 qc7xx_usb_fifo_config(USB_FIFO_F4, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 2, true);
                 qc7xx_usb_fifo_config(USB_FIFO_F5, USB_GET_ENDPOINT_TYPE(ep->bmAttributes), 512, 2, false);
@@ -1316,7 +1316,7 @@ void USBD_IRQHandler(uint8_t busid)
                 qc7xx_usb_reset_fifo(USB_FIFO_F1);
                 qc7xx_usb_reset_fifo(USB_FIFO_F2);
                 qc7xx_usb_reset_fifo(USB_FIFO_F3);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
                 qc7xx_usb_reset_fifo(USB_FIFO_F4);
                 qc7xx_usb_reset_fifo(USB_FIFO_F5);
                 qc7xx_usb_reset_fifo(USB_FIFO_F6);
@@ -1356,7 +1356,7 @@ void USBD_IRQHandler(uint8_t busid)
                 qc7xx_usb_reset_fifo(USB_FIFO_F1);
                 qc7xx_usb_reset_fifo(USB_FIFO_F2);
                 qc7xx_usb_reset_fifo(USB_FIFO_F3);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
                 qc7xx_usb_reset_fifo(USB_FIFO_F4);
                 qc7xx_usb_reset_fifo(USB_FIFO_F5);
                 qc7xx_usb_reset_fifo(USB_FIFO_F6);

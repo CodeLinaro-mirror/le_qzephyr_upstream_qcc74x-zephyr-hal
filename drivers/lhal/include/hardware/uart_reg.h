@@ -68,7 +68,7 @@
 #define UART_CR_URX_IR_INV (1 << 7U)
 #define UART_CR_URX_BIT_CNT_D_SHIFT (8U)
 #define UART_CR_URX_BIT_CNT_D_MASK  (0x7 << UART_CR_URX_BIT_CNT_D_SHIFT)
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define UART_CR_URX_DEG_EN          (1 << 11U)
 #define UART_CR_URX_DEG_CNT_SHIFT   (12U)
 #define UART_CR_URX_DEG_CNT_MASK    (0xf << UART_CR_URX_DEG_CNT_SHIFT)
@@ -84,10 +84,10 @@
 
 /* 0xC : data_config */
 #define UART_CR_UART_BIT_INV      (1 << 0U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define UART_CR_URX_DEG_EN        (1 << 1U)
 #endif
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define UART_CR_URX_DEG_CNT_SHIFT (8U)
 #define UART_CR_URX_DEG_CNT_MASK  (0xff << UART_CR_URX_DEG_CNT_SHIFT)
 #endif
@@ -104,7 +104,7 @@
 
 /* 0x18 : urx_rto_timer */
 #define UART_CR_URX_RTO_VALUE_SHIFT (0U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define UART_CR_URX_RTO_VALUE_MASK  (0xffff << UART_CR_URX_RTO_VALUE_SHIFT)
 #else
 #define UART_CR_URX_RTO_VALUE_MASK  (0xff << UART_CR_URX_RTO_VALUE_SHIFT)

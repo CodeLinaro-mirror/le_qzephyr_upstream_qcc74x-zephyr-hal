@@ -11,7 +11,7 @@
 #if defined(QCC74X)
 #define CAM_FRONT_BASE 0x20050000
 #endif
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define CAM_FRONT_BASE 0x20040000
 #endif
 
@@ -32,14 +32,14 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
     uint16_t resolution_x, resolution_y;
     uint32_t frame_size;
     uint32_t threshold;
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     uint32_t tmpval;
 #endif
 
     reg_base = dev->reg_base;
     putreg32(config->output_bufaddr, reg_base + CAM_DVP2AXI_ADDR_START_OFFSET);
     putreg32(config->resolution_y << 16 | config->resolution_x, reg_base + CAM_DVP2AXI_FRAM_EXM_OFFSET);
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
     putreg32(data_mode, reg_base + CAM_DVP_DEBUG_OFFSET);
 #endif
 
@@ -58,7 +58,7 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
 
 #if defined(QCC74X)
     putreg32(0, CAM_FRONT_BASE + CAM_FRONT_DVP2BUS_SRC_SEL_1_OFFSET);
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     regval = getreg32(CAM_FRONT_BASE + CAM_FRONT_DVP_MUX_SEL_REG_OFFSET);
     regval &= ~(dev->idx == 0 ? CAM_FRONT_REG_D2XA_IN_SEL_MASK : CAM_FRONT_REG_D2XB_IN_SEL_MASK);
     putreg32(regval, CAM_FRONT_BASE + CAM_FRONT_DVP_MUX_SEL_REG_OFFSET);
@@ -90,13 +90,13 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
     frame_size = resolution_x * resolution_y * 2;
     regval = getreg32(reg_base + CAM_DVP2AXI_CONFIGUE_OFFSET);
     if (config->with_mjpeg) {
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
         regval |= CAM_REG_WRAP_MODE;
 #else
         regval &= ~CAM_REG_SW_MODE;
 #endif
     } else {
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
         regval &= ~CAM_REG_WRAP_MODE;
 #else
         regval |= CAM_REG_SW_MODE;
@@ -124,7 +124,7 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
                 frame_size = resolution_x * resolution_y / 2;
 #if defined(QCC74X)
                 putreg32(1, CAM_FRONT_BASE + CAM_FRONT_DVP2BUS_SRC_SEL_1_OFFSET);
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
                 tmpval = getreg32(CAM_FRONT_BASE + CAM_FRONT_DVP_MUX_SEL_REG_OFFSET);
                 tmpval |= 3 << (dev->idx == 0 ? CAM_FRONT_REG_D2XA_IN_SEL_SHIFT : CAM_FRONT_REG_D2XB_IN_SEL_SHIFT);
                 putreg32(tmpval, CAM_FRONT_BASE + CAM_FRONT_DVP_MUX_SEL_REG_OFFSET);
@@ -150,7 +150,7 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
                 frame_size = resolution_x * resolution_y / 2;
 #if defined(QCC74X)
                 putreg32(1, CAM_FRONT_BASE + CAM_FRONT_DVP2BUS_SRC_SEL_1_OFFSET);
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
                 tmpval = getreg32(CAM_FRONT_BASE + CAM_FRONT_DVP_MUX_SEL_REG_OFFSET);
                 tmpval |= 3 << (dev->idx == 0 ? CAM_FRONT_REG_D2XA_IN_SEL_SHIFT : CAM_FRONT_REG_D2XB_IN_SEL_SHIFT);
                 putreg32(tmpval, CAM_FRONT_BASE + CAM_FRONT_DVP_MUX_SEL_REG_OFFSET);
@@ -198,7 +198,7 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
         default:
             break;
     }
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     putreg32(resolution_y << CAM_REG_FRAME_HEIGHT_SHIFT | (frame_size / resolution_y / 8), reg_base + CAM_DVP2AXI_FRAME_BCNT_OFFSET);
 #else
     putreg32(frame_size, reg_base + CAM_DVP2AXI_FRAME_BCNT_OFFSET);
@@ -239,7 +239,7 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
             frame_size = frame_size >> 6;
             break;
     }
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     tmpval = getreg32(reg_base + CAM_DVP2AXI_FRAME_BCNT_OFFSET);
     tmpval &= CAM_REG_FRAME_WIDTH_X8_MASK;
     tmpval = config->output_bufsize / tmpval / 8;
@@ -250,7 +250,7 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
 
     qc7xx_cam_int_mask(dev, CAM_INTMASK_FIFO_OVERWRITE, true);
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     regval = getreg32(CAM_FRONT_BASE + CAM_FRONT_MM_MISC_CTRL_OFFSET);
     regval |= CAM_FRONT_CR_DVP_S2P_EN;
     putreg32(regval, CAM_FRONT_BASE + CAM_FRONT_MM_MISC_CTRL_OFFSET);
@@ -345,7 +345,7 @@ void qc7xx_cam_pop_one_frame(struct qc7xx_device_s *dev)
 #ifdef romapi_qc7xx_cam_pop_one_frame
     romapi_qc7xx_cam_pop_one_frame(dev);
 #else
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
     putreg32(1, dev->reg_base + CAM_DVP_FRAME_FIFO_POP_OFFSET);
 #endif
 #endif
@@ -361,7 +361,7 @@ uint8_t qc7xx_cam_get_frame_count(struct qc7xx_device_s *dev)
 
     reg_base = dev->reg_base;
     regval = getreg32(reg_base + CAM_DVP_STATUS_AND_ERROR_OFFSET);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     return ((regval >> 12) & 1);
 #else
     regval &= CAM_FRAME_VALID_CNT_MASK;
@@ -379,7 +379,7 @@ uint32_t qc7xx_cam_get_frame_info(struct qc7xx_device_s *dev, uint8_t **pic)
 
     reg_base = dev->reg_base;
     *pic = (uint8_t *)(uintptr_t)getreg32(reg_base + CAM_FRAME_START_ADDR0_OFFSET);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     reg_base = getreg32(reg_base + CAM_DVP2AXI_FRAME_BCNT_OFFSET);
     return ((reg_base & CAM_REG_FRAME_WIDTH_X8_MASK) * 8 * (reg_base >> CAM_REG_FRAME_HEIGHT_SHIFT));
 #else
@@ -447,7 +447,7 @@ int qc7xx_cam_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             putreg32(regval, reg_base + CAM_DVP2AXI_MISC_OFFSET);
             break;
 
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
         case CAM_CMD_GET_FRAME_ID:
             /* Get frame id */
             *(uint16_t *)arg = getreg32(reg_base + CAM_FRAME_ID_STS01_OFFSET) & 0xffff;
@@ -458,13 +458,13 @@ int qc7xx_cam_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             /* Wrap to output buffer start address, only effective in mjpeg mode, arg use ENABLE or DISABLE */
             regval = getreg32(reg_base + CAM_DVP2AXI_CONFIGUE_OFFSET);
             if (arg) {
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
                 regval |= CAM_REG_WRAP_MODE;
 #else
                 regval |= CAM_REG_HW_MODE_FWRAP;
 #endif
             } else {
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
                 regval &= ~CAM_REG_WRAP_MODE;
 #else
                 regval &= ~CAM_REG_HW_MODE_FWRAP;
@@ -481,7 +481,7 @@ int qc7xx_cam_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             putreg32(regval, reg_base + CAM_DVP_STATUS_AND_ERROR_OFFSET);
             break;
 
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
         case CAM_CMD_FRAME_ID_RESET:
             /* Reset frame id */
             regval = getreg32(CAM_FRONT_BASE + CAM_FRONT_ISP_ID_YUV_OFFSET);
@@ -514,7 +514,7 @@ int qc7xx_cam_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
 
         case CAM_CMD_INVERSE_YUYV2UYVY:
             /* If image sensor output format is YUYV, it will be changed to UYVY */
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             regval = getreg32(CAM_FRONT_BASE + CAM_FRONT_MM_MISC_CTRL_OFFSET);
             if (arg) {
                 regval |= CAM_FRONT_CR_DVP_S2P_DA_ORDER;
@@ -542,7 +542,7 @@ int qc7xx_cam_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             putreg32(config->frame_valid, reg_base + CAM_DVP2AXI_FRAME_VLD_OFFSET);
         } break;
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
         case CAM_CMD_SET_OUTPUT_ADDR:
             putreg32(arg, reg_base + CAM_DVP2AXI_ADDR_START_OFFSET);
             break;

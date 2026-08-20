@@ -6,7 +6,7 @@
 #include "qc7xx_l1c.h"
 #include "qc7xx_core.h"
 
-#if (defined(QCC74X) || defined(QCC75X)) && !defined(CPU_LP)
+#if (defined(QCC74X) || defined(QCC75X) || defined(QCR373)) && !defined(CPU_LP)
 #include "csi_core.h"
 void qc7xx_l1c_icache_enable(void)
 {

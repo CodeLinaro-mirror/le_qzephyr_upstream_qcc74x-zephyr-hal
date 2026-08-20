@@ -19,7 +19,7 @@ extern "C" {
 /** @addtogroup EF_CTRL
   * @{
   */
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define EF_CTRL_SF_AES_NONE (0) /*!< No AES */
 #define EF_CTRL_SF_AES_128  (1) /*!< AES 128 */
 #define EF_CTRL_SF_AES_192  (2) /*!< AES 192 */

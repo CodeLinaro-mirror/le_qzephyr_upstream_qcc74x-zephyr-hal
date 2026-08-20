@@ -15,7 +15,7 @@ struct qc7xx_dma_irq_callback {
 #if defined(QCC74X)
 const uint32_t dma_base[] = { 0x2000C000 };
 struct qc7xx_dma_irq_callback dma_callback[1][4];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 const uint32_t dma_base[] = { 0x20081000, 0x20086000, 0x000C0000 };
 struct qc7xx_dma_irq_callback dma_callback[3][8];
 #endif
@@ -34,7 +34,7 @@ void dma0_isr(int irq, void *arg)
     }
 }
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 void dma1_isr(int irq, void *arg)
 {
     uint32_t regval;
@@ -274,7 +274,7 @@ int qc7xx_dma_channel_lli_reload(struct qc7xx_device_s *dev, struct qc7xx_dma_ch
     putreg32(lli_pool[0].dst_addr, channel_base + DMA_CxDSTADDR_OFFSET);
     putreg32(lli_pool[0].nextlli, channel_base + DMA_CxLLI_OFFSET);
     putreg32(lli_pool[0].control.WORD, channel_base + DMA_CxCONTROL_OFFSET);
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     /* clean cache, DMA does not pass through the cache */
     qc7xx_l1c_dcache_clean_range((uint32_t *)(uintptr_t)lli_pool, sizeof(struct qc7xx_dma_channel_lli_pool_s) * lli_count_used_offset);
 #endif
@@ -296,7 +296,7 @@ void qc7xx_dma_channel_lli_link_head(struct qc7xx_device_s *dev,
     lli_pool[used_lli_count - 1].nextlli = (uint32_t)(uintptr_t)&lli_pool[0];
 
     putreg32(lli_pool[0].nextlli, channel_base + DMA_CxLLI_OFFSET);
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     /* clean cache, DMA does not pass through the cache */
     qc7xx_l1c_dcache_clean_range((uint32_t *)lli_pool, sizeof(struct qc7xx_dma_channel_lli_pool_s) * used_lli_count);
 #endif

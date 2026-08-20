@@ -16,7 +16,7 @@
   * @{
   */
 
-#if (defined(QCC74X) || defined(QCC75X)) && !defined(CPU_LP)
+#if (defined(QCC74X) || defined(QCC75X) || defined(QCR373)) && !defined(CPU_LP)
 #if ((0) && defined(CPU_D0))
 #define QC7XX_CACHE_LINE_SIZE 64
 #else

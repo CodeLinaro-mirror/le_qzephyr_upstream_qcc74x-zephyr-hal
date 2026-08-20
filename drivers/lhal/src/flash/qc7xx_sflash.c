@@ -16,7 +16,7 @@
 
 #if defined(QCC74X)
 #define QC7XX_SF_CTRL_BUF_BASE ((uint32_t)0x2000b600)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_SF_CTRL_BUF_BASE ((uint32_t)0x20082600)
 #endif
 
@@ -74,7 +74,7 @@ void ATTR_TCM_SECTION qc7xx_sflash_init(const struct sf_ctrl_cfg_type *p_sf_ctrl
 }
 #else
 __WEAK
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void ATTR_TCM_SECTION qc7xx_sflash_init(const struct sf_ctrl_cfg_type *p_sf_ctrl_cfg,
                                        const struct sf_ctrl_bank2_cfg *p_bank2_cfg)
 {

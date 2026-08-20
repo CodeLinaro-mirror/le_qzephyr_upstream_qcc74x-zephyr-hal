@@ -50,7 +50,7 @@
 #define QC7XX_EXTFLASH_DATA11_GPIO GPIO_PIN_19
 #define QC7XX_EXTFLASH_DATA21_GPIO GPIO_PIN_18
 #define QC7XX_EXTFLASH_DATA31_GPIO GPIO_PIN_14
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 /* Flash option sf2 */
 /* Flash CLK */
 #define QC7XX_EXTFLASH_CLK0_GPIO      GPIO_PIN_39
@@ -99,7 +99,7 @@ uint32_t qc7xx_sf_cfg_flash_identify(uint8_t call_from_flash, uint8_t flash_pin_
                                     spi_flash_cfg_type *p_flash_cfg, uint8_t group, uint8_t bank);
 uint32_t qc7xx_sf_cfg_flash_identify_ext(uint8_t callfromflash, uint8_t flash_pin_cfg, uint8_t restore_default,
                                         spi_flash_cfg_type *p_flash_cfg, uint8_t group, uint8_t bank);
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 int qc7xx_sf_cfg_flash_init(uint8_t sel, const struct sf_ctrl_cfg_type *p_sfctrl_cfg,
                            const struct sf_ctrl_bank2_cfg *p_bank2_cfg);
 #ifdef QC7XX_SF_CTRL_SBUS2_ENABLE

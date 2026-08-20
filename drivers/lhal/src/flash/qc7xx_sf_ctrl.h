@@ -18,24 +18,24 @@
 
 #if defined(QCC74X)
 #define QC7XX_SF_CTRL_BASE      ((uint32_t)0x2000b000)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_SF_CTRL_BASE      ((uint32_t)0x20082000)
 #endif
 
 #if defined(QCC74X)
 #define QC7XX_FLASH_XIP_BASE    (0xA0000000)
 #define QC7XX_FLASH_XIP_END     (0xA0000000 + 64 * 1024 * 1024)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_FLASH_XIP_BASE    (0x80000000)
 #define QC7XX_FLASH_XIP_END     (0x80000000 + 64 * 1024 * 1024)
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #ifndef CONFIG_DISABLE_SBUS2_ENABLE_SUPPORT
 #define QC7XX_SF_CTRL_SBUS2_ENABLE
 #endif
 #endif
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define QC7XX_SF_CTRL_32BITS_ADDR_ENABLE
 #define QC7XX_SF_CTRL_AES_XTS_ENABLE
 #endif
@@ -50,7 +50,7 @@
 /**
  *  @brief Serial flash config pin select type definition
  */
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define SF_IO_EMB_SWAP_IO3IO0                           0x0  /*!< SF select embedded flash swap io3 with io0 */
 #define SF_IO_EMB_SWAP_IO3IO0_IO2CS                     0x1  /*!< SF select embedded flash swap io3 with io0 and io2 with cs */
 #define SF_IO_EMB_SWAP_NONE                             0x2  /*!< SF select embedded flash no swap */
@@ -234,7 +234,7 @@ struct sf_ctrl_psram_cfg {
  *  @brief SF Ctrl cmds configuration structure type definition
  */
 struct sf_ctrl_cmds_cfg {
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint8_t ack_latency;                 /*!< SF Ctrl ack latency cycles */
     uint8_t cmds_core_en;                /*!< SF Ctrl cmds core enable */
 #endif
@@ -289,7 +289,7 @@ struct qc7xx_sf_ctrl_io_cs_clk_delay_cfg {
 #define NOR_FLASH_CTRL_BUF_SIZE     256
 #define NAND_FLASH_CTRL_BUF_SIZE    512
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define IS_SF_CTRL_PIN_SELECT(type) (((type) == SF_IO_EMB_SWAP_IO3IO0) ||                           \
                                      ((type) == SF_IO_EMB_SWAP_IO3IO0_IO2CS) ||                     \
                                      ((type) == SF_IO_EMB_SWAP_NONE) ||                             \

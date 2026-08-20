@@ -7,7 +7,7 @@
 #include "qc7xx_efuse.h"
 #include "hardware/adc_reg.h"
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define ADC_GPIP_BASE ((uint32_t)0x20002000)
 #endif
 
