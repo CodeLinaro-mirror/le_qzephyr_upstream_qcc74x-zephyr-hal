@@ -1,3 +1,9 @@
+# Release v2.1.9
+## Features
+- feat: add QCC74x HBN system helper
+## Bug Fixes
+- None
+
 # Release v2.1.8
 ## Features
 - feat: support wram reset for qcc74x
