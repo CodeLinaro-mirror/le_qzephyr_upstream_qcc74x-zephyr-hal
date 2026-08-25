@@ -63,7 +63,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/default/libqcc743_wifi_fhost.a
-    sha256: e9b83acb16e5e34a8ac1d313544eb19f006c6762ce5b09f2b6ff2ba632bb0405
+    sha256: e55a2639e68d85d6d860e789cb38718bd3d28f778f76f76ae685ae2cf5451d59
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -73,7 +73,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_fhost.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_fhost.a
-    sha256: 7319cbc1b49bc3acbfeee3a9eb098bfe3fc17e609cde263333fb6f0588818226
+    sha256: 3d5e16b9d36f7ce50449ff7788ee03ea714634284bbee980ee4fe1c73386001e
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt

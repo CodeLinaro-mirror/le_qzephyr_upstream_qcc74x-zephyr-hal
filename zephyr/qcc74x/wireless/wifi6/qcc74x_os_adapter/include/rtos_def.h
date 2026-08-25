@@ -84,7 +84,7 @@ enum
     /// WiFi task stack size
     FHOST_WIFI_STACK_SIZE = (512+2),
     /// Control task stack size
-    FHOST_CNTRL_STACK_SIZE = (512+256),
+    FHOST_CNTRL_STACK_SIZE = (512+256+1024),
     /// TCP/IP task stack size
     FHOST_TCPIP_STACK_SIZE = 1024,// zephyr not used
     /// RX task stack size
