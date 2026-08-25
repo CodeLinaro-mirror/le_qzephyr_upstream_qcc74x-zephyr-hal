@@ -1,3 +1,9 @@
+# Release v2.1.10
+## Features
+- feat: add anti-rollback enable getter
+## Bug Fixes
+- fix: Fix the WiFi control task stack overflow issue
+
 # Release v2.1.9
 ## Features
 - feat: add QCC74x HBN system helper
