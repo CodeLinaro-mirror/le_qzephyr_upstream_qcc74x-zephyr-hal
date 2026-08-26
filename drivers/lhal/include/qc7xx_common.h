@@ -147,6 +147,7 @@ typedef struct
     uint32_t rsvd1;        /* rsvd1 */
 } qc7xx_verinf_t;
 
+int32_t qc7xx_get_anti_rollback_enable(uint8_t *enabled);
 int32_t qc7xx_get_app_version_from_efuse(uint8_t *version);
 int32_t qc7xx_set_app_version_to_efuse(uint8_t version);
 int32_t qc7xx_get_boot2_version_from_efuse(uint8_t *version);

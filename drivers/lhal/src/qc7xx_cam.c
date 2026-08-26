@@ -100,6 +100,8 @@ void qc7xx_cam_init(struct qc7xx_device_s *dev, const struct qc7xx_cam_config_s 
         regval &= ~CAM_REG_WRAP_MODE;
 #else
         regval |= CAM_REG_SW_MODE;
+        /* Clear HW frame-wrap mode so SW_MODE frame-done interrupt fires */
+        regval &= ~CAM_REG_HW_MODE_FWRAP;
 #endif
     }
     regval &= ~(CAM_REG_DROP_EN | CAM_REG_DROP_EVEN | CAM_REG_DVP_DATA_MODE_MASK | CAM_REG_DVP_DATA_BSEL | CAM_REG_V_SUBSAMPLE_EN | CAM_REG_V_SUBSAMPLE_POL);

@@ -98,7 +98,11 @@ zephyr_library_sources(src/ap/neighbor_db.c)
 zephyr_library_sources(src/ap/rrm.c)
 zephyr_library_sources(src/utils/crc32.c)
 zephyr_library_sources(src/utils/uuid.c)
-zephyr_library_sources(src/utils/base64.c)
+# base64: use Zephyr's lib/utils/base64.c when CONFIG_BASE64=y (selected by
+# NET_L2_WIFI in Zephyr 4.4), otherwise fall back to WPA supplicant's own copy.
+if(NOT CONFIG_BASE64)
+    zephyr_library_sources(src/utils/base64.c)
+endif()
 zephyr_library_sources(src/ap/wmm.c)
 zephyr_library_sources(src/ap/mbo_ap.c)
 zephyr_library_sources(src/ap/ap_list.c)

@@ -366,6 +366,24 @@ __WEAK uint32_t ATTR_TCM_SECTION qc7xx_soft_crc32(void *in, uint32_t len)
 #endif
 }
 
+__WEAK int32_t qc7xx_get_anti_rollback_enable(uint8_t *enabled)
+{
+#if defined(QCC74X) || defined(QCC75X)
+    uint32_t value;
+
+    if (enabled == NULL) {
+        return 1;
+    }
+
+    qc7xx_ef_ctrl_read_direct(NULL, ANTI_ROLLBACK_ENABLE_OFFSET, &value, 1, 1);
+    *enabled = (value >> ANTI_ROLLBACK_ENABLE_POS) & ANTI_ROLLBACK_ENABLE_MASK;
+
+    return 0;
+#else
+    return 1;
+#endif
+}
+
 __WEAK int32_t qc7xx_get_app_version_from_efuse(uint8_t *version)
 {
 #ifdef romapi_qc7xx_get_app_version_from_efuse

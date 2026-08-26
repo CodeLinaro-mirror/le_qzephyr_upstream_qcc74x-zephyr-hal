@@ -46,6 +46,7 @@ if(CONFIG_SOC_SERIES_QCC74X)
     ../../drivers/lhal/src/qc7xx_mtimer.c
     ../../drivers/lhal/src/qc7xx_timer.c
     ../../drivers/lhal/src/qc7xx_dma.c
+    ../../drivers/lhal/src/qc7xx_cam.c
     ../../drivers/lhal/src/qc7xx_dbi.c
     ../../drivers/lhal/src/qc7xx_l1c.c
     ../../drivers/lhal/src/qc7xx_pwm_v2.c
@@ -68,8 +69,9 @@ if(CONFIG_SOC_SERIES_QCC74X)
     ../../drivers/lhal/src/qc7xx_clock.c
   )
   # Audio ADC/DAC lhal sources: only needed when the audio drivers are built.
-  zephyr_sources_ifdef(CONFIG_AUDIO_ADC_OPAL ../../drivers/lhal/src/qc7xx_auadc.c)
-  zephyr_sources_ifdef(CONFIG_AUDIO_DAC_OPAL ../../drivers/lhal/src/qc7xx_audac.c)
+  zephyr_sources_ifdef(CONFIG_AUDIO_ADC_QCC74X ../../drivers/lhal/src/qc7xx_auadc.c)
+  zephyr_sources_ifdef(CONFIG_AUDIO_DAC_QCC74X ../../drivers/lhal/src/qc7xx_audac.c)
+  zephyr_sources_ifdef(CONFIG_VIDEO_QCC74X_JPEG ../../drivers/lhal/src/qc7xx_mjpeg.c)
 if(CONFIG_ROMAPI)
   zephyr_sources(
     ../../drivers/soc/qcc74x/std/src/qcc74x_romapi_e907.c
@@ -97,15 +99,18 @@ endif()
     ../../drivers/rfparam/Src/rfparam_rftlv.c
 
     )
+  if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_POWEROFF)
+    zephyr_sources(
+      ../../drivers/sys/qcc74x/qcc74x_sys.c
+    )
+  endif()
   zephyr_sources_ifdef( CONFIG_WIFI
-    ../../drivers/sys/qcc74x/qcc74x_sys.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
     ../../bsp/board/qcc74xdk/wireless_regdb.c
   )
   zephyr_sources_ifdef( CONFIG_BT
-    ../../drivers/sys/qcc74x/qcc74x_sys.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c

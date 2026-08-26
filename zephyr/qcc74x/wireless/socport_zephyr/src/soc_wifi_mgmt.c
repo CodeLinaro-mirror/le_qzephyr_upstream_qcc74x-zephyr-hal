@@ -51,6 +51,16 @@ static void qc7xx_wifi_irq_bridge(const void *arg)
 
 static void qc7xx_wifi_irq_connect(void)
 {
+    /* Re-registering the same IRQ every PDS15 wake overflows
+     * z_shared_isr_table_entry.clients[] under CONFIG_SHARED_INTERRUPTS,
+     * corrupting adjacent kernel state. Connect once. */
+    static bool connected;
+
+    if (connected) {
+        return;
+    }
+    connected = true;
+
 #if defined(CONFIG_DYNAMIC_INTERRUPTS)
     (void)irq_connect_dynamic(WIFI_IRQ, 0, qc7xx_wifi_irq_bridge, NULL, 0);
 #else

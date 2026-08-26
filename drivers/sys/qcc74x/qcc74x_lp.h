@@ -483,7 +483,7 @@ typedef struct {
     uint8_t acomp0_en;
     uint8_t acomp1_en;
 
-    /* Map to pins num, range: 2, 3, 10, 12, 13, 14, 19 */
+    /* Map to pins num, range: 2, 3, 10, 12, 13, 14, 19, 20 */
     uint8_t acomp0_io_num;
     uint8_t acomp1_io_num;
 
