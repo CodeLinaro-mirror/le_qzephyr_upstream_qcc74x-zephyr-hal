@@ -16,7 +16,7 @@
   * @{
   */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define UART_FIFO_MAX           32
 #else
 #error "unknown device"

@@ -20,7 +20,7 @@
 #define ANTI_ROLLBACK_ENABLE_POS           (12)
 #define ANTI_ROLLBACK_BOOT2_VERSION_OFFSET (0x170)
 #define ANTI_ROLLBACK_APP_VERSION_OFFSET   (0x180)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define ANTI_ROLLBACK_ENABLE_OFFSET        (0x7c)
 #define ANTI_ROLLBACK_ENABLE_MASK          (0x01)
 #define ANTI_ROLLBACK_ENABLE_POS           (12)
@@ -181,7 +181,7 @@ void *qc7xx_get_no_cache_addr(const void *addr)
 
     return NULL;
 }
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 bool qc7xx_check_cache_addr(const void *addr)
 {
     uintptr_t a = (uintptr_t)addr;
@@ -238,7 +238,7 @@ void *qc7xx_get_no_cache_addr(const void *addr)
 }
 #endif
 
-#if (defined(QCC74X) || defined(QCC75X)) && !defined(CPU_LP)
+#if (defined(QCC74X) || defined(QCC75X) || defined(QCR373)) && !defined(CPU_LP)
 bool qc7xx_check_cache_addr_aligned(uintptr_t addr)
 {
     if (addr & (QC7XX_CACHE_LINE_SIZE - 1)) {
@@ -389,7 +389,7 @@ __WEAK int32_t qc7xx_get_app_version_from_efuse(uint8_t *version)
 #ifdef romapi_qc7xx_get_app_version_from_efuse
     return romapi_qc7xx_get_app_version_from_efuse(version);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t otp_ef_boot2_anti_rollback_en = 0;
     uint32_t tmpVal;
 
@@ -405,14 +405,14 @@ __WEAK int32_t qc7xx_get_app_version_from_efuse(uint8_t *version)
         return 1;
     }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t version_low_low = 0;
     uint32_t version_low = 0;
     uint32_t version_high = 0;
     uint32_t version_high_high = 0;
 #if defined(QCC74X)
     uint32_t value[8];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     uint32_t value[4];
 #endif
     /* read efuse value */
@@ -423,7 +423,7 @@ __WEAK int32_t qc7xx_get_app_version_from_efuse(uint8_t *version)
     version_low = value[1] | value[5];
     version_high = value[2] | value[6];
     version_high_high = value[3] | value[7];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     /* get real version from efuse */
     version_low_low = value[0];
     version_low = value[1];
@@ -468,7 +468,7 @@ __WEAK int32_t qc7xx_set_app_version_to_efuse(uint8_t version)
 #ifdef romapi_qc7xx_set_app_version_to_efuse
     return romapi_qc7xx_set_app_version_to_efuse(version);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint8_t version_old;
     uint32_t tmpVal;
 
@@ -487,14 +487,14 @@ __WEAK int32_t qc7xx_set_app_version_to_efuse(uint8_t version)
         return 0;
     }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t version_low_low = 0;
     uint32_t version_low = 0;
     uint32_t version_high = 0;
     uint32_t version_high_high = 0;
 #if defined(QCC74X)
     uint32_t value[8];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     uint32_t value[4];
 #endif
 
@@ -512,7 +512,7 @@ __WEAK int32_t qc7xx_set_app_version_to_efuse(uint8_t version)
     value[1] = value[5] = version_low;
     value[2] = value[6] = version_high;
     value[3] = value[7] = version_high_high;
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     value[0] = version_low_low;
     value[1] = version_low;
     value[2] = version_high;
@@ -533,7 +533,7 @@ __WEAK int32_t qc7xx_get_boot2_version_from_efuse(uint8_t *version)
 #ifdef romapi_qc7xx_get_boot2_version_from_efuse
     return romapi_qc7xx_get_boot2_version_from_efuse(version);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t otp_ef_boot2_anti_rollback_en = 0;
     uint32_t tmpVal;
 
@@ -549,12 +549,12 @@ __WEAK int32_t qc7xx_get_boot2_version_from_efuse(uint8_t *version)
         return 1;
     }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t version_high = 0;
     uint32_t version_low = 0;
 #if defined(QCC74X)
     uint32_t value[4];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     uint32_t value[2];
 #endif
 
@@ -564,7 +564,7 @@ __WEAK int32_t qc7xx_get_boot2_version_from_efuse(uint8_t *version)
     /* get real version from efuse */
     version_low = value[0] | value[2];
     version_high = value[1] | value[3];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     /* get real version from efuse */
     version_low = value[0];
     version_high = value[1];
@@ -596,7 +596,7 @@ __WEAK int32_t qc7xx_set_boot2_version_to_efuse(uint8_t version)
 #ifdef romapi_qc7xx_set_boot2_version_to_efuse
     return romapi_qc7xx_set_boot2_version_to_efuse(version);
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint8_t version_old;
     uint32_t tmpVal;
 
@@ -615,12 +615,12 @@ __WEAK int32_t qc7xx_set_boot2_version_to_efuse(uint8_t version)
         return 0;
     }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     uint32_t version_high = 0;
     uint32_t version_low = 0;
 #if defined(QCC74X)
     uint32_t value[4];
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     uint32_t value[2];
 #endif
 
@@ -632,7 +632,7 @@ __WEAK int32_t qc7xx_set_boot2_version_to_efuse(uint8_t version)
 #if defined(QCC74X)
     value[0] = value[2] = version_low;
     value[1] = value[3] = version_high;
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
     value[0] = version_low;
     value[1] = version_high;
 #endif

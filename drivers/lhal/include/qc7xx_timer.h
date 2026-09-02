@@ -99,7 +99,7 @@ struct qc7xx_timer_config_s {
     uint32_t preload_val;
 };
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief TIMER capture configuration structure
  *
@@ -215,7 +215,7 @@ void qc7xx_timer_compint_clear(struct qc7xx_device_s *dev, uint8_t cmp_no);
  */
 int qc7xx_timer_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief Initialize the timer capture feature.
  *

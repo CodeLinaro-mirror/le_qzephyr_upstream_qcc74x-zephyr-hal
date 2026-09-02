@@ -3484,7 +3484,7 @@ int qc7xx_emac_v2_bd_tx_enqueue(struct qc7xx_device_s *dev, uint32_t flags, uint
         arch_memcpy_fast((void *)(uintptr_t)(txdesc->buffer1), data_in, length1);
     }
 #ifdef EMAC_V2_DO_FLUSH_DATA
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     qc7xx_l1c_dcache_clean_range((void *)txdesc->buffer1, length1);
 #endif
 #endif
@@ -3958,7 +3958,7 @@ int qc7xx_emac_bd_ctrl_clean(struct qc7xx_device_s *dev)
 }
 
 #if 0
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 /**
  * @brief qc7xx emac phy register read
  *

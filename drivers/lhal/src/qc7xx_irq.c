@@ -5,11 +5,26 @@
 
 #include "qc7xx_irq.h"
 #include "qc7xx_core.h"
+#if !defined(QCC75X) && !defined(QCR373) || defined(CPU_MODEL_A0) || defined(CPU_LP)
 #include <csi_core.h>
+#else
+#include <nmsis_core.h>
+#endif
 
+#if defined(QCC75X) || defined(QCR373)
 #if defined(QCC75X)
 #include "qcc75x_irq.h"
+#elif defined(QCR373)
+#include "qcr373_irq.h"
+#endif
+#if defined(QCC75X)
 #include "qcc75x_glb.h"
+#elif defined(QCR373)
+#include "qcr373_glb.h"
+#endif
+#endif
+#if (defined(QCC75X) || defined(QCR373)) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)
+#include <arch/risc-v/qc7xx_rv_privilege.h>
 #endif
 
 #ifndef QC7XX_IOT_SDK
@@ -135,6 +150,8 @@ void qc7xx_irq_enable(int irq)
     } else {
         csi_vic_enable_irq(irq);
     }
+#elif (defined(QCC75X) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)) || defined(QCR373)
+    qc7xx_rv_eclic_enable_irq(irq);
 #else
     csi_vic_enable_irq(irq);
 #endif
@@ -152,6 +169,8 @@ void qc7xx_irq_disable(int irq)
     } else {
         csi_vic_disable_irq(irq);
     }
+#elif (defined(QCC75X) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)) || defined(QCR373)
+    qc7xx_rv_eclic_disable_irq(irq);
 #else
     csi_vic_disable_irq(irq);
 #endif
@@ -169,6 +188,8 @@ void qc7xx_irq_set_pending(int irq)
     } else {
         csi_vic_set_pending_irq(irq);
     }
+#elif (defined(QCC75X) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)) || defined(QCR373)
+    qc7xx_rv_eclic_set_pending_irq(irq);
 #else
     csi_vic_set_pending_irq(irq);
 #endif
@@ -186,6 +207,8 @@ void qc7xx_irq_clear_pending(int irq)
     } else {
         csi_vic_clear_pending_irq(irq);
     }
+#elif (defined(QCC75X) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)) || defined(QCR373)
+    qc7xx_rv_eclic_clear_pending_irq(irq);
 #else
     csi_vic_clear_pending_irq(irq);
 #endif
@@ -198,7 +221,11 @@ void qc7xx_irq_set_nlbits(uint8_t nlbits)
     romapi_qc7xx_irq_set_nlbits(nlbits);
 #else
 #if !defined(CPU_D0)
+#if (defined(QCC75X) || defined(QCR373)) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)
+    qc7xx_rv_eclic_set_nlbits(nlbits);
+#else
     CLIC->CLICCFG = ((nlbits & 0xf) << 1) | 1;
+#endif
 #endif
 #endif
 }
@@ -217,6 +244,8 @@ void qc7xx_irq_set_priority(int irq, uint8_t preemptprio, uint8_t subprio)
     } else {
         csi_vic_set_prio(irq, preemptprio);
     }
+#elif (defined(QCC75X) && !defined(CPU_MODEL_A0) && !defined(CPU_LP)) || defined(QCR373)
+    qc7xx_rv_eclic_set_priority_irq(irq, preemptprio);
 #else
     csi_vic_set_prio(irq, preemptprio);
 #endif

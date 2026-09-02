@@ -3,9 +3,17 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#if defined(QCC75X) || defined(QCR373)
 #if defined(QCC75X)
 #include "qcc75x_memorymap.h"
+#elif defined(QCR373)
+#include "qcr373_memorymap.h"
+#endif
+#if defined(QCC75X)
 #include "qcc75x_glb.h"
+#elif defined(QCR373)
+#include "qcr373_glb.h"
+#endif
 #elif defined(QCC74X)
 #include "qcc74x_memorymap.h"
 #include "qcc74x_glb.h"
@@ -18,7 +26,7 @@
 #include "hardware/sf_ctrl_reg.h"
 #include "qc7xx_efuse.h"
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 static uint32_t flash1_size = 4 * 1024 * 1024;
 static uint32_t flash2_size = 2 * 1024 * 1024;
 #ifdef QC7XX_SF_CTRL_SBUS2_ENABLE
@@ -259,7 +267,7 @@ static uint32_t ATTR_TCM_SECTION flash_get_size_from_jedecid(uint32_t jedec_id)
     return flash_size;
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 static int flash_get_clock_delay(spi_flash_cfg_type *cfg)
 {
     uint32_t reg_base = 0;
@@ -308,7 +316,7 @@ static void ATTR_TCM_SECTION flash_set_l1c_wrap(spi_flash_cfg_type *p_flash_cfg)
     }
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 static void ATTR_TCM_SECTION qc7xx_flash_set_cmds(spi_flash_cfg_type *p_flash_cfg)
 {
     struct sf_ctrl_cmds_cfg cmds_cfg;
@@ -366,7 +374,7 @@ static int ATTR_TCM_SECTION flash_config_init(spi_flash_cfg_type *p_flash_cfg, u
     p_flash_cfg->c_read_support = 0x00;
 #endif
     /* Set flash controler from p_flash_cfg */
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     qc7xx_flash_set_cmds(p_flash_cfg);
 #endif
     flash_set_qspi_enable(p_flash_cfg);
@@ -437,7 +445,7 @@ static int ATTR_TCM_SECTION flash2_init(void)
         }
         qc7xx_sf_ctrl_sbus2_revoke_replace();
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
         flash2_size = flash_get_size_from_jedecid(g_jedec_id2);
 #endif
     }
@@ -467,10 +475,10 @@ int ATTR_TCM_SECTION qc7xx_flash_init(void)
             g_jedec_id = jedec_id;
             g_flash_cfg.mid = (jedec_id & 0xff);
             flash_get_clock_delay(&g_flash_cfg);
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
             flash1_size = flash_get_size_from_jedecid(g_jedec_id);
 #endif
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
             flash2_size = 0;
 #endif
             return 0;
@@ -482,14 +490,14 @@ int ATTR_TCM_SECTION qc7xx_flash_init(void)
     flash_get_clock_delay(&g_flash_cfg);
     GLB_Set_Flash_Id_Value(g_jedec_id);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     flash1_size = flash_get_size_from_jedecid(g_jedec_id);
 #endif
 
 #ifdef QC7XX_SF_CTRL_SBUS2_ENABLE
     flash2_init();
 #else
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     flash2_size = 0;
 #endif
 #endif
@@ -507,7 +515,7 @@ uint32_t qc7xx_flash_get_size(void)
     return flash_get_size_from_jedecid(g_jedec_id);
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #ifdef QC7XX_SF_CTRL_SBUS2_ENABLE
 uint32_t qc7xx_flash2_get_size(void)
 {
@@ -540,7 +548,7 @@ void ATTR_TCM_SECTION qc7xx_flash_set_iomode(uint8_t iomode)
         g_flash_cfg.io_mode |= iomode;
     }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     qc7xx_flash_set_cmds(&g_flash_cfg);
 #endif
     flash_set_qspi_enable(&g_flash_cfg);
@@ -567,7 +575,7 @@ int ATTR_TCM_SECTION qc7xx_flash_erase(uint32_t startaddr, uint32_t len)
     int stat = -1;
     uintptr_t flag;
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     if ((startaddr + len) > (flash1_size + flash2_size)) {
         return -ENOMEM;
     } else if ((startaddr + len) <= flash1_size) {
@@ -619,7 +627,7 @@ int ATTR_TCM_SECTION qc7xx_flash_write(uint32_t addr, uint8_t *data, uint32_t le
     int stat = -1;
     uintptr_t flag;
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     if ((addr + len) > (flash1_size + flash2_size)) {
         return -ENOMEM;
     } else if ((addr + len) <= flash1_size) {
@@ -671,7 +679,7 @@ int ATTR_TCM_SECTION qc7xx_flash_read(uint32_t addr, uint8_t *data, uint32_t len
     int stat = -1;
     uintptr_t flag;
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     if ((addr + len) > (flash1_size + flash2_size)) {
         return -ENOMEM;
     } else if ((addr + len) <= flash1_size) {

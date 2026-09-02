@@ -42,7 +42,7 @@
 
 #if defined(QCC74X)
 #define QC7XX_PSRAM_BASE 0xA8000000
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_PSRAM_BASE 0x88000000
 #endif
 
@@ -97,6 +97,13 @@
 #define QC7XX_DEVICE_TYPE_PEC        49
 #define QC7XX_DEVICE_TYPE_EMAC_V2    50
 #define QC7XX_DEVICE_TYPE_DVP_RASTER 51
+
+#if defined(QCR373)
+#define QC7XX_DEVICE_TYPE_OSD        52
+#define QC7XX_DEVICE_TYPE_SEC_GMAC   53
+#define QC7XX_DEVICE_TYPE_TOUCH_V2   54
+#define QC7XX_DEVICE_TYPE_DMA2D      55
+#endif
 
 struct qc7xx_device_s {
     const char *name;

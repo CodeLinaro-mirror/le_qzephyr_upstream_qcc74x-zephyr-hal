@@ -30,7 +30,7 @@
 
 #if defined(QCC74X)
 #define QC7XX_SF_CTRL_BUF_BASE ((uint32_t)0x2000B600)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_SF_CTRL_BUF_BASE ((uint32_t)0x20082600)
 #endif
 

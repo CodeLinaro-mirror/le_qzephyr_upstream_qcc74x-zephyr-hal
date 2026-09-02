@@ -28,7 +28,7 @@
   * @}
   */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define QC7XX_GLB_CGEN0_BASE (0x20000000 + 0x580)
 #define QC7XX_GLB_CGEN1_BASE (0x20000000 + 0x584)
 #define QC7XX_GLB_CGEN2_BASE (0x20000000 + 0x588)
@@ -77,7 +77,7 @@
         putreg32(regval, QC7XX_GLB_CGEN1_BASE);                    \
     } while (0)
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_SPI1_ENABLE()                            \
     do {                                                          \
         volatile uint32_t regval = getreg32(0x200005cc);          \
@@ -93,7 +93,7 @@
         putreg32(regval, QC7XX_GLB_CGEN1_BASE);                    \
     } while (0)
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_I2C1_ENABLE()                            \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN1_BASE); \
@@ -131,7 +131,7 @@
         putreg32(regval, QC7XX_GLB_CGEN1_BASE);                    \
     } while (0)
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_CAN_ENABLE()                             \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN1_BASE); \
@@ -147,7 +147,7 @@
         regval |= (1 << 13);                                      \
         putreg32(regval, QC7XX_GLB_CGEN1_BASE);                    \
     } while (0)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_USB_ENABLE()                             \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN2_BASE); \
@@ -156,7 +156,7 @@
     } while (0)
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_I2S_ENABLE()                             \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN1_BASE); \
@@ -165,7 +165,7 @@
     } while (0)
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_SDH_ENABLE()                             \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN2_BASE); \
@@ -174,7 +174,7 @@
     } while (0)
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_EMAC_ENABLE()                            \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN2_BASE); \
@@ -201,12 +201,28 @@
     } while (0)
 #endif
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define PERIPHERAL_CLOCK_PEC_ENABLE()                             \
     do {                                                          \
         volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN2_BASE); \
         regval |= (1 << 25);                                      \
         putreg32(regval, QC7XX_GLB_CGEN2_BASE);                    \
+    } while (0)
+#endif
+
+#if defined(QCR373)
+#define PERIPHERAL_CLOCK_SPI0_2_ENABLE()                          \
+    do {                                                          \
+        volatile uint32_t regval = getreg32(QC7XX_GLB_CGEN1_BASE); \
+        regval |= (1 << 18);                                      \
+        putreg32(regval, QC7XX_GLB_CGEN1_BASE);                   \
+    } while (0)
+#define PERIPHERAL_CLOCK_SPI3_ENABLE()                            \
+    do {                                                          \
+        *(volatile uint32_t *)0x20000548 &= ~(1 << 8);            \
+        volatile uint32_t regval = getreg32(0x00080024);          \
+        regval |= (1 << 1);                                       \
+        putreg32(regval, 0x00080024);                             \
     } while (0)
 #endif
 

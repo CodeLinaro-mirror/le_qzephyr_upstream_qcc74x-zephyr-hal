@@ -23,7 +23,7 @@
 /* 0x0 : HBN_CTL */
 #define HBN_RTC_ENABLE               (1 << 0U)
 #define HBN_RTC_CTL_SHIFT            (1U)
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define HBN_RTC_CTL_MASK             (0x7 << HBN_RTC_CTL_SHIFT)
 #define HBN_RTC_DLY_OPTION           (1 << 4U)
 #endif

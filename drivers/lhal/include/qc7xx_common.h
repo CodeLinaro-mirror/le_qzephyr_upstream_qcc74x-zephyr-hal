@@ -128,7 +128,7 @@ bool qc7xx_check_cache_addr(const void *addr);
 
 void *qc7xx_get_no_cache_addr(const void *addr);
 
-#if (defined(QCC74X) || defined(QCC75X)) && !defined(CPU_LP)
+#if (defined(QCC74X) || defined(QCC75X) || defined(QCR373)) && !defined(CPU_LP)
 bool qc7xx_check_cache_addr_aligned(uintptr_t addr);
 #else
 #define qc7xx_check_cache_addr_aligned(addr)  (true)

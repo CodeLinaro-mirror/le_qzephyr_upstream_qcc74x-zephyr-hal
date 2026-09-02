@@ -35,7 +35,7 @@
 
 /* 0x44 : gpdac_dma_config */
 #define GPIP_GPDAC_DMA_TX_EN (1 << 0U)
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GPIP_GPDAC_DMA_INV_MSB (1 << 1U)
 #endif
 #define GPIP_GPDAC_DMA_FORMAT_SHIFT (4U)
@@ -62,7 +62,7 @@
 #define GLB_GPDAC_REF_SEL        (1 << 8U)
 #define GLB_GPDAC_TEST_SEL_SHIFT (9U)
 #define GLB_GPDAC_TEST_SEL_MASK  (0x7 << GLB_GPDAC_TEST_SEL_SHIFT)
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GLB_GPDAC_ANA_CLK_SEL (1 << 12U)
 #define GLB_GPDAC_DAT_CHA_SEL (1 << 13U)
 #define GLB_GPDAC_DAT_CHB_SEL (1 << 14U)
@@ -87,7 +87,7 @@
 #define GLB_GPDAC_B_OUTMUX_MASK  (0x7 << GLB_GPDAC_B_OUTMUX_SHIFT)
 
 /* 0x314 : gpdac_data */
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GLB_GPDAC_B_DATA_SHIFT (0U)
 #define GLB_GPDAC_B_DATA_MASK  (0x1fff << GLB_GPDAC_B_DATA_SHIFT)
 #define GLB_GPDAC_A_DATA_SHIFT (16U)

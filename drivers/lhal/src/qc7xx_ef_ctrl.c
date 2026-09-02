@@ -9,7 +9,7 @@
 
 #if defined(QCC74X)
 #define QC7XX_EF_CTRL_BASE ((uint32_t)0x20056000)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_EF_CTRL_BASE ((uint32_t)0x2000C000)
 #endif
 
@@ -21,7 +21,7 @@
 
 #if defined(QCC74X)
 #define EF_CTRL_EFUSE_R0_SIZE 512
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define EF_CTRL_EFUSE_R0_SIZE 256
 #else
 #define EF_CTRL_EFUSE_R0_SIZE 128
@@ -30,7 +30,7 @@
 #define EF_CTRL_DATA0_CLEAR qc7xx_ef_ctrl_clear_data_reg0(dev)
 #define EF_CTRL_DATA1_CLEAR qc7xx_ef_ctrl_clear_data_reg1(dev)
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 extern void AON_Set_Switch_For_Efuse(uint8_t enable);
 #define qc7xx_power_on_efuse()  AON_Set_Switch_For_Efuse(1);
 #define qc7xx_power_off_efuse()  AON_Set_Switch_For_Efuse(0);

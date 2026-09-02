@@ -135,7 +135,7 @@ struct sflash_sec_reg_cfg
 extern "C" {
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void qc7xx_sflash_init(const struct sf_ctrl_cfg_type *p_sf_ctrl_cfg, const struct sf_ctrl_bank2_cfg *p_bank2_cfg);
 #else
 void qc7xx_sflash_init(const struct sf_ctrl_cfg_type *p_sf_ctrl_cfg);

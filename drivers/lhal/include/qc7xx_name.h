@@ -142,4 +142,14 @@
 #define QC7XX_NAME_USB_V1         "usb_v1"
 #define QC7XX_NAME_USB_V2         "usb_v2"
 #define QC7XX_NAME_DVP_RASTER     "dvp_raster"
+
+#if defined(QCR373)
+#define QC7XX_NAME_DPI            "dpi"
+#define QC7XX_NAME_DSI            "dsi"
+#define QC7XX_NAME_OSD0           "osd0"
+#define QC7XX_NAME_OSD1           "osd1"
+#define QC7XX_NAME_DMA2D_CH0      "dma2d_ch0"
+#define QC7XX_NAME_DMA2D_CH1      "dma2d_ch1"
+#define QC7XX_NAME_TOUCH_V2       "touch_v2"
+#endif
 #endif

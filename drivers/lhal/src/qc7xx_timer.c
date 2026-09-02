@@ -8,8 +8,12 @@
 #include "hardware/timer_reg.h"
 #if defined(QCC74X)
 #include "qcc74x_glb.h"
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
+#if defined(QCC75X)
 #include "qcc75x_glb.h"
+#elif defined(QCR373)
+#include "qcr373_glb.h"
+#endif
 #endif
 
 void qc7xx_timer_init(struct qc7xx_device_s *dev, const struct qc7xx_timer_config_s *config)
@@ -285,7 +289,7 @@ int qc7xx_timer_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 void qc7xx_timer_capture_init(struct qc7xx_device_s *dev, const struct qc7xx_timer_capture_config_s *config)
 {
 #ifdef romapi_qc7xx_timer_capture_init

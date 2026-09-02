@@ -8,7 +8,7 @@
 
 #include "qc7xx_core.h"
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define EMAC_SPEED_10M_SUPPORT (1)
 #else
 #define EMAC_SPEED_10M_SUPPORT (0)

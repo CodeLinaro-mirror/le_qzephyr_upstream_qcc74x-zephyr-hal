@@ -7,7 +7,7 @@
 #include "qc7xx_clock.h"
 #include "hardware/spi_reg.h"
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GLB_SPI_MODE_ADDRESS 0x20000510
 #endif
 
@@ -29,7 +29,7 @@ void qc7xx_spi_init(struct qc7xx_device_s *dev, const struct qc7xx_spi_config_s 
     uint32_t regval;
     uint32_t div;
 
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     uint32_t mini_spi_mode = getreg32(0x00080024);
     if (config->role == SPI_ROLE_MASTER) {
         mini_spi_mode &= ~(1 << 1); // master mode

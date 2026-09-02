@@ -6,7 +6,7 @@
 #include "qc7xx_dac.h"
 #include "hardware/dac_reg.h"
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define DAC_GPIP_BASE ((uint32_t)0x20002000)
 #endif
 
