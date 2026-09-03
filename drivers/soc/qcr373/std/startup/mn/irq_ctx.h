@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #ifndef __IRQ_CTX_H__
 #define __IRQ_CTX_H__
 

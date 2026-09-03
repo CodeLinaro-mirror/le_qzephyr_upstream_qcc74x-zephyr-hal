@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -17,6 +17,9 @@
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
+
+/* Skip CSR definitions for QCR373: riscv_encoding.h (via nmsis_core.h) provides them */
+#if !defined(QCR373)
 
 /* User Trap Registers */
 
@@ -354,6 +357,8 @@
 #define PMPCFG_A_NAPOT  (3 << 3)  /* naturally aligned power-of-two region */
 #define PMPCFG_A_MASK   (3 << 3)  /* address-matching mode mask */
 #define PMPCFG_L        (1 << 7)  /* locked ? */
+
+#endif /* !defined(QCR373) */
 
 /****************************************************************************
  * Public Types

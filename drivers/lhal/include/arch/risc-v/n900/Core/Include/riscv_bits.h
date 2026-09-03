@@ -1,4 +1,11 @@
 /*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Contains code under the following license:
+ *
+ * Not a contribution.
+ *
  * Copyright (c) 2019 Nuclei Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -90,7 +97,9 @@ extern "C" {
 #define STR(x)       XSTR(x)
 #define XSTR(x)      #x
 #define __STR(s)     #s
+#ifndef STRINGIFY
 #define STRINGIFY(s) __STR(s)
+#endif
 
 #ifdef __cplusplus
 }

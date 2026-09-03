@@ -1,4 +1,11 @@
 /*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Contains code under the following license:
+ *
+ * Not a contribution.
+ *
  * Copyright (c) 2019 Nuclei Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -63,8 +70,12 @@ extern "C" {
 #define MSTATUS64_SD                    0x8000000000000000
 
 #define MSTATUS_FS_INITIAL              0x00002000
+#ifndef MSTATUS_FS_DIRTY
 #define MSTATUS_FS_CLEAN                0x00004000
+#endif
+#ifndef MSTATUS_FS_DIRTY
 #define MSTATUS_FS_DIRTY                0x00006000
+#endif
 
 #define MSTATUS_VS_INITIAL              0x00000200
 #define MSTATUS_VS_CLEAN                0x00000400
@@ -93,20 +104,48 @@ extern "C" {
 #define USTATUS_UIE                     0x00000001
 #define USTATUS_UPIE                    0x00000010
 
+#ifndef DCSR_XDEBUGVER
 #define DCSR_XDEBUGVER                  (3U << 30)
+#endif
+#ifndef DCSR_NDRESET
 #define DCSR_NDRESET                    (1 << 29)
+#endif
+#ifndef DCSR_FULLRESET
 #define DCSR_FULLRESET                  (1 << 28)
+#endif
+#ifndef DCSR_EBREAKM
 #define DCSR_EBREAKM                    (1 << 15)
+#endif
+#ifndef DCSR_EBREAKH
 #define DCSR_EBREAKH                    (1 << 14)
+#endif
+#ifndef DCSR_EBREAKS
 #define DCSR_EBREAKS                    (1 << 13)
+#endif
+#ifndef DCSR_EBREAKU
 #define DCSR_EBREAKU                    (1 << 12)
+#endif
+#ifndef DCSR_STOPCYCLE
 #define DCSR_STOPCYCLE                  (1 << 10)
+#endif
+#ifndef DCSR_STOPTIME
 #define DCSR_STOPTIME                   (1 << 9)
+#endif
+#ifndef DCSR_CAUSE
 #define DCSR_CAUSE                      (7 << 6)
+#endif
+#ifndef DCSR_DEBUGINT
 #define DCSR_DEBUGINT                   (1 << 5)
+#endif
+#ifndef DCSR_HALT
 #define DCSR_HALT                       (1 << 3)
+#endif
+#ifndef DCSR_STEP
 #define DCSR_STEP                       (1 << 2)
+#endif
+#ifndef DCSR_PRV
 #define DCSR_PRV                        (3 << 0)
+#endif
 
 #define DCSR_CAUSE_NONE                 0
 #define DCSR_CAUSE_SWBP                 1
@@ -115,22 +154,52 @@ extern "C" {
 #define DCSR_CAUSE_STEP                 4
 #define DCSR_CAUSE_HALT                 5
 
+#ifndef MCONTROL_TYPE
 #define MCONTROL_TYPE(xlen)             (0xfULL << ((xlen)-4))
+#endif
+#ifndef MCONTROL_DMODE
 #define MCONTROL_DMODE(xlen)            (1ULL << ((xlen)-5))
+#endif
+#ifndef MCONTROL_MASKMAX
 #define MCONTROL_MASKMAX(xlen)          (0x3fULL << ((xlen)-11))
+#endif
 
+#ifndef MCONTROL_SELECT
 #define MCONTROL_SELECT                 (1 << 19)
+#endif
+#ifndef MCONTROL_TIMING
 #define MCONTROL_TIMING                 (1 << 18)
+#endif
+#ifndef MCONTROL_ACTION
 #define MCONTROL_ACTION                 (0x3f << 12)
+#endif
+#ifndef MCONTROL_CHAIN
 #define MCONTROL_CHAIN                  (1 << 11)
+#endif
+#ifndef MCONTROL_MATCH
 #define MCONTROL_MATCH                  (0xf << 7)
+#endif
+#ifndef MCONTROL_M
 #define MCONTROL_M                      (1 << 6)
+#endif
+#ifndef MCONTROL_H
 #define MCONTROL_H                      (1 << 5)
+#endif
+#ifndef MCONTROL_S
 #define MCONTROL_S                      (1 << 4)
+#endif
+#ifndef MCONTROL_U
 #define MCONTROL_U                      (1 << 3)
+#endif
+#ifndef MCONTROL_EXECUTE
 #define MCONTROL_EXECUTE                (1 << 2)
+#endif
+#ifndef MCONTROL_STORE
 #define MCONTROL_STORE                  (1 << 1)
+#endif
+#ifndef MCONTROL_LOAD
 #define MCONTROL_LOAD                   (1 << 0)
+#endif
 
 #define MCONTROL_TYPE_NONE              0
 #define MCONTROL_TYPE_MATCH             2

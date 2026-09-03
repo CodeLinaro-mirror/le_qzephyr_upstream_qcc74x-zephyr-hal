@@ -1,4 +1,11 @@
 /*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Contains code under the following license:
+ *
+ * Not a contribution.
+ *
  * Copyright (c) 2019 Nuclei Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -1101,7 +1108,6 @@ __STATIC_FORCEINLINE void __set_rv_cycle(uint64_t cycle)
     __RV_CSR_WRITE(CSR_MCYCLE, (uint32_t)(cycle));
 #elif __RISCV_XLEN == 64
     __RV_CSR_WRITE(CSR_MCYCLE, cycle);
-#else // TODO Need cover for XLEN=128 case in future
 #endif
 }
 
@@ -1145,7 +1151,6 @@ __STATIC_FORCEINLINE void __set_rv_instret(uint64_t instret)
     __RV_CSR_WRITE(CSR_MINSTRET, (uint32_t)(instret));
 #elif __RISCV_XLEN == 64
     __RV_CSR_WRITE(CSR_MINSTRET, instret);
-#else // TODO Need cover for XLEN=128 case in future
 #endif
 }
 
@@ -1956,7 +1961,6 @@ __STATIC_INLINE void __set_hpm_counter(unsigned long idx, uint64_t value)
             __RV_CSR_WRITE(CSR_MHPMCOUNTER31, (value));
             break;
 
-#else
 #endif
         default:
             break;

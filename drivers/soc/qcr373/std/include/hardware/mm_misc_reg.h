@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #ifndef __MM_MISC_REG_H__
 #define __MM_MISC_REG_H__
 

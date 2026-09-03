@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include "qc7xx_peri.h"
 #include "qc7xx_reset.h"
 #include "qcr373_glb.h"

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include "qcr373_common.h"
 #include "qc7xx_efuse.h"
 #include "qc7xx_ef_ctrl.h"

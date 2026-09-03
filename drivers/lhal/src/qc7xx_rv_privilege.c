@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+ 
 #include "qc7xx_core.h"
 #include <risc-v/qc7xx_rv_privilege.h>
 
