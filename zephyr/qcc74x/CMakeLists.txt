@@ -99,7 +99,7 @@ endif()
     ../../drivers/rfparam/Src/rfparam_rftlv.c
 
     )
-  if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_POWEROFF)
+  if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_IEEE802154 OR CONFIG_POWEROFF)
     zephyr_sources(
       ../../drivers/sys/qcc74x/qcc74x_sys.c
     )
@@ -110,13 +110,15 @@ endif()
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
     ../../bsp/board/qcc74xdk/wireless_regdb.c
   )
-  zephyr_sources_ifdef( CONFIG_BT
-    ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
-    ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
-    ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
-  )
+  if(CONFIG_BT OR CONFIG_IEEE802154)
+    zephyr_sources(
+      ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
+      ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
+      ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
+    )
+  endif()
 
-if(CONFIG_WIFI OR CONFIG_BT)
+if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_IEEE802154)
   add_subdirectory(wireless)
 
   # phyrf
