@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include "qcr373_clock.h"
 
 /** @addtogroup  QCR373_Peripheral_Driver

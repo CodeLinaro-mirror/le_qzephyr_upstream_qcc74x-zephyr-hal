@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include "qcr373_pm.h"
 #include "qc7xx_flash.h"
 #include "qcr373_clock.h"

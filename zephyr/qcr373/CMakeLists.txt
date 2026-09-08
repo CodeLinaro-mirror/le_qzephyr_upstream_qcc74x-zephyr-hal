@@ -1,4 +1,4 @@
-# Copyright (c) 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_SOC_SERIES_QCR373)
@@ -32,8 +32,7 @@ if(CONFIG_SOC_SERIES_QCR373)
   )
 
   zephyr_sources(
-    ../../drivers/lhal/include/arch/risc-v/t-head/rv_hart.c
-    ../../drivers/lhal/include/arch/risc-v/t-head/rv_pmp.c
+
     ../../drivers/lhal/config/qcr373/device_table.c
     ../../drivers/lhal/src/qc7xx_common.c
     ../../drivers/lhal/src/qc7xx_gpio.c

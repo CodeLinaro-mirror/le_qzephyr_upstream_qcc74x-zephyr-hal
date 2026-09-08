@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include "qc7xx_core.h"
 #include "qcr373_memorymap.h"
 #include "qcr373_irq.h"
