@@ -1,3 +1,9 @@
+# Release v2.1.13
+## Features
+- feat: CSI DMA capture and antenna diversity config by user
+## Bug Fixes
+- None
+
 # Release v2.1.12
 ## Features
 - feat: add CSI DMA capture and host tools
