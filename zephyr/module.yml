@@ -43,7 +43,7 @@ blobs:
   # ── Wi-Fi prebuilt libraries ──────────────────────────────────────────────
 
   - path: qcc74x/lib/default/libqcc743_wifi_macsw.a
-    sha256: 6f4391302e66023bbf23bb9f139fd4f348aeb364656c73cb5c9eb471d3c76533
+    sha256: d6f13bad5d92720293118f331acc62bdced99d9923449336574870d5dbdbe343
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -53,7 +53,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_macsw.a
-    sha256: 19867947ee83a9ff8308b0008d1f8b574bee9e6082364fa177a1bc34ee487513
+    sha256: ab0ccbddf224bfaab97614f82e3a6d4a6847daed09c9e5923f3058fd81f2f2e6
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -63,7 +63,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/default/libqcc743_wifi_fhost.a
-    sha256: 5966de43225f2dd7fbef51a760405abdee1e3fbfdcc56e4559998ceaf8c4e181
+    sha256: 7539ce277a6f5d1155424fd38c175cbcf565224fa00fbd93c6157b412640385e
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
@@ -73,7 +73,7 @@ blobs:
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_fhost.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_fhost.a
-    sha256: 83e20de1d3ca71c3a363b88995f5a9202e656d0afe49fe78d0bfbc95d1a520de
+    sha256: e5339555425ac258496fa557bf32320139b1e6cb84bf538ef24b024b0ce0a130
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
