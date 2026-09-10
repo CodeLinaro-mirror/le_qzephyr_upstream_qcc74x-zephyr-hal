@@ -1,3 +1,9 @@
+# Release v2.1.11
+## Features
+- feat: add lmac154 15.4 MAC library and Zephyr build wiring
+## Bug Fixes
+- None
+
 # Release v2.1.10
 ## Features
 - feat: add anti-rollback enable getter
@@ -60,4 +66,3 @@
 - None
 ## Bug Fixes
 - None
-

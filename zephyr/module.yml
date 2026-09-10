@@ -94,6 +94,16 @@ blobs:
     description: "QCC743 BT/BLE controller prebuilt library"
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libbtblecontroller.a
 
+  - path: qcc74x/lib/liblmac154_qcc743.a
+    sha256: e1679f4633234eebd31490233e524b15807a57d9de6848320ab4d3bc52f8d1c2
+    type: lib
+    version: '2.1.11'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/liblmac154_qcc743.a?format=TEXT
+    fetcher: gitiles
+    description: "QCC743 IEEE 802.15.4 low-level MAC prebuilt library"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/liblmac154_qcc743.a
+
   # ── PHY RF prebuilt libraries ─────────────────────────────────────────────
 
   - path: qcc74x/lib/libqcc743_phyrf.a
