@@ -191,9 +191,11 @@ int qcc74x_wifi_lowpower_prepare(qc7xx_lp_fw_cfg_t *cfg,
 				 struct qcc74x_wifi_lowpower_session *session)
 {
 	struct qcc74x_wifi_lowpower_status status;
+	struct qcc74x_wifi_lowpower_ps_config ps_config;
 	uint32_t next_wakeup_us;
 	uint64_t requested_timeout_us;
 	bool beacon_stamp_ready;
+	int ret;
 
 	if ((cfg == NULL) || (timeout_us == NULL) || (session == NULL)) {
 		return -EINVAL;
@@ -223,15 +225,38 @@ int qcc74x_wifi_lowpower_prepare(qc7xx_lp_fw_cfg_t *cfg,
 		return -EAGAIN;
 	}
 
-	cfg->bcmc_dtim_mode = 0U;
-	cfg->dtim_origin = QCC74X_WIFI_LOWPOWER_DEFAULT_DTIM_ORIGIN;
+	ret = qcc74x_wifi_lowpower_ps_config_get(&ps_config);
+	if (ret != 0) {
+		return -EAGAIN;
+	}
+
+	switch (ps_config.wakeup_mode) {
+	case WIFI_PS_WAKEUP_MODE_DTIM:
+		/* BL ABI: dtim_num is an AP-DTIM multiplier, not the AP period. */
+		cfg->bcmc_dtim_mode = 1U;
+		cfg->dtim_origin = QCC74X_WIFI_LOWPOWER_DEFAULT_DTIM_ORIGIN;
+		cfg->dtim_num = QCC74X_WIFI_LOWPOWER_DEFAULT_DTIM_ORIGIN;
+		break;
+	case WIFI_PS_WAKEUP_MODE_LISTEN_INTERVAL:
+		if (ps_config.listen_interval == 0U) {
+			return -EINVAL;
+		}
+
+		/* BL ABI: listen interval uses the non-BCMC LPFW path directly. */
+		cfg->bcmc_dtim_mode = 0U;
+		cfg->dtim_origin = ps_config.listen_interval;
+		cfg->dtim_num = ps_config.listen_interval;
+		break;
+	default:
+		return -ENOTSUP;
+	}
+
 	beacon_stamp_ready =
 		(iot2lp_para->last_beacon_stamp_rtc_valid != 0U) &&
 		(iot2lp_para->last_beacon_stamp_rtc_us != 0U) &&
 		(iot2lp_para->beacon_dtim_period != 0U);
 	cfg->tim_wakeup_en =
 		((status.twt_flow_count == 0) && beacon_stamp_ready) ? 1U : 0U;
-	cfg->dtim_num = cfg->dtim_origin;
 	cfg->mtimer_timeout_mini_us = 4500U;
 	cfg->mtimer_timeout_max_us = 12000U;
 
