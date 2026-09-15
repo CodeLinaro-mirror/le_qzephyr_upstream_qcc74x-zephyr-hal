@@ -231,3 +231,99 @@ blobs:
     fetcher: gitiles
     description: "QConn Secure tool for macOS"
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure-macos
+
+  # ── QConn_Mem_Map host tools ──────────────────────────────────────────────
+
+  - path: qcc74x/tool/QConn_Mem_Map.exe
+    sha256: 531d06138fb0999eac666691ca2a019ff1d34f844d55b7db32f865eeaaacb0b3
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map.exe?format=TEXT
+    fetcher: gitiles
+    description: "QConn Memory Map tool for Windows"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map.exe
+
+  - path: qcc74x/tool/QConn_Mem_Map-ubuntu
+    sha256: e5dbbd862caa884b1ed0f96d7f4a97ad59a93f33dae4748fd3bd39644935a97f
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-ubuntu?format=TEXT
+    fetcher: gitiles
+    description: "QConn Memory Map tool for Linux (Ubuntu)"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-ubuntu
+
+  - path: qcc74x/tool/QConn_Mem_Map-macos
+    sha256: 768abd34bddcdb956bac6d88152c49d1b42406eea52fd566de4141f469fa4b00
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-macos?format=TEXT
+    fetcher: gitiles
+    description: "QConn Memory Map tool for macOS"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-macos
+
+  # ── QConn_Production_Tool host tools ─────────────────────────────────────
+
+  - path: qcc74x/tool/QConn_Production_Tool.exe
+    sha256: c31bd129c93a24572b12db88b65c1957c1ee7e337c662ac9401b4086b3f3ce11
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool.exe?format=TEXT
+    fetcher: gitiles
+    description: "QConn Production Tool for Windows"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool.exe
+
+  - path: qcc74x/tool/QConn_Production_Tool-ubuntu
+    sha256: a5b080cc70cd6f66db9bee0a16f621c71b557c57873d724600ee7b37f2ffe800
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-ubuntu?format=TEXT
+    fetcher: gitiles
+    description: "QConn Production Tool for Linux (Ubuntu)"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-ubuntu
+
+  - path: qcc74x/tool/QConn_Production_Tool-macos
+    sha256: 283bfa8563d8a61855a565cf97ec272a7fdc69890741588269990fa5ebdf433c
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-macos?format=TEXT
+    fetcher: gitiles
+    description: "QConn Production Tool for macOS"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-macos
+
+  # ── QConn_RCT host tools ──────────────────────────────────────────────────
+
+  - path: qcc74x/tool/QConn_RCT.exe
+    sha256: 5aa32c617ec02dc480656db6c8082d25f295ab142335eac0cf7babd3cf2ed121
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT.exe?format=TEXT
+    fetcher: gitiles
+    description: "QConn RCT tool for Windows"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT.exe
+
+  - path: qcc74x/tool/QConn_RCT-ubuntu
+    sha256: d70115159ba7f9ef7fba0a38f6f3ebeb9787376774670ed45d0bde8c077f5408
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-ubuntu?format=TEXT
+    fetcher: gitiles
+    description: "QConn RCT tool for Linux (Ubuntu)"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-ubuntu
+
+  - path: qcc74x/tool/QConn_RCT-macos
+    sha256: e238106c0acc83ac38de96e84bf219a72be47b0cf66f88ca239c6369e8ed50bb
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-macos?format=TEXT
+    fetcher: gitiles
+    description: "QConn RCT tool for macOS"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-macos
