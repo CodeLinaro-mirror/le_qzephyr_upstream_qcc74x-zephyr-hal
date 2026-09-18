@@ -80,12 +80,12 @@
     },
     "FLASH_PATTERN": {
       "win": [
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag}",
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag} --reset"
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
       ],
       "linux": [
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag}",
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag} --reset"
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
       ]
     },
     "FLASH_PATTERN_LABELS": {
@@ -97,7 +97,8 @@
         "Flash (no reset)",
         "Flash and reset"
       ]
-    }
+    },
+    "needsPortWakeupBeforeDebug": true
   },
   {
     "1": "Used and updated by extension, you should not change it manually if you don't know why",
@@ -180,12 +181,12 @@
     },
     "FLASH_PATTERN": {
       "win": [
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag}",
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag} --reset"
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
       ],
       "linux": [
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag}",
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag} --reset"
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
       ]
     },
     "FLASH_PATTERN_LABELS": {
@@ -197,7 +198,8 @@
         "Flash (no reset)",
         "Flash and reset"
       ]
-    }
+    },
+    "needsPortWakeupBeforeDebug": true
   },
   {
     "1": "Used and updated by extension, you should not change it manually if you don't know why",
@@ -280,12 +282,12 @@
     },
     "FLASH_PATTERN": {
       "win": [
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag}",
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag} --reset"
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
       ],
       "linux": [
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag}",
-        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild -- --chipname=qcc${boardTag} --reset"
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
       ]
     },
     "FLASH_PATTERN_LABELS": {
@@ -297,6 +299,7 @@
         "Flash (no reset)",
         "Flash and reset"
       ]
-    }
+    },
+    "needsPortWakeupBeforeDebug": true
   }
 ]
