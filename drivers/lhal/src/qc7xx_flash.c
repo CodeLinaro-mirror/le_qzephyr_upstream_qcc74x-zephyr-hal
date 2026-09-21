@@ -363,7 +363,7 @@ static int ATTR_TCM_SECTION flash_config_init(spi_flash_cfg_type *p_flash_cfg, u
     /* Winbond W25Q32JW-IQ not support continue read */
     if (jid == 0x1660EF) {
         p_flash_cfg->io_mode = SF_CTRL_QIO_MODE;
-        p_flash_cfg->c_read_support = 0x00; 
+        p_flash_cfg->c_read_support = 0x00;
     }
 
 #ifdef CONFIG_FLASH_2LINE
@@ -807,6 +807,18 @@ void ATTR_TCM_SECTION qc7xx_flash_jump_encrypted_app(uint8_t index, uint32_t fla
 
     qc7xx_sf_ctrl_aes_enable_be();
     qc7xx_sf_ctrl_aes_enable();
+
+    qc7xx_flash_set_cache(0, 1, 0, flash_addr);
+    qc7xx_l1c_dcache_clean_invalidate_all();
+    qc7xx_l1c_icache_invalid_all();
+
+    entry = (void (*)(void))QC7XX_FLASH_XIP_BASE;
+    entry();
+}
+
+void ATTR_TCM_SECTION qc7xx_flash_jump_app(uint32_t flash_addr)
+{
+    void (*entry)(void);
 
     qc7xx_flash_set_cache(0, 1, 0, flash_addr);
     qc7xx_l1c_dcache_clean_invalidate_all();

@@ -197,6 +197,18 @@ void qc7xx_sha1_finish(struct qc7xx_device_s *dev, struct qc7xx_sha1_ctx_s *ctx,
 void qc7xx_sha256_finish(struct qc7xx_device_s *dev, struct qc7xx_sha256_ctx_s *ctx, uint8_t *output);
 
 /**
+ * @brief Finish SHA-256 and report hardware update failures.
+ *
+ * @param [in] dev
+ * @param [in] ctx
+ * @param [out] output
+ * @return 0 on success, a negated errno value on failure.
+ */
+int qc7xx_sha256_finish_checked(struct qc7xx_device_s *dev,
+                                struct qc7xx_sha256_ctx_s *ctx,
+                                uint8_t *output);
+
+/**
  * @brief
  *
  * @param [in] dev

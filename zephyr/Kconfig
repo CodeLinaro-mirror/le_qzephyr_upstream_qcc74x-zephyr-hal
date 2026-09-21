@@ -2,5 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 if SOC_FAMILY_QUALCOMM
 
+config QCC74X_SEC_PKA
+	bool
+	help
+	  Enable the QCC74x public-key accelerator implementation.
 
 endif # SOC_FAMILY_QUALCOMM
