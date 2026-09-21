@@ -89,9 +89,16 @@
 
 /** @defgroup I2S_CMD_DATA_ENABLE_TYPE i2s data enable type
   * @{
+  * Arg bits for I2S_CMD_DATA_ENABLE:
+  *   ENABLE_TX / ENABLE_RX : set the corresponding bit
+  *   DISABLE_TX / DISABLE_RX: clear the corresponding bit
+  *   If neither ENABLE nor DISABLE is set for a direction, that direction is not touched.
+  *   Use (DISABLE_TX | DISABLE_RX) to clear both (e.g. after configure).
   */
-#define I2S_CMD_DATA_ENABLE_TX        (1 << 1)
-#define I2S_CMD_DATA_ENABLE_RX        (1 << 2)
+#define I2S_CMD_DATA_ENABLE_TX        (1 << 1)  /*!< Set   TXD_EN */
+#define I2S_CMD_DATA_ENABLE_RX        (1 << 2)  /*!< Set   RXD_EN */
+#define I2S_CMD_DATA_DISABLE_TX       (1 << 3)  /*!< Clear TXD_EN */
+#define I2S_CMD_DATA_DISABLE_RX       (1 << 4)  /*!< Clear RXD_EN */
 
 /**
   * @}

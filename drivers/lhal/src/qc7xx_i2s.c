@@ -329,18 +329,18 @@ int qc7xx_i2s_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             break;
 
         case I2S_CMD_DATA_ENABLE:
-            /* data enable, arg: use @ref I2S_CMD_DATA_ENABLE_TYPE */
+            /* Independent TX/RX control via arg bits.
+             * ENABLE_TX/ENABLE_RX set the bit; DISABLE_TX/DISABLE_RX clear it.
+             * Directions not mentioned in arg are left unchanged. */
             regval = getreg32(reg_base + I2S_CONFIG_OFFSET);
-            /* enable tx data signal */
             if (arg & I2S_CMD_DATA_ENABLE_TX) {
                 regval |= I2S_CR_I2S_TXD_EN;
-            } else {
+            } else if (arg & I2S_CMD_DATA_DISABLE_TX) {
                 regval &= ~I2S_CR_I2S_TXD_EN;
             }
-            /* enable rx data signal */
             if (arg & I2S_CMD_DATA_ENABLE_RX) {
                 regval |= I2S_CR_I2S_RXD_EN;
-            } else {
+            } else if (arg & I2S_CMD_DATA_DISABLE_RX) {
                 regval &= ~I2S_CR_I2S_RXD_EN;
             }
             putreg32(regval, reg_base + I2S_CONFIG_OFFSET);
