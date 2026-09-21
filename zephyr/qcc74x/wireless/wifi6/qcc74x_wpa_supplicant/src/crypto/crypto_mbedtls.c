@@ -1,3 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: 2020-2026 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
+ * SPDX-License-Identifier: BSD-3-Clause
+ * Not a contribution.
+ */
 #define MBEDTLS_ALLOW_PRIVATE_ACCESS
 
 #include "includes.h"
