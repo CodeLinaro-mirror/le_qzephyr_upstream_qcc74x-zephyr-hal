@@ -1,11 +1,4 @@
 /*
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
- * SPDX-License-Identifier: BSD-3-Clause
- *
- * Contains code under the following license:
- *
- * Not a contribution.
- *
  * Copyright (c) 2019 Nuclei Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -21,6 +14,11 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * Not a contribution.
+ *
  */
 #ifndef __CORE_FEATURE_PMP_H__
 #define __CORE_FEATURE_PMP_H__
