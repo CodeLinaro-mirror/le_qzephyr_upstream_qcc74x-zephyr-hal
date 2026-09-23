@@ -48,6 +48,7 @@ if(CONFIG_BT)
   )
 endif()
 
+# ==================== IEEE 802.15.4 (lmac154) ====================
 if(CONFIG_IEEE802154)
   add_subdirectory(lmac154_lib)
 endif()

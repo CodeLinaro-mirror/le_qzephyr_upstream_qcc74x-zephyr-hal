@@ -1,3 +1,12 @@
+# Release v2.1.14
+## Features
+- feat: support PDS15 GPIO wake
+- feat: add flash application jump support
+- feat: accelerate MCUboot image authentication
+- feat: update support max connection from 2 to 4
+## Bug Fixes
+- fix: follow STA channel when starting AP
+
 # Release v2.1.13
 ## Features
 - feat: CSI DMA capture and antenna diversity config by user
