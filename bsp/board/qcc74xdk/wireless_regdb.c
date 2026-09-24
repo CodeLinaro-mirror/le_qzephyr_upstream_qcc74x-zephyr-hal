@@ -259,3 +259,9 @@ void wireless_regdb_init(void) {
     // This function is be called by driver during the initialization phase
     wireless_config_set_reg_db(&wireless_reg_db);
 }
+
+const struct reg_db_t *wireless_regdb_get(void) {
+    // The database handed to the wl library is private to it, so expose the
+    // board copy for callers that need to report regulatory limits.
+    return &wireless_reg_db;
+}
