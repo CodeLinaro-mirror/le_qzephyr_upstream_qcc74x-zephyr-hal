@@ -9,7 +9,7 @@
 
 #include "platform_al.h"
 
-#if defined(CONFIG_QCC74X_PM_PDS15) || defined(CFG_WIFI_PDS_RESUME)
+#if defined(CONFIG_QCC74X_PM_LPFW) || defined(CFG_WIFI_PDS_RESUME)
 #include <qcc74x_lp.h>
 
 #include "export/common/co_utils.h"
@@ -174,7 +174,7 @@ static int platform_workqueue_init(void)
 }
 SYS_INIT(platform_workqueue_init, POST_KERNEL, 0);
 
-#if defined(CONFIG_QCC74X_PM_PDS15) || defined(CFG_WIFI_PDS_RESUME)
+#if defined(CONFIG_QCC74X_PM_LPFW) || defined(CFG_WIFI_PDS_RESUME)
 static uint8_t platform_get_leg_rate(uint8_t rate)
 {
 	switch (rate) {

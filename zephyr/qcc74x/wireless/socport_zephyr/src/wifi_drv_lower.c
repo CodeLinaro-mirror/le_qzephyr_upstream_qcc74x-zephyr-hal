@@ -15,44 +15,10 @@
 #include "os.h"
 #include "rtos_al.h"
 
-#if defined(CONFIG_BOARD_QCC74X_DEVKITP) || defined(CONFIG_BOARD_QCC743_DEVKITP) || \
-	defined(CFG_QCC74X_WIFI_CONSTRAINED_RAM)
-#define TX_BUF_CNT (11)
-#else
-#define TX_BUF_CNT (24)
-#endif
-
 #define TX_BUF_ALLOC_TIMEOUT (0)
-
-static rtos_semaphore dnld_txbuf_semaphore;
-
-void cmd_net_printf()
-{
-	struct k_mem_slab *rx, *tx;
-	struct net_buf_pool *rx_data, *tx_data;
-
-	net_pkt_get_info(&rx, &tx, &rx_data, &tx_data);
-
-    printf("pkt:%u/%u, tx:%u/%u\r\n",
-	       rx->info.num_blocks, k_mem_slab_num_free_get(rx),
-	       tx->info.num_blocks, k_mem_slab_num_free_get(tx));
-
-	printf("Fragment length %d bytes\n", CONFIG_NET_BUF_DATA_SIZE);
-	printf("Network buffer pools:\n");
-
-	printf("Address\t\tTotal\tAvail\tMaxUsed\tName\n");
-	printf("%p\t%d\t%u\t-\tRX\n",
-	       rx, rx->info.num_blocks, k_mem_slab_num_free_get(rx));
-
-	printf("%p\t%d\t%u\t-\tTX\n",
-	       tx, tx->info.num_blocks, k_mem_slab_num_free_get(tx));
-	printf("%p\t%d\t%ld\t%d\tRX DATA (%s)\n", rx_data, rx_data->buf_count,
-	   atomic_get(&rx_data->avail_count), rx_data->max_used, rx_data->name);
-
-	printf("%p\t%d\t%ld\t%d\tTX DATA (%s)\n", tx_data, tx_data->buf_count,
-	   atomic_get(&tx_data->avail_count), tx_data->max_used, tx_data->name);
-
-}
+#define TX_FRAME_AREA_SIZE 1600
+#define TX_HEADROOM 400
+#define TX_BUFFER_SIZE (TX_FRAME_AREA_SIZE + TX_HEADROOM)
 
 int net_pkt_avil_cnt(void)
 {
@@ -78,6 +44,25 @@ static int net_pkt_rx_avil(void)
 
 volatile uint32_t g_net_recv_data = 0;
 
+#if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+struct qc7xx_rx_external_context {
+    net_buf_free_fn free_fn;
+    void *net_buf;
+};
+
+static void qc7xx_rx_external_destroy(struct net_buf *buf)
+{
+    struct qc7xx_rx_external_context *ctx = net_buf_user_data(buf);
+
+    ctx->free_fn(ctx->net_buf);
+    net_buf_destroy(buf);
+}
+
+NET_BUF_POOL_HEAP_DEFINE(qc7xx_rx_external_pool, CONFIG_NET_PKT_RX_COUNT,
+                         sizeof(struct qc7xx_rx_external_context),
+                         qc7xx_rx_external_destroy);
+#endif
+
 #if defined(CONFIG_NET_STATISTICS_WIFI)
 static void qc7xx_wifi_update_rx_stats(struct net_stats_wifi *stats,
                                        struct net_eth_hdr *hdr, uint16_t len)
@@ -95,12 +80,21 @@ static void qc7xx_wifi_update_rx_stats(struct net_stats_wifi *stats,
 }
 #endif
 
-static int qc7xx_wifi_recv(void *payload, uint16_t length, uint8_t offset, uint8_t skip_after_eth_hdr, net_buf_free_fn free_fn)
+static int qc7xx_wifi_recv(void *net_buf, void *payload, uint16_t length, uint8_t offset,
+                           uint8_t skip_after_eth_hdr, net_buf_free_fn free_fn)
 {
     struct net_pkt *pkt;
+#if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+    struct net_buf *external;
+    struct qc7xx_rx_external_context *external_ctx;
+#endif
     uint8_t *data = (uint8_t *)payload + offset + skip_after_eth_hdr;
-    uint16_t pkt_len;
+    uint16_t pkt_len = 0U;
+    int ret;
+#if !defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+    ARG_UNUSED(net_buf);
     ARG_UNUSED(free_fn);
+#endif
 
     if (qc7xx_wifi_iface == NULL) {
         printf("net interface unavailable\r\n");
@@ -114,38 +108,46 @@ static int qc7xx_wifi_recv(void *payload, uint16_t length, uint8_t offset, uint8
     pkt_len = length - skip_after_eth_hdr;
 
 
-#if 1
     if (1 != net_pkt_rx_avil()) {
         // workaround
         goto out;
     }
 
+#if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+    pkt = net_pkt_rx_alloc_on_iface(qc7xx_wifi_iface, K_NO_WAIT);
+    if (pkt != NULL) {
+        external = net_buf_alloc_with_data(&qc7xx_rx_external_pool, data,
+                                           pkt_len, K_NO_WAIT);
+        if (external == NULL) {
+            net_pkt_unref(pkt);
+            pkt = NULL;
+        }
+    }
+#else
     pkt = net_pkt_rx_alloc_with_buffer(qc7xx_wifi_iface, pkt_len, AF_UNSPEC, 0, K_MSEC(100));
+#endif
     if (!pkt) {
         printf("Failed alloc pkt buf, flag:%d\r\n", g_net_recv_data);
         goto out;
     }
+
+#if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+    external_ctx = net_buf_user_data(external);
+    external_ctx->free_fn = free_fn;
+    external_ctx->net_buf = net_buf;
+    net_pkt_append_buffer(pkt, external);
+    net_pkt_set_family(pkt, AF_UNSPEC);
+    net_pkt_cursor_init(pkt);
 #else
-    pkt = net_pkt_rx_alloc_on_iface(qc7xx_wifi_iface, K_MSEC(100));
-    if (!pkt) {
-        printf("Failed to alloc pkt, flag:%d\r\n", g_net_recv_data);
-        k_sleep(K_MSEC(2));
-        goto out;
-    }
-	net_pkt_set_family(pkt, AF_UNSPEC);
-	if (net_pkt_alloc_buffer(pkt, pkt_len, 0, K_MSEC(100))) {
-        printf("Failed to alloc buffer, flag:%d\r\n", g_net_recv_data);
-        k_sleep(K_MSEC(1));
+    ret = net_pkt_write(pkt, data, pkt_len);
+    if (ret < 0) {
+        printf("Failed to write to net buf\r\n");
         goto pkt_unref;
     }
 #endif
 
-    if (net_pkt_write(pkt, data, pkt_len) < 0) {
-        printf("Failed to write to net buf\r\n");
-        goto pkt_unref;
-    }
-
-    if (net_recv_data(qc7xx_wifi_iface, pkt) < 0) {
+    ret = net_recv_data(qc7xx_wifi_iface, pkt);
+    if (ret < 0) {
         printf("Failed to push received data\r\n");
         goto pkt_unref;
     }
@@ -155,10 +157,17 @@ static int qc7xx_wifi_recv(void *payload, uint16_t length, uint8_t offset, uint8
     qc7xx_wifi_update_rx_stats(&qc7xx_data.stats, (struct net_eth_hdr *)data, pkt_len);
 #endif
 
+#if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+    return 1;
+#else
     return 0;
+#endif
 
 pkt_unref:
     net_pkt_unref(pkt);
+#if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
+    return 1;
+#endif
 
 out:
 #if defined(CONFIG_NET_STATISTICS_WIFI)
@@ -227,8 +236,21 @@ out:
  * replace net_al.c
  */
 
-char __attribute__((section("SHAREDRAM"))) __attribute__((aligned(4))) fhost_tx_buf[TX_BUF_CNT][400 + 1600];
-volatile int fhost_tx_buf_length[TX_BUF_CNT];
+#if defined(CONFIG_PSRAM) && defined(CONFIG_QCC74X_WIFI_HIGH_PERFORMANCE)
+#define FHOST_TX_COPY_BUF_COUNT 24
+#elif defined(CFG_QCC74X_WIFI_CONSTRAINED_RAM)
+#define FHOST_TX_COPY_BUF_COUNT 11
+#else
+#define FHOST_TX_COPY_BUF_COUNT 24
+#endif
+
+static rtos_semaphore dnld_txbuf_semaphore;
+char __attribute__((section("SHAREDRAM"))) __attribute__((aligned(4)))
+	fhost_tx_buf[FHOST_TX_COPY_BUF_COUNT][TX_BUFFER_SIZE];
+volatile int fhost_tx_buf_length[FHOST_TX_COPY_BUF_COUNT];
+
+BUILD_ASSERT(CONFIG_QCC74X_WIFI_TX_BATCH_DEPTH < FHOST_TX_COPY_BUF_COUNT,
+             "TX batching must leave a free copy buffer");
 
 extern int net_eth_receive(net_al_if_t *netif, void *addr, uint16_t len);
 extern void fhost_rx_buf_push(void *net_buf);
@@ -241,8 +263,8 @@ void *net_al_tx_buf_get_header(void *buf)
 {
     uint32_t val = (uint32_t)buf;
 
-    for (int i = 0; i < TX_BUF_CNT; i++) {
-        if (val - (uint32_t)(fhost_tx_buf[i]) == 400) {
+    for (int i = 0; i < FHOST_TX_COPY_BUF_COUNT; i++) {
+        if (val - (uint32_t)(fhost_tx_buf[i]) == TX_HEADROOM) {
             return fhost_tx_buf[i];
         }
     }
@@ -254,8 +276,9 @@ void net_al_tx_buf_set_len(void *buf, int length)
 {
     uint32_t val = (uint32_t)buf;
 
-    for (int i = 0; i < TX_BUF_CNT; i++) {
-        if(val == (uint32_t)(fhost_tx_buf[i]) || val - (uint32_t)(fhost_tx_buf[i]) == 400) {
+    for (int i = 0; i < FHOST_TX_COPY_BUF_COUNT; i++) {
+        if(val == (uint32_t)(fhost_tx_buf[i]) ||
+	   val - (uint32_t)(fhost_tx_buf[i]) == TX_HEADROOM) {
             fhost_tx_buf_length[i] = length;
         }
     }
@@ -265,8 +288,9 @@ int net_al_tx_buf_get_len(void *buf)
 {
     uint32_t val = (uint32_t)buf;
 
-    for (int i = 0; i < TX_BUF_CNT; i++) {
-        if(val == (uint32_t)(fhost_tx_buf[i]) || val - (uint32_t)(fhost_tx_buf[i]) == 400) {
+    for (int i = 0; i < FHOST_TX_COPY_BUF_COUNT; i++) {
+        if(val == (uint32_t)(fhost_tx_buf[i]) ||
+	   val - (uint32_t)(fhost_tx_buf[i]) == TX_HEADROOM) {
             return fhost_tx_buf_length[i];
         }
     }
@@ -277,7 +301,7 @@ int net_al_tx_buf_get_len(void *buf)
 
 void net_al_tx_buf_init()
 {
-    if (rtos_semaphore_create(&dnld_txbuf_semaphore, TX_BUF_CNT, 0))
+    if (rtos_semaphore_create(&dnld_txbuf_semaphore, FHOST_TX_COPY_BUF_COUNT, 0))
     {
         while(1) {
         printf("assert. =============\r\n");
@@ -302,10 +326,10 @@ void *net_al_tx_buf_alloc(int32_t timeout)
     }
 
     while (1) {
-        for (int i = 0; i < TX_BUF_CNT; i++) {
+        for (int i = 0; i < FHOST_TX_COPY_BUF_COUNT; i++) {
             if(fhost_tx_buf_length[i] == 0) {
                 fhost_tx_buf_length[i] = 1;
-                return &fhost_tx_buf[i][400];
+                return &fhost_tx_buf[i][TX_HEADROOM];
             }
         }
 
@@ -332,8 +356,8 @@ void *net_al_tx_buf_alloc(int32_t timeout)
 
 void net_al_tx_buf_free(void *buf)
 {
-    for (int i = 0; i < TX_BUF_CNT; i++) {
-        if(buf == &fhost_tx_buf[i][400]) {
+    for (int i = 0; i < FHOST_TX_COPY_BUF_COUNT; i++) {
+        if(buf == &fhost_tx_buf[i][TX_HEADROOM]) {
             if (fhost_tx_buf_length[i] != 0) {
                 fhost_tx_buf_length[i] = 0;
                 rtos_semaphore_signal(dnld_txbuf_semaphore, false);
@@ -343,17 +367,22 @@ void net_al_tx_buf_free(void *buf)
     }
 }
 
+void *net_al_tx_buf_data(void *buf)
+{
+	return buf;
+}
+
 void net_al_tx_buf_get(uint32_t *tot, uint32_t *used)
 {
     uint32_t tmp_used = 0;
 
-    for (int i = 0; i < TX_BUF_CNT; i++) {
+    for (int i = 0; i < FHOST_TX_COPY_BUF_COUNT; i++) {
         if(fhost_tx_buf_length[i] != 0) {
             tmp_used++;
         }
     }
     if (tot) {
-        *tot = TX_BUF_CNT;
+        *tot = FHOST_TX_COPY_BUF_COUNT;
     }
     if (used) {
         *used = tmp_used;
@@ -362,17 +391,17 @@ void net_al_tx_buf_get(uint32_t *tot, uint32_t *used)
 
 net_al_tx_t net_buf_tx_alloc_fill(const uint8_t *frame, uint32_t length)
 {
-    uint8_t *pkg;
+	uint8_t *pkg;
 
-    pkg = net_al_tx_buf_alloc(TX_BUF_ALLOC_TIMEOUT);
-    if (!pkg) {
-        return NULL;
-    }
+	pkg = net_al_tx_buf_alloc(TX_BUF_ALLOC_TIMEOUT);
+	if (!pkg) {
+		return NULL;
+	}
 
-    memcpy(pkg, frame, length);
-    net_al_tx_buf_set_len(pkg, length);
+	memcpy(pkg, frame, length);
+	net_al_tx_buf_set_len(pkg, length);
 
-    return (net_al_tx_t)pkg;
+	return (net_al_tx_t)pkg;
 }
 
 /* init, tx/rx */
@@ -406,7 +435,10 @@ void net_al_input(net_al_rx_t net_buf, void *payload,
     struct net_eth_hdr *eth_hdr = payload;
     if (htons(eth_hdr->type) != NET_ETH_PTYPE_EAPOL) {
         if ((uint32_t)net_if == (uint32_t)qc7xx_wifi_iface) {
-            qc7xx_wifi_recv(payload, length, offset, skip_after_eth_hdr, free_fn);
+            if (qc7xx_wifi_recv(net_buf, payload, length, offset,
+                                skip_after_eth_hdr, free_fn) > 0) {
+                free_fn = NULL;
+            }
 #if defined(CONFIG_QC7XX_WIFI_AP_STA_MODE)
         } else if ((uint32_t)net_if == (uint32_t)qc7xx_wifi_iface_ap) {
             qc7xx_wifi_ap_recv(payload, length, offset, skip_after_eth_hdr, free_fn);
@@ -418,37 +450,36 @@ void net_al_input(net_al_rx_t net_buf, void *payload,
         net_eth_receive(net_if, (uint8_t *)payload + offset + skip_after_eth_hdr, length - skip_after_eth_hdr);
     }
 
-    free_fn(net_buf);
+    if (free_fn != NULL) {
+        free_fn(net_buf);
+    }
+}
+
+bool net_buf_tx_all_shram(net_al_tx_t net_buf)
+{
+	ARG_UNUSED(net_buf);
+	return true;
 }
 
 void *net_buf_tx_info(net_al_tx_t *net_buf, uint16_t *tot_len, int *seg_cnt,
                       uint32_t seg_addr[], uint16_t seg_len[], uint32_t *headroom_len)
 {
+	char *buf = (char *)net_buf;
+	int length = net_al_tx_buf_get_len(buf);
+	void *headroom = net_al_tx_buf_get_header(buf);
 
-    char *buf;
-    int length;
-    void *headroom;
+	*headroom_len = TX_HEADROOM;
+	*tot_len = length;
+	seg_addr[0] = (uint32_t)buf;
+	seg_len[0] = *tot_len;
+	*seg_cnt = 1;
 
-    buf = (char *)net_buf;
-    length = net_al_tx_buf_get_len(buf);
-    headroom = net_al_tx_buf_get_header(buf);
-
-    *headroom_len = 400;
-
-    *tot_len = length;
-
-    seg_addr[0] = (uint32_t)buf;
-    seg_len[0] = *tot_len;
-    *seg_cnt = 1;
-
-    return headroom;
+	return headroom;
 }
 
 void net_buf_tx_free(net_al_tx_t net_buf)
 {
-    void *buf = (void *)net_buf;
-    // Free the buffer
-    net_al_tx_buf_free(buf);
+	net_al_tx_buf_free((void *)net_buf);
 }
 
 /*
@@ -478,7 +509,7 @@ void net_buf_rx_free(net_al_rx_t net_buf)
 
 int net_al_tx_req(struct net_al_tx_req req)
 {
-    net_al_tx_t *ibuf = req.net_buf;
+    net_al_tx_t ibuf = req.net_buf;
     net_al_if_t net_if = req.net_if;
     int type = req.type;
     void *cfm_cb = req.cfm_cb;
@@ -486,7 +517,9 @@ int net_al_tx_req(struct net_al_tx_req req)
     void *buf_rx = req.buf_rx;
     int no_cck = req.no_cck;
 
-    return fhost_tx_req_do(net_if, ibuf, type, cfm_cb, cfm_cb_arg, buf_rx, no_cck);
+    int result = fhost_tx_req_do(net_if, ibuf, type, cfm_cb, cfm_cb_arg, buf_rx, no_cck);
+
+    return result;
 }
 
 void net_al_rx_resend(bool rx_buf_forward,
@@ -496,9 +529,9 @@ void net_al_rx_resend(bool rx_buf_forward,
                     int offset,
                     int mac_hdr_len)
 {
-    uint8_t *pkg;
+	net_al_tx_t pkg;
 
-    pkg = net_al_tx_buf_alloc(TX_BUF_ALLOC_TIMEOUT);
+	pkg = net_al_tx_buf_alloc(TX_BUF_ALLOC_TIMEOUT);
     if (!pkg)
     {
         if (!rx_buf_forward)
@@ -509,11 +542,11 @@ void net_al_rx_resend(bool rx_buf_forward,
     }
     else
     {
-        if (offset != 0) {
-            printf("=============== offset:%d\r\n", offset);
-        }
-        memcpy(pkg,  (uint8_t*)payload + offset, length);
-        net_al_tx_buf_set_len(pkg, length);
+		if (offset != 0) {
+			printf("=============== offset:%d\r\n", offset);
+		}
+			memcpy(pkg, (uint8_t *)payload + offset, length);
+			net_al_tx_buf_set_len(pkg, length);
 
         void fhost_rx_do_resend_req(void *buf, net_al_tx_t net_buf_tx, bool forward);
         fhost_rx_do_resend_req(buf, (net_al_tx_t)pkg, rx_buf_forward);
@@ -561,17 +594,17 @@ int net_l2_send_do(net_al_if_t net_if, const uint8_t *data, int data_len, uint16
                    const uint8_t *dst_addr, bool *ack)
 {
     int res = 0;
-    uint8_t *pkg;
+	net_al_tx_t pkg;
 
     pkg = net_al_tx_buf_alloc(TX_BUF_ALLOC_TIMEOUT);
     if (!pkg) {
         return -1;
     }
-    memcpy(pkg + 14, data, data_len);
-    net_al_tx_buf_set_len(pkg, data_len + 14);
+	memcpy((uint8_t *)pkg + 14, data, data_len);
+	net_al_tx_buf_set_len(pkg, data_len + 14);
 
-    if (dst_addr) {
-        struct net_eth_hdr *eth_hdr = (struct net_eth_hdr *)pkg;
+	if (dst_addr) {
+		struct net_eth_hdr *eth_hdr = (struct net_eth_hdr *)pkg;
         memcpy(eth_hdr->dst.addr, dst_addr, WIFI_MAC_ADDR_LEN);
         memcpy(eth_hdr->src.addr, net_if_get_mac_addr(net_if), WIFI_MAC_ADDR_LEN);
         eth_hdr->type = htons(ethertype);

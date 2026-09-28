@@ -99,15 +99,17 @@ void PSram_Ctrl_Init(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Cfg_Type *psramCtrlCfg)
     }
 }
 
+static void ATTR_TCM_SECTION PSram_Ctrl_Release(PSRAM_ID_Type PSRAM_ID);
+
 /****************************************************************************/ /**
  * @brief  PSRAM Ctrl request access
  *
  * @param  PSRAM_ID: PSRAM ID
  *
- * @return None
+ * @return SUCCESS or TIMEOUT
  *
 *******************************************************************************/
-static void PSram_Ctrl_Request(PSRAM_ID_Type PSRAM_ID)
+static QC7XX_Err_Type ATTR_TCM_SECTION PSram_Ctrl_Request(PSRAM_ID_Type PSRAM_ID)
 {
     uint32_t tmpVal = 0;
     uint32_t psram_base = PSRAM_CTRL_BASE + (0x1000 * PSRAM_ID);
@@ -122,9 +124,12 @@ static void PSram_Ctrl_Request(PSRAM_ID_Type PSRAM_ID)
     do {
         tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
         if (time_out++ > PSRAM_X8_CTRL_WAIT_TIMEOUT) {
-            break;
+            PSram_Ctrl_Release(PSRAM_ID);
+            return TIMEOUT;
         }
     } while (!QC7XX_IS_REG_BIT_SET(tmpVal, PSRAM_REG_CONFIG_GNT));
+
+    return SUCCESS;
 }
 
 /****************************************************************************/ /**
@@ -135,7 +140,7 @@ static void PSram_Ctrl_Request(PSRAM_ID_Type PSRAM_ID)
  * @return None
  *
 *******************************************************************************/
-static void PSram_Ctrl_Release(PSRAM_ID_Type PSRAM_ID)
+static void ATTR_TCM_SECTION PSram_Ctrl_Release(PSRAM_ID_Type PSRAM_ID)
 {
     uint32_t tmpVal = 0;
     uint32_t psram_base = PSRAM_CTRL_BASE + (0x1000 * PSRAM_ID);
@@ -156,7 +161,10 @@ static void PSram_Ctrl_Release(PSRAM_ID_Type PSRAM_ID)
  * @return SUCCESS or TIMEOUT
  *
 *******************************************************************************/
-QC7XX_Err_Type PSram_Ctrl_Winbond_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Winbond_Cfg_Reg_Type reg_addr, uint16_t *regVal)
+/* Manual controller access cannot execute from PSRAM. Callers must also keep
+ * buffers/stacks outside PSRAM and prevent concurrent PSRAM access.
+ */
+QC7XX_Err_Type ATTR_TCM_SECTION PSram_Ctrl_Winbond_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Winbond_Cfg_Reg_Type reg_addr, uint16_t *regVal)
 {
     uint32_t tmpVal = 0;
     uint32_t psram_base = PSRAM_CTRL_BASE + (0x1000 * PSRAM_ID);
@@ -166,7 +174,9 @@ QC7XX_Err_Type PSram_Ctrl_Winbond_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Wi
     CHECK_PARAM(IS_PSRAM_CTRL_WINBOND_CFG_REG_TYPE(reg_addr));
     CHECK_PARAM(IS_PSRAM_ID_TYPE(PSRAM_ID));
 
-    PSram_Ctrl_Request(PSRAM_ID);
+    if (PSram_Ctrl_Request(PSRAM_ID) != SUCCESS) {
+        return TIMEOUT;
+    }
 
     //configure pSRAM register,select reg_addr CR0 or CR1
     tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
@@ -182,6 +192,7 @@ QC7XX_Err_Type PSram_Ctrl_Winbond_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Wi
     do {
         tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
         if (time_out++ > PSRAM_X8_CTRL_WAIT_TIMEOUT) {
+            PSram_Ctrl_Release(PSRAM_ID);
             return TIMEOUT;
         }
     } while (!QC7XX_IS_REG_BIT_SET(tmpVal, PSRAM_STS_CONFIG_R_DONE));
@@ -205,7 +216,7 @@ QC7XX_Err_Type PSram_Ctrl_Winbond_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Wi
  * @return SUCCESS or TIMEOUT
  *
 *******************************************************************************/
-QC7XX_Err_Type PSram_Ctrl_Winbond_Write_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Winbond_Cfg_Reg_Type reg_addr, PSRAM_Winbond_Cfg_Type *reg_cfg)
+QC7XX_Err_Type ATTR_TCM_SECTION PSram_Ctrl_Winbond_Write_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_Winbond_Cfg_Reg_Type reg_addr, PSRAM_Winbond_Cfg_Type *reg_cfg)
 {
     uint32_t tmpVal = 0;
     uint32_t psram_base = PSRAM_CTRL_BASE + (0x1000 * PSRAM_ID);
@@ -216,7 +227,9 @@ QC7XX_Err_Type PSram_Ctrl_Winbond_Write_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_W
     CHECK_PARAM(IS_PSRAM_CTRL_WINBOND_CFG_REG_TYPE(reg_addr));
     CHECK_PARAM(IS_PSRAM_ID_TYPE(PSRAM_ID));
 
-    PSram_Ctrl_Request(PSRAM_ID);
+    if (PSram_Ctrl_Request(PSRAM_ID) != SUCCESS) {
+        return TIMEOUT;
+    }
 
     //configure Winbond register
     tmpVal = QC7XX_RD_REG(psram_base, PSRAM_WINBOND_PSRAM_CONFIGURE);
@@ -261,6 +274,7 @@ QC7XX_Err_Type PSram_Ctrl_Winbond_Write_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_W
     do {
         tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
         if (time_out++ > PSRAM_X8_CTRL_WAIT_TIMEOUT) {
+            PSram_Ctrl_Release(PSRAM_ID);
             return TIMEOUT;
         }
     } while (!QC7XX_IS_REG_BIT_SET(tmpVal, PSRAM_STS_CONFIG_W_DONE));
@@ -290,7 +304,9 @@ QC7XX_Err_Type PSram_Ctrl_ApMem_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_ApMe
     CHECK_PARAM(IS_PSRAM_CTRL_APMEM_CFG_REG_TYPE(reg_addr));
     CHECK_PARAM(IS_PSRAM_ID_TYPE(PSRAM_ID));
 
-    PSram_Ctrl_Request(PSRAM_ID);
+    if (PSram_Ctrl_Request(PSRAM_ID) != SUCCESS) {
+        return TIMEOUT;
+    }
 
     //configure pSRAM register,select reg_addr CR0 or CR1
     tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
@@ -306,6 +322,7 @@ QC7XX_Err_Type PSram_Ctrl_ApMem_Read_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_ApMe
     do {
         tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
         if (time_out++ > PSRAM_X8_CTRL_WAIT_TIMEOUT) {
+            PSram_Ctrl_Release(PSRAM_ID);
             return TIMEOUT;
         }
     } while (!QC7XX_IS_REG_BIT_SET(tmpVal, PSRAM_STS_CONFIG_R_DONE));
@@ -339,7 +356,9 @@ QC7XX_Err_Type PSram_Ctrl_ApMem_Write_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_ApM
     CHECK_PARAM(IS_PSRAM_CTRL_APMEM_CFG_REG_TYPE(reg_addr));
     CHECK_PARAM(IS_PSRAM_ID_TYPE(PSRAM_ID));
 
-    PSram_Ctrl_Request(PSRAM_ID);
+    if (PSram_Ctrl_Request(PSRAM_ID) != SUCCESS) {
+        return TIMEOUT;
+    }
 
     //configure Winbond register
     tmpVal = QC7XX_RD_REG(psram_base, PSRAM_APMEMORY_PSRAM_CONFIGURE);
@@ -372,6 +391,7 @@ QC7XX_Err_Type PSram_Ctrl_ApMem_Write_Reg(PSRAM_ID_Type PSRAM_ID, PSRAM_Ctrl_ApM
     do {
         tmpVal = QC7XX_RD_REG(psram_base, PSRAM_CONFIGURE);
         if (time_out++ > PSRAM_X8_CTRL_WAIT_TIMEOUT) {
+            PSram_Ctrl_Release(PSRAM_ID);
             return TIMEOUT;
         }
     } while (!QC7XX_IS_REG_BIT_SET(tmpVal, PSRAM_STS_CONFIG_W_DONE));

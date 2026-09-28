@@ -19,6 +19,17 @@ extern int32_t (*shared_aon_set_ldo11_soc_sstart_delay)(uint32_t);
 extern int32_t (*shared_pds_default_level_config)(uint32_t*, uint32_t);
 #endif
 
+/* Diagnostic build only: uncached APP-side breadcrumbs, no LPFW ABI change. */
+#ifdef CONFIG_QCC74X_PDS1_DEBUG_TRACE
+extern volatile uint32_t qcc74x_pds1_debug_stage;
+#define QCC74X_PDS1_TRACE(value) do { \
+    qcc74x_pds1_debug_stage = (value); \
+    __asm__ volatile("fence rw, rw" ::: "memory"); \
+} while (0)
+#else
+#define QCC74X_PDS1_TRACE(value) do { } while (0)
+#endif
+
 #define IOT2LP_PARA_ADDR          0x20010400
 // #define LP_FW_MAX_SIZE            30 * 1024
 
@@ -259,6 +270,10 @@ typedef struct {
 
     lp_fw_time_debug_t *time_debug;
 
+    /* APP and LPFW must be rebuilt together when this shared ABI changes. */
+    uint32_t pds_level;
+    uint32_t handoff_failure;
+
     /* The parameter that remains after the reset, it has to be at the back */
     struct {
         /* reset reason */
@@ -267,6 +282,14 @@ typedef struct {
     } reset_keep;
 
 } iot2lp_para_t;
+
+/* Fixed retention window shared with the LPFW binary, below WL_API_RMEM. */
+#define QC7XX_LPFW_ABI_VERSION "qcc74x-pds1-abi2"
+#if !defined(__cplusplus)
+_Static_assert(sizeof(iot2lp_para_t) == 440, "APP/LPFW shared ABI mismatch");
+_Static_assert(IOT2LP_PARA_ADDR + sizeof(iot2lp_para_t) <= 0x20010600,
+               "APP/LPFW parameters overlap PHY retention memory");
+#endif
 
 typedef int (*qc7xx_lp_cb_t)(void *arg);
 

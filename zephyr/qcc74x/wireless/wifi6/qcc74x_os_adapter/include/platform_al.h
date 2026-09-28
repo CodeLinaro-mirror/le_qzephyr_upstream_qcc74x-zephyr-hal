@@ -5,7 +5,7 @@
 #include "rtos_def.h"
 
 #if defined(CFG_QCC74x_WIFI_PS_ENABLE) || defined(CFG_WIFI_PDS_RESUME) || \
-    defined(CONFIG_QCC74X_PM_PDS15)
+    defined(CONFIG_QCC74X_PM_LPFW)
 #include <qcc74x_lp.h>
 #else
 enum PSM_EVENT {

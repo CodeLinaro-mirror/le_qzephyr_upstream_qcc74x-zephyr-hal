@@ -1,3 +1,18 @@
+# Release v2.1.16
+## Features
+- feat: decouple QCC748 PDS1 PSRAM retention from the Wi-Fi performance profile
+- feat: add QCC748 PDS1 Wi-Fi library variants
+## Bug Fixes
+- fix: retain PSRAM controller access and Wi-Fi task stacks safely across PDS1
+
+# Release v2.1.15
+## Features
+- feat: restructure to release-style west workspace layout
+- feat: support QCC74x PDS1 PSRAM retention in LPFW
+- zperf: Optimize 748 performance (TCP TX: 28Mbps TCP RX: 29Mbps UDP TX: 52Mbps UDP RX: 53Mbps)
+## Bug Fixes
+- fix: preserve WPA and crypto attribution.
+
 # Release v2.1.14
 ## Features
 - feat: support PDS15 GPIO wake
