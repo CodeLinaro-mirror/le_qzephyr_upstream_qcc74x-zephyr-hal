@@ -114,6 +114,18 @@ int32_t (*shared_lpfw_beacon_delay_sliding_win_get_average)(void) = NULL;
 int32_t (*shared_aon_set_ldo11_soc_sstart_delay)(uint32_t) = NULL;
 int32_t (*shared_pds_default_level_config)(uint32_t *, uint32_t) = NULL;
 #endif
+
+#ifndef CONFIG_WIFI
+/*
+ * LPFW references this Wi-Fi export unconditionally.  This radio-free demo
+ * has no RX buffer, so provide the link symbol and leave the field null.
+ */
+uint32_t *export_get_rx_buffer1_addr(void)
+{
+	return NULL;
+}
+#endif
+
 uint32_t *shared_func_array[32];
 
 qc7xx_lp_fw_cfg_t lpfw_cfg = {
