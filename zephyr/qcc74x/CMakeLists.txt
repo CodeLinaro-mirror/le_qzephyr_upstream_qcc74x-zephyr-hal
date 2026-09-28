@@ -101,13 +101,8 @@ endif()
     ../../drivers/soc/qcc74x/std/port/qcc74x_clock.c
     ../../drivers/rfparam/Src/rfparam_adapter.c
     ../../drivers/rfparam/Src/rfparam_rftlv.c
-
+    ../../drivers/sys/qcc74x/qcc74x_sys.c
     )
-  if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_IEEE802154 OR CONFIG_POWEROFF)
-    zephyr_sources(
-      ../../drivers/sys/qcc74x/qcc74x_sys.c
-    )
-  endif()
   zephyr_sources_ifdef( CONFIG_WIFI
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
