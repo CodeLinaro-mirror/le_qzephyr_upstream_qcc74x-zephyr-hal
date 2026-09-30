@@ -1,7 +1,9 @@
 /*
- * SPDX-FileCopyrightText: 2020-2026 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2015-2021 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2021-2026 Bouffalo Lab (modifications)
  *
- * SPDX-License-Identifier: Apache-2.0
+ * Includes code from the original wpa_supplicant/CEVA delivery, distributed
+ * under the BSD license, and adapted Espressif mbedTLS code under Apache-2.0.
  *
  * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
  * SPDX-License-Identifier: BSD-3-Clause
