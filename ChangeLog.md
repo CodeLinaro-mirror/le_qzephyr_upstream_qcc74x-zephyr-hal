@@ -1,3 +1,31 @@
+# Release v2.1.14
+## Features
+- feat: support PDS15 GPIO wake
+- feat: add flash application jump support
+- feat: accelerate MCUboot image authentication
+- feat: update support max connection from 2 to 4
+## Bug Fixes
+- fix: follow STA channel when starting AP
+
+# Release v2.1.13
+## Features
+- feat: CSI DMA capture and antenna diversity config by user
+## Bug Fixes
+- None
+
+# Release v2.1.12
+## Features
+- feat: add CSI DMA capture and host tools
+- feat: add antenna diversity support
+## Bug Fixes
+- fix: reject invalid AP channels instead of fallback
+
+# Release v2.1.11
+## Features
+- feat: add lmac154 15.4 MAC library and Zephyr build wiring
+## Bug Fixes
+- None
+
 # Release v2.1.10
 ## Features
 - feat: add anti-rollback enable getter
@@ -9,6 +37,7 @@
 - feat: add QCC74x HBN system helper
 ## Bug Fixes
 - None
+
 
 # Release v2.1.8
 ## Features
@@ -60,4 +89,3 @@
 - None
 ## Bug Fixes
 - None
-

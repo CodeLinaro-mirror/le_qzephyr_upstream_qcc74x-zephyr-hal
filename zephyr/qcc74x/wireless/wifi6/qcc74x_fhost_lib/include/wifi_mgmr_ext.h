@@ -411,6 +411,11 @@ struct twt_setup_ind_info {
 
 typedef void (*scan_item_cb_t)(void *env, void *arg, wifi_mgmr_scan_item_t *item);
 
+#ifdef CONFIG_ANTDIV_STATIC
+int ant_scan_task_start(wifi_mgmr_scan_params_t *scan_params,
+                        wifi_mgmr_sta_connect_params_t *conn_param);
+#endif
+
 /**
  * wifi_sta_antenna_connect
  * Connect to the AP

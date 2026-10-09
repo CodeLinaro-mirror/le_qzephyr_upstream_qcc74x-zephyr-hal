@@ -6,8 +6,15 @@
 #include "qc7xx_clock.h"
 #if defined(QCC74X)
 #include "qcc74x_clock.h"
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
+#if defined(QCC75X)
 #include "qcc75x_clock.h"
+#elif defined(QCR373)
+#include "qcr373_clock.h"
+#endif
+uint32_t qc7xx_peripheral_clock_get_by_id(uint8_t peri);
+int qc7xx_peripheral_clock_control_by_id(uint8_t peri, bool enable);
+int qc7xx_peripheral_clock_status_get_by_id(uint8_t peri);
 #endif
 
 /****************************************************************************/ /**

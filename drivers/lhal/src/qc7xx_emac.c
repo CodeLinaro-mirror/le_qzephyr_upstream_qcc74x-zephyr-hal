@@ -37,7 +37,7 @@ int qc7xx_emac_init(struct qc7xx_device_s *dev, const struct qc7xx_emac_config_s
 
     reg_base = dev->reg_base;
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GLB_EMAC_CLK_OUT_ADDRESS (0x20000390)
 #define GLB_UNGATE_CFG2_ADDRESS  (0x20000588)
 #define GLB_SWRST_CFG0_OFFSET    (0x20000540)
@@ -555,7 +555,7 @@ int qc7xx_emac_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             putreg32(regval, reg_base + EMAC_MODE_OFFSET);
             break;
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
         case EMAC_CMD_SET_MAC_RX_CLK_INVERT:
             /* MAC RX clock invert. Default: ref_clk_out mode: true, ref_clk_in mode: false */
             regval = getreg32(GLB_EMAC_CLK_OUT_ADDRESS);

@@ -44,7 +44,7 @@
 #define EMAC_PAD      (1 << 15U)
 #define EMAC_RECSMALL (1 << 16U)
 #define EMAC_RMII_EN  (1 << 17U)
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define EMAC_100M     (1 << 18U)
 #endif
 

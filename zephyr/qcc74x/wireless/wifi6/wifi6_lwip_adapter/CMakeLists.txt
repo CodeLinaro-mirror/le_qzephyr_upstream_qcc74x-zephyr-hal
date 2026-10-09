@@ -1,6 +1,8 @@
 zephyr_library()
 
 zephyr_library_sources(net_al_ext.c)
+zephyr_library_sources_ifdef(CONFIG_QCC74X_WIFI_ANTENNA_DIVERSITY_STATIC
+                             cli_utils_al.c)
 
 
 if (CONFIG_WIFI_MAT)

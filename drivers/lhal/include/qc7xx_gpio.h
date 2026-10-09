@@ -64,7 +64,7 @@
 #define GPIO_PIN_33     33
 #define GPIO_PIN_34     34
 #define GPIO_PIN_MAX    35
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define GPIO_PIN_23     23
 #define GPIO_PIN_24     24
 #define GPIO_PIN_25     25
@@ -123,7 +123,7 @@
 #define GPIO_FUNC_AUDAC_PWM (25 << GPIO_FUNC_SHIFT)
 #define GPIO_FUNC_JTAG      (26 << GPIO_FUNC_SHIFT)
 #define GPIO_FUNC_CLKOUT    (31 << GPIO_FUNC_SHIFT)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define GPIO_FUNC_SDH       (0 << GPIO_FUNC_SHIFT)
 #define GPIO_FUNC_SPI       (1 << GPIO_FUNC_SHIFT)
 #define GPIO_FUNC_SPI0      (1 << GPIO_FUNC_SHIFT)
@@ -207,7 +207,7 @@
 #define GPIO_UART_FUNC_UART1_CTS 5
 #define GPIO_UART_FUNC_UART1_TX  6
 #define GPIO_UART_FUNC_UART1_RX  7
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define GPIO_UART_FUNC_UART2_RTS 8
 #define GPIO_UART_FUNC_UART2_CTS 9
 #define GPIO_UART_FUNC_UART2_TX  10
@@ -262,7 +262,7 @@ void qc7xx_gpio_output_value_mode_enable(struct qc7xx_device_s *dev, uint8_t pin
  */
 void qc7xx_gpio_pin0_31_output(struct qc7xx_device_s *dev, uint32_t value);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief Write gpio32-63 output value.
  *
@@ -288,7 +288,7 @@ void qc7xx_gpio_set(struct qc7xx_device_s *dev, uint8_t pin);
  */
 void qc7xx_gpio_pin0_31_set(struct qc7xx_device_s *dev, uint32_t value);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief set gpio32-63 pin with bitmap.
  *
@@ -314,7 +314,7 @@ void qc7xx_gpio_reset(struct qc7xx_device_s *dev, uint8_t pin);
  */
 void qc7xx_gpio_pin0_31_reset(struct qc7xx_device_s *dev, uint32_t value);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief reset gpio32-63 pin with bitmap.
  *
@@ -341,7 +341,7 @@ bool qc7xx_gpio_read(struct qc7xx_device_s *dev, uint8_t pin);
  */
 uint32_t qc7xx_gpio_pin0_31_read(struct qc7xx_device_s *dev);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief Read level from gpio pin 32~63.
  *
@@ -386,7 +386,7 @@ bool qc7xx_gpio_get_intstatus(struct qc7xx_device_s *dev, uint8_t pin);
  */
 uint32_t qc7xx_gpio_get_intstatus_pin0_31(struct qc7xx_device_s *dev);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief Get gpio32-63 pin interrupt status.
  *
@@ -404,7 +404,7 @@ uint32_t qc7xx_gpio_get_intstatus_pin32_63(struct qc7xx_device_s *dev);
  */
 void qc7xx_gpio_int_clear_pin0_31(struct qc7xx_device_s *dev, uint32_t pins);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief clear gpio32-63 interrupt status with bitmap.
  *

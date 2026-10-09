@@ -54,7 +54,7 @@
   * @{
   */
 #define CAM_INTSTS_NORMAL           (1 << 12)
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define CAM_INTSTS_MEMORY_OVERWRITE (1 << 13)
 #define CAM_INTSTS_FRAME_OVERWRITE  (1 << 14)
 #endif
@@ -69,7 +69,7 @@
   * @{
   */
 #define CAM_INTMASK_NORMAL           (1 << 8)
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define CAM_INTMASK_MEMORY_OVERWRITE (1 << 9)
 #define CAM_INTMASK_FRAME_OVERWRITE  (1 << 10)
 #endif
@@ -84,7 +84,7 @@
   * @{
   */
 #define CAM_INTCLR_NORMAL           (1 << 4)
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define CAM_INTCLR_MEMORY_OVERWRITE (1 << 5)
 #define CAM_INTCLR_FRAME_OVERWRITE  (1 << 6)
 #endif
@@ -132,19 +132,19 @@
 #define CAM_CMD_SET_HSYNC_POLARITY 2
 #define CAM_CMD_SET_BURST          3
 #define CAM_CMD_SET_RGBA8888_ALPHA 4
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define CAM_CMD_GET_FRAME_ID       5
 #endif
 #define CAM_CMD_WRAP_MODE                6
 #define CAM_CMD_COUNT_TRIGGER_NORMAL_INT 7
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
 #define CAM_CMD_FRAME_ID_RESET         8
 #endif
 #define CAM_CMD_INVERSE_VSYNC_POLARITY 9
 #define CAM_CMD_INVERSE_HSYNC_POLARITY 10
 #define CAM_CMD_INVERSE_YUYV2UYVY      11
 #define CAM_CMD_FRAME_FILTER           12
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
 #define CAM_CMD_SET_OUTPUT_ADDR        13
 #endif
 

@@ -12,7 +12,7 @@
 
 /* Register offsets *********************************************************/
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define GLB_GPIO_CFG0_OFFSET                                    (0x8C4)/* gpio_cfg0 */
 #define GLB_GPIO_CFG142_OFFSET                                  (0xAFC)/* gpio_cfg142 */
 #define GLB_GPIO_CFG143_OFFSET                                  (0xB00)/* gpio_cfg143 */

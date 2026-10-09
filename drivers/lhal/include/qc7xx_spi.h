@@ -16,7 +16,7 @@
   * @{
   */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define SPI_FIFO_BYTE_NUM_MAX           32
 #define SPI_FIFO_WIDTH_VARIABLE_SUPPORT 1
 #else

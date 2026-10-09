@@ -131,6 +131,9 @@ void wireless_config_set_reg_db(const struct reg_db_t *reg_db);
 void wireless_regdb_init(void);
 void wireless_spur_init(void);
 
+// Read-only access to the board regulatory database
+const struct reg_db_t *wireless_regdb_get(void);
+
 // Debug log levels
 #define WL_CFG_LOG_NONE      0  // No debug output
 #define WL_CFG_LOG_ERROR     1  // Errors only

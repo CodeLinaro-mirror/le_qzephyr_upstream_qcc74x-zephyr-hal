@@ -41,7 +41,7 @@
 
 #if defined(QCC74X)
 #define FLASH_XIP_BASE (0xA0000000)
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define FLASH_XIP_BASE (0x80000000)
 #endif
 
@@ -81,7 +81,7 @@ uint32_t qc7xx_flash_get_jedec_id(void);
  */
 uint32_t qc7xx_flash_get_size(void);
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief get flash2 size
  *
@@ -188,6 +188,13 @@ void qc7xx_flash_aes_disable(void);
  * @param [in] len firmware length.
  */
 void qc7xx_flash_jump_encrypted_app(uint8_t index, uint32_t flash_addr, uint32_t len);
+
+/**
+ * @brief Initialize flash jump to app.
+ *
+ * @param [in] flash_addr flash physical address.
+ */
+void qc7xx_flash_jump_app(uint32_t flash_addr);
 
 #ifdef __cplusplus
 }

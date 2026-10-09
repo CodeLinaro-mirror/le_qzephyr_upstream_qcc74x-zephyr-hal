@@ -111,6 +111,7 @@ zephyr_compile_definitions_ifdef(CONFIG_CSIDMA_CLI -DCFG_CSIDMA_CLI=1)
 
 zephyr_compile_definitions_ifdef(CONFIG_IPV6 -DCFG_IPV6)
 
-#zephyr_compile_definitions(-DCONFIG_ANTDIV_STATIC)
-#zephyr_compile_definitions(-DCONFIG_ANTDIV_DYNAMIC)
-#add_subdirectory(antdiv_hal)
+zephyr_compile_definitions_ifdef(CONFIG_QCC74X_WIFI_ANTENNA_DIVERSITY_STATIC
+                                 -DCONFIG_ANTDIV_STATIC)
+zephyr_compile_definitions_ifdef(CONFIG_QCC74X_WIFI_ANTENNA_DIVERSITY_DYNAMIC
+                                 -DCONFIG_ANTDIV_DYNAMIC)

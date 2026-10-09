@@ -4,6 +4,7 @@
  */
 
 #include "qc7xx_sec_sha.h"
+#include "qc7xx_l1c.h"
 #include "hardware/sec_eng_reg.h"
 
 #define PUT_UINT32_BE(n, b, i)               \
@@ -141,6 +142,7 @@ int qc7xx_sha1_update(struct qc7xx_device_s *dev, struct qc7xx_sha1_ctx_s *ctx, 
 
     if (left && len >= fill) {
         arch_memcpy_fast((void *)((uint8_t *)ctx->sha_buf + left), input, fill);
+        qc7xx_l1c_dcache_clean_range(ctx->sha_buf, sizeof(ctx->sha_buf));
         putreg32((uint32_t)(uintptr_t)ctx->sha_buf, reg_base + SEC_ENG_SE_SHA_0_MSA_OFFSET);
 
         regval &= ~SEC_ENG_SE_SHA_0_MSG_LEN_MASK;
@@ -175,6 +177,7 @@ int qc7xx_sha1_update(struct qc7xx_device_s *dev, struct qc7xx_sha1_ctx_s *ctx, 
             regval &= ~SEC_ENG_SE_SHA_0_HASH_SEL;
         }
         /* Fill data */
+        qc7xx_l1c_dcache_clean_range((void *)input, fill * 64);
         putreg32((uintptr_t)input, reg_base + SEC_ENG_SE_SHA_0_MSA_OFFSET);
 
         regval &= ~SEC_ENG_SE_SHA_0_MSG_LEN_MASK;
@@ -477,6 +480,55 @@ void qc7xx_sha256_finish(struct qc7xx_device_s *dev, struct qc7xx_sha256_ctx_s *
 #else
     return qc7xx_sha1_finish(dev, (struct qc7xx_sha1_ctx_s *)ctx, output);
 #endif
+}
+
+int qc7xx_sha256_finish_checked(struct qc7xx_device_s *dev,
+                                struct qc7xx_sha256_ctx_s *ctx,
+                                uint8_t *output)
+{
+    uint32_t high;
+    uint32_t low;
+    uint32_t last;
+    uint32_t padn;
+    uint32_t regval;
+    uint8_t msg_len[8];
+    int rc;
+
+    high = (ctx->total[0] >> 29) | (ctx->total[1] << 3);
+    low = ctx->total[0] << 3;
+    PUT_UINT32_BE(high, msg_len, 0);
+    PUT_UINT32_BE(low, msg_len, 4);
+
+    last = ctx->total[0] & 0x3f;
+    padn = (last < 56) ? (56 - last) : (120 - last);
+
+    rc = qc7xx_sha256_update(dev, ctx, ctx->sha_padding, padn);
+    if (rc != 0) {
+        goto out;
+    }
+
+    arch_memcpy_fast(ctx->sha_padding, msg_len, sizeof(msg_len));
+    rc = qc7xx_sha256_update(dev, ctx, ctx->sha_padding, sizeof(msg_len));
+    if (rc != 0) {
+        goto out;
+    }
+
+    for (uint32_t i = 0; i < 8; i++) {
+        regval = getreg32(dev->reg_base + SEC_ENG_SE_SHA_0_HASH_L_0_OFFSET +
+                         i * sizeof(uint32_t));
+        *output++ = regval & 0xff;
+        *output++ = (regval >> 8) & 0xff;
+        *output++ = (regval >> 16) & 0xff;
+        *output++ = (regval >> 24) & 0xff;
+    }
+
+out:
+    regval = getreg32(dev->reg_base + SEC_ENG_SE_SHA_0_CTRL_OFFSET);
+    regval &= ~SEC_ENG_SE_SHA_0_HASH_SEL;
+    regval &= ~SEC_ENG_SE_SHA_0_EN;
+    putreg32(regval, dev->reg_base + SEC_ENG_SE_SHA_0_CTRL_OFFSET);
+
+    return rc;
 }
 
 void qc7xx_sha512_finish(struct qc7xx_device_s *dev, struct qc7xx_sha512_ctx_s *ctx, uint8_t *output)

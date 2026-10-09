@@ -16,7 +16,7 @@
   * @{
   */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #define UART_FIFO_MAX           32
 #else
 #error "unknown device"
@@ -400,16 +400,6 @@ void qc7xx_uart_int_clear(struct qc7xx_device_s *dev, uint32_t int_clear);
  * @return A negated errno value on failure.
  */
 int qc7xx_uart_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg);
-
-/**
- * @brief PDS15 resume shims.
- *
- * Reinitialize UART hardware and re-arm the IRQ callback after returning
- * from PDS15 deep sleep.  Called from pm_pds15_glue.c.
- */
-struct device;
-int qc7xx_uart_force_resume(const struct device *dev);
-int qc7xx_uart_force_irq_rearm(const struct device *dev);
 
 #ifdef __cplusplus
 }

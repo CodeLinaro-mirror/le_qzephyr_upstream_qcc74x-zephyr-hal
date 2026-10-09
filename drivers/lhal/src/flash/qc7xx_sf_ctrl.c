@@ -5,7 +5,7 @@
 
 #include "qc7xx_sf_ctrl.h"
 #include "hardware/sf_ctrl_reg.h"
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 #include "csi_core.h"
 #endif
 
@@ -897,7 +897,7 @@ uint8_t ATTR_TCM_SECTION qc7xx_sf_ctrl_get_wrap_queue_value(void)
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /****************************************************************************/ /**
  * @brief  SF Ctrl set cmds config
  *
@@ -976,7 +976,7 @@ void ATTR_TCM_SECTION qc7xx_sf_ctrl_select_pad(uint8_t sel)
     reg_base = QC7XX_SF_CTRL_BASE;
 
     regval = getreg32(reg_base + SF_CTRL_2_OFFSET);
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     if (sel <= SF_IO_EXT_SF3 || sel == SF_IO_EXT_SF2) {
         /* Single flash mode, disable bank2 */
         regval &= ~SF_CTRL_SF_IF_BK2_EN;

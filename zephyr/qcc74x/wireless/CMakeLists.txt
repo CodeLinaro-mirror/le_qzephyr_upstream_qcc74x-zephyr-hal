@@ -47,3 +47,8 @@ if(CONFIG_BT)
     -L${QCC74X_BLOB_BASE}/lib/
   )
 endif()
+
+# ==================== IEEE 802.15.4 (lmac154) ====================
+if(CONFIG_IEEE802154)
+  add_subdirectory(lmac154_lib)
+endif()

@@ -65,13 +65,17 @@ if(CONFIG_SOC_SERIES_QCC74X)
     ../../drivers/lhal/src/qc7xx_rtc.c
     ../../drivers/lhal/src/qc7xx_sec_sha.c
     ../../drivers/lhal/src/qc7xx_sec_aes.c
-    ../../drivers/lhal/src/qc7xx_sec_pka.c
     ../../drivers/lhal/src/qc7xx_clock.c
   )
   # Audio ADC/DAC lhal sources: only needed when the audio drivers are built.
   zephyr_sources_ifdef(CONFIG_AUDIO_ADC_QCC74X ../../drivers/lhal/src/qc7xx_auadc.c)
   zephyr_sources_ifdef(CONFIG_AUDIO_DAC_QCC74X ../../drivers/lhal/src/qc7xx_audac.c)
   zephyr_sources_ifdef(CONFIG_VIDEO_QCC74X_JPEG ../../drivers/lhal/src/qc7xx_mjpeg.c)
+  if(CONFIG_QCC74X_SEC_PKA)
+    zephyr_link_libraries(
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../drivers/lhal/src/pka/libpka_qc7xx.a
+    )
+  endif()
 if(CONFIG_ROMAPI)
   zephyr_sources(
     ../../drivers/soc/qcc74x/std/src/qcc74x_romapi_e907.c
@@ -97,26 +101,23 @@ endif()
     ../../drivers/soc/qcc74x/std/port/qcc74x_clock.c
     ../../drivers/rfparam/Src/rfparam_adapter.c
     ../../drivers/rfparam/Src/rfparam_rftlv.c
-
+    ../../drivers/sys/qcc74x/qcc74x_sys.c
     )
-  if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_POWEROFF)
-    zephyr_sources(
-      ../../drivers/sys/qcc74x/qcc74x_sys.c
-    )
-  endif()
   zephyr_sources_ifdef( CONFIG_WIFI
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
     ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
     ../../bsp/board/qcc74xdk/wireless_regdb.c
   )
-  zephyr_sources_ifdef( CONFIG_BT
-    ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
-    ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
-    ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
-  )
+  if(CONFIG_BT OR CONFIG_IEEE802154)
+    zephyr_sources(
+      ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_media.c
+      ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_efuse.c
+      ../../drivers/soc/qcc74x/std/src/qcc74x_mfg_flash.c
+    )
+  endif()
 
-if(CONFIG_WIFI OR CONFIG_BT)
+if(CONFIG_WIFI OR CONFIG_BT OR CONFIG_IEEE802154)
   add_subdirectory(wireless)
 
   # phyrf

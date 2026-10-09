@@ -5,14 +5,23 @@
 
 #include "qc7xx_mtimer.h"
 #include "qc7xx_core.h"
+#if defined(QCC75X) || defined(QCR373)
+#include <nmsis_core.h>
+#include <arch/risc-v/qc7xx_rv_privilege.h>
+#else
 #include <csi_core.h>
+#endif
 
 static void (*systick_callback)(void);
 static uint64_t current_set_ticks = 0;
 
 static void systick_isr(int irq, void *arg)
 {
+#if defined(QCC75X) || defined(QCR373)
+    qc7xx_rv_systimer_set_compare(qc7xx_rv_systimer_get_compare() + current_set_ticks);
+#else
     csi_coret_config(current_set_ticks, 7);
+#endif
     systick_callback();
 }
 
@@ -22,9 +31,14 @@ void qc7xx_mtimer_config(uint64_t ticks, void (*interruptfun)(void))
 
     current_set_ticks = ticks;
     systick_callback = interruptfun;
+#if defined(QCC75X) || defined(QCR373)
+    int irq = qc7xx_rv_systimer_irqn();
+    qc7xx_rv_systimer_set_compare(qc7xx_rv_systimer_get_time() + ticks);
+    qc7xx_irq_attach(irq, systick_isr, NULL);
+#else
     csi_coret_config_use(ticks, 7);
-
     qc7xx_irq_attach(7, systick_isr, NULL);
+#endif
     qc7xx_irq_enable(7);
 }
 
@@ -42,10 +56,17 @@ uint64_t ATTR_TCM_SECTION qc7xx_mtimer_get_time_us(void)
     volatile uint64_t tmp_low, tmp_high, tmp_low1, tmp_high1;
 
     do {
+#if defined(QCC75X) || defined(QCR373)
+        uint64_t t = qc7xx_rv_systimer_get_time();
+        tmp_high = t >> 32; tmp_low = t & 0xFFFFFFFF;
+        t = qc7xx_rv_systimer_get_time();
+        tmp_high1 = t >> 32; tmp_low1 = t & 0xFFFFFFFF;
+#else
         tmp_high = (uint64_t)csi_coret_get_valueh();
         tmp_low = (uint64_t)csi_coret_get_value();
         tmp_low1 = (uint64_t)csi_coret_get_value();
         tmp_high1 = (uint64_t)csi_coret_get_valueh();
+#endif
         timeout++;
         if (timeout == 1000) {
             return 0;

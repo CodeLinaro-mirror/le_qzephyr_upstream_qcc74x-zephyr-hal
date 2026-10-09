@@ -606,7 +606,9 @@ void qc7xx_lp_fw_bcn_loss_cfg_dtim_default(uint8_t dtim_num);
 /* bcn tpre cfg */
 void qc7xx_lp_fw_bcn_tpre_cfg(int32_t tpre_us);
 
-int qc7xx_lp_io_wakeup_cfg(qc7xx_lp_io_cfg_t *io_wakeup_cfg);
+int qc7xx_lp_io_wakeup_validate(uint64_t wake_mask);
+int qc7xx_lp_io_wakeup_cfg(const qc7xx_lp_io_cfg_t *io_wakeup_cfg);
+int qc7xx_lp_wakeup_io_result_get(uint64_t *wake_bits, uint64_t *edge_bits);
 void qc7xx_lp_wakeup_io_int_register(void (*wakeup_io_callback)(uint64_t wake_up_io_bits));
 int qc7xx_lp_wakeup_io_get_mode(uint8_t io_num);
 

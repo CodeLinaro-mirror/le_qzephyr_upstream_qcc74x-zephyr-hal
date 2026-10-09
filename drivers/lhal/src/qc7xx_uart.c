@@ -86,7 +86,7 @@ void qc7xx_uart_init(struct qc7xx_device_s *dev, const struct qc7xx_uart_config_
         tx_cfg &= ~UART_CR_UTX_CTS_EN;
     }
 
-#if !defined(QCC75X)
+#if !defined(QCC75X) && !defined(QCR373)
     rx_cfg &= ~UART_CR_URX_DEG_EN;
 #endif
 
@@ -97,7 +97,7 @@ void qc7xx_uart_init(struct qc7xx_device_s *dev, const struct qc7xx_uart_config_
     regval &= ~UART_CR_URX_RTS_SW_MODE;
     putreg32(regval, reg_base + UART_SW_MODE_OFFSET);
     regval = getreg32(reg_base + UART_DATA_CONFIG_OFFSET);
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     regval &= ~UART_CR_URX_DEG_EN;
 #endif
     regval &= ~UART_CR_UART_BIT_INV;
@@ -676,7 +676,7 @@ int qc7xx_uart_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
             putreg32(rx_tmp, reg_base + UART_URX_CONFIG_OFFSET);
             break;
         case UART_CMD_SET_DEGLITCH_CNT:
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             rx_tmp = getreg32(reg_base + UART_DATA_CONFIG_OFFSET);
 #else
             rx_tmp = getreg32(reg_base + UART_URX_CONFIG_OFFSET);
@@ -687,7 +687,7 @@ int qc7xx_uart_feature_control(struct qc7xx_device_s *dev, int cmd, size_t arg)
                 rx_tmp |= (arg << UART_CR_URX_DEG_CNT_SHIFT) & UART_CR_URX_DEG_CNT_MASK;
                 rx_tmp |= UART_CR_URX_DEG_EN;
             }
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
             putreg32(rx_tmp, reg_base + UART_DATA_CONFIG_OFFSET);
 #else
             putreg32(rx_tmp, reg_base + UART_URX_CONFIG_OFFSET);

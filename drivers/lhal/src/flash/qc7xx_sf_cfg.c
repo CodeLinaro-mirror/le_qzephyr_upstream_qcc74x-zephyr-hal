@@ -2630,7 +2630,7 @@ __UNUSED static const ATTR_TCM_CONST_SECTION flash_info_t flash_infos[] = {
  *  @{
  */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /**
  * @brief Error type definition
  */
@@ -2642,7 +2642,7 @@ typedef enum {
     NORESC = 4   /* no resource or resource temperary unavailable */
 } QC7XX_Err_Type;
 #endif
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 extern QC7XX_Err_Type GLB_Set_SFlash_IO_PARM(uint8_t sel_embedded, uint8_t swapIo3Io0, uint8_t swapIo2Cs);
 extern QC7XX_Err_Type GLB_Set_SFlash2_IO_PARM(uint8_t swapIo3Io0);
 #endif
@@ -2679,7 +2679,7 @@ int ATTR_TCM_SECTION qc7xx_sf_cfg_init_ext_flash_gpio(uint8_t ext_flash_pin)
         gpio_pins[3] = QC7XX_EXTFLASH_DATA10_GPIO;
         gpio_pins[4] = QC7XX_EXTFLASH_DATA20_GPIO;
         gpio_pins[5] = QC7XX_EXTFLASH_DATA30_GPIO;
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     } else if (ext_flash_pin == 1) {
         gpio_pins[0] = QC7XX_EXTFLASH_CLK1_GPIO;
         gpio_pins[1] = QC7XX_EXTFLASH_CS1_GPIO;
@@ -2727,7 +2727,7 @@ int ATTR_TCM_SECTION qc7xx_sf_cfg_deinit_ext_flash_gpio(uint8_t ext_flash_pin)
         gpio_pins[3] = QC7XX_EXTFLASH_DATA10_GPIO;
         gpio_pins[4] = QC7XX_EXTFLASH_DATA20_GPIO;
         gpio_pins[5] = QC7XX_EXTFLASH_DATA30_GPIO;
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     } else if (ext_flash_pin == 1) {
         gpio_pins[0] = QC7XX_EXTFLASH_CLK1_GPIO;
         gpio_pins[1] = QC7XX_EXTFLASH_CS1_GPIO;
@@ -2754,7 +2754,7 @@ int ATTR_TCM_SECTION qc7xx_sf_cfg_deinit_ext_flash_gpio(uint8_t ext_flash_pin)
  *  @{
  */
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /****************************************************************************/ /**
  * @brief  Init flash GPIO according to flash Pin config
  *
@@ -2830,7 +2830,7 @@ int ATTR_TCM_SECTION qc7xx_sf_cfg_init_flash2_gpio(uint8_t swap)
     return romapi_qc7xx_sf_cfg_init_flash2_gpio(swap);
 #else
     qc7xx_sf_cfg_init_ext_flash_gpio(0);
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
     GLB_Set_SFlash2_IO_PARM(swap);
 #endif
 
@@ -2883,7 +2883,7 @@ uint32_t ATTR_TCM_SECTION qc7xx_sf_cfg_flash_identify(uint8_t call_from_flash, u
     if (auto_scan) {
         flash_pin = 0;
         do {
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
             if (!IS_SF_CTRL_PIN_SELECT(flash_pin)) {
                 flash_pin++;
                 continue;
@@ -2964,7 +2964,7 @@ uint32_t ATTR_TCM_SECTION qc7xx_sf_cfg_flash_identify(uint8_t call_from_flash, u
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /****************************************************************************/ /**
  * @brief  Identify one flash patch
  *
@@ -3038,7 +3038,7 @@ int ATTR_TCM_SECTION qc7xx_sf_cfg_get_flash_cfg_need_lock(uint32_t flash_id, spi
 #endif
 }
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /****************************************************************************/ /**
  * @brief  Get flash config according to flash ID patch
  *
@@ -3058,7 +3058,7 @@ int ATTR_TCM_SECTION qc7xx_sf_cfg_get_flash_cfg_need_lock_ext(uint32_t flash_id,
 }
 #endif
 
-#if defined(QCC74X) || defined(QCC75X)
+#if defined(QCC74X) || defined(QCC75X) || defined(QCR373)
 /****************************************************************************/ /**
  * @brief  SF Cfg flash init
  *

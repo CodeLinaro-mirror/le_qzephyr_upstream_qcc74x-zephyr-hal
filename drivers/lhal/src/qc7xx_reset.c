@@ -6,8 +6,12 @@
 #include "qc7xx_reset.h"
 #if defined(QCC74X)
 #include "qcc74x_reset.h"
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
+#if defined(QCC75X)
 #include "qcc75x_reset.h"
+#elif defined(QCR373)
+#include "qcr373_reset.h"
+#endif
 #endif
 /****************************************************************************/ /**
  * @brief  reset peri

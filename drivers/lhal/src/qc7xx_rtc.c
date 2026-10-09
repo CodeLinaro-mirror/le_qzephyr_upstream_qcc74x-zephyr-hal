@@ -12,7 +12,7 @@
 
 #if defined(QCC74X)
 #define QC7XX_RTC_BASE 0x2000F000
-#elif defined(QCC75X)
+#elif defined(QCC75X) || defined(QCR373)
 #define QC7XX_RTC_BASE 0x2008F000
 #endif
 
@@ -61,7 +61,7 @@ void qc7xx_rtc_set_time(struct qc7xx_device_s *dev, uint64_t time)
     putreg32(regval, reg_base + HBN_RTC_TIME_H_OFFSET);
 
     /* Read RTC val */
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     rtc_cnt = getreg32(reg_base + HBN_RTC_TIME_H_OFFSET);
     rtc_cnt <<= 32;
     rtc_cnt |= getreg32(reg_base + HBN_RTC_TIME_L_OFFSET);
@@ -75,7 +75,7 @@ void qc7xx_rtc_set_time(struct qc7xx_device_s *dev, uint64_t time)
     rtc_cnt += time;
 
     /* Set RTC Comp time  */
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     putreg32((uint32_t)rtc_cnt, reg_base + HBN_TIME_L_OFFSET);
     putreg32((uint32_t)(rtc_cnt >> 32), reg_base + HBN_TIME_H_OFFSET);
 #else
@@ -110,7 +110,7 @@ uint64_t qc7xx_rtc_get_time(struct qc7xx_device_s *dev)
     putreg32(regval, reg_base + HBN_RTC_TIME_H_OFFSET);
 
     /* Read RTC val */
-#if defined(QCC75X)
+#if defined(QCC75X) || defined(QCR373)
     time_l = getreg32(reg_base + HBN_RTC_TIME_L_OFFSET);
     time_h = getreg32(reg_base + HBN_RTC_TIME_H_OFFSET);
 #else

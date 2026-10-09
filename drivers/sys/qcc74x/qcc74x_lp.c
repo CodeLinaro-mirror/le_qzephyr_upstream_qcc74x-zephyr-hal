@@ -4,6 +4,7 @@
  */
 
 #include <assert.h>
+#include <errno.h>
 #include "qc7xx_core.h"
 // #include <wl_api.h>
 #include <qcc74x_pm.h>
@@ -55,6 +56,26 @@
 #define QCC74X_UART_FREQ       40000000
 #define UART_BAUDRATE         (2000000)
 #define QC7XX_LP_DEBUG_IO_DISABLED 0xFFU
+#define QC7XX_LP_GPIO_PAD_COUNT 35U
+#define QC7XX_LP_GPIO_CFG_WRITABLE_MASK                           \
+    (GLB_REG_GPIO_0_IE_MSK | GLB_REG_GPIO_0_SMT_MSK |             \
+     GLB_REG_GPIO_0_DRV_MSK | GLB_REG_GPIO_0_PU_MSK |             \
+     GLB_REG_GPIO_0_PD_MSK | GLB_REG_GPIO_0_OE_MSK |              \
+     GLB_REG_GPIO_0_FUNC_SEL_MSK | GLB_REG_GPIO_0_INT_MODE_SET_MSK | \
+     GLB_REG_GPIO_0_INT_MASK_MSK | GLB_REG_GPIO_0_O_MSK |         \
+     GLB_REG_GPIO_0_MODE_MSK)
+#define QC7XX_LP_GPIO_CFG_COMMAND_MASK                             \
+    (GLB_REG_GPIO_0_INT_CLR_MSK | GLB_REG_GPIO_0_SET_MSK |        \
+     GLB_REG_GPIO_0_CLR_MSK)
+#define QC7XX_LP_AON_PAD_CTRL_0_MASK                               \
+    (HBN_REG_EN_AON_CTRL_GPIO_MSK | HBN_REG_AON_PAD_IE_SMT_MSK)
+#define QC7XX_LP_AON_PAD_CTRL_1_MASK                               \
+    (HBN_REG_AON_PAD_PU_MSK | HBN_REG_AON_PAD_PD_MSK |            \
+     HBN_REG_AON_PAD_OE_MSK)
+#define QC7XX_LP_AON_IRQ_MODE_MASK                                 \
+    (HBN_PIN_WAKEUP_MODE_MSK | HBN_PIN_WAKEUP_MASK_MSK |          \
+     HBN_REG_EN_HW_PU_PD_MSK | HBN_PIN_WAKEUP_SEL_MSK |           \
+     HBN_PIN_WAKEUP_EN_MSK)
 
 #define QCC74X_ACOMP_VREF_1V65 33
 
@@ -93,6 +114,18 @@ int32_t (*shared_lpfw_beacon_delay_sliding_win_get_average)(void) = NULL;
 int32_t (*shared_aon_set_ldo11_soc_sstart_delay)(uint32_t) = NULL;
 int32_t (*shared_pds_default_level_config)(uint32_t *, uint32_t) = NULL;
 #endif
+
+#ifndef CONFIG_WIFI
+/*
+ * LPFW references this Wi-Fi export unconditionally.  This radio-free demo
+ * has no RX buffer, so provide the link symbol and leave the field null.
+ */
+uint32_t *export_get_rx_buffer1_addr(void)
+{
+	return NULL;
+}
+#endif
+
 uint32_t *shared_func_array[32];
 
 qc7xx_lp_fw_cfg_t lpfw_cfg = {
@@ -135,9 +168,20 @@ static uint64_t g_virtual_timestamp_base_us = 0;        /* virtual time base */
 
 static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg);
 static void qc7xx_lp_acomp_wakeup_init(qc7xx_lp_acomp_cfg_t *acomp_wakeup_cfg);
+static void qc7xx_lp_aon_gpio_cfg_save(void);
+static void qc7xx_lp_gpio_cfg_restore(void);
 
 static qc7xx_lp_io_cfg_t *gp_lp_io_cfg = NULL;
+static qc7xx_lp_io_cfg_t g_lp_io_cfg;
 static qc7xx_lp_io_cfg_t g_lp_io_cfg_bak;
+static uint32_t g_lp_gpio_cfg_bak[QC7XX_LP_GPIO_PAD_COUNT];
+static uint64_t g_lp_gpio_cfg_saved_mask;
+static uint32_t g_lp_aon_pad_ctrl_0_bak;
+static uint32_t g_lp_aon_pad_ctrl_1_bak;
+static uint32_t g_lp_aon_irq_mode_bak;
+static bool g_lp_aon_gpio_cfg_saved;
+static uint64_t g_lp_wakeup_io_bits;
+static uint64_t g_lp_wakeup_io_edge_bits;
 static qc7xx_lp_acomp_cfg_t *gp_lp_acomp_cfg = NULL;
 static qc7xx_lp_acomp_cfg_t g_lp_acomp_cfg_bak;
 static void qc7xx_lp_soft_irq(void);
@@ -1390,6 +1434,10 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
         return -1;
     }
 
+    /* A failed entry must not expose GPIO wake data from the previous pass. */
+    g_lp_wakeup_io_bits = 0;
+    g_lp_wakeup_io_edge_bits = 0;
+
     rtc_wakeup_cmp_cnt = qc7xx_lp_fw_cfg->rtc_wakeup_cmp_cnt;
     rtc_sleep_us = qc7xx_lp_fw_cfg->rtc_timeout_us;
 
@@ -1559,6 +1607,7 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
     pm_pds_mask_all_wakeup_src();
     AON_Output_Float_LDO15_RF();
     AON_Output_Float_DCDC18();
+    qc7xx_lp_aon_gpio_cfg_save();
     HBN_Pin_WakeUp_Mask(0xF);
     PDS_Set_GPIO_Pad_IntClr(PDS_GPIO_INT_SET_1_GPIO0_GPIO7);
     PDS_Set_GPIO_Pad_IntClr(PDS_GPIO_INT_SET_2_GPIO8_GPIO15);
@@ -1790,6 +1839,8 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
 
     qc7xx_lp_vtime_after_sleep();
 
+    qc7xx_lp_gpio_cfg_restore();
+
     LP_HOOK(post_sys, iot2lp_para);
 
     /* try to use app mtimer to cal rc32,so make beacon_stamp_mtimer_valid=0 and init rc32k auto cal
@@ -1802,8 +1853,17 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
     qc7xx_lp_fw_cfg->lpfw_recv_cnt = iot2lp_para->lp_info->bcn_lpfw_recv_cnt;
     qc7xx_lp_fw_cfg->lpfw_loss_cnt = iot2lp_para->lp_info->bcn_lpfw_loss_cnt;
     qc7xx_lp_fw_cfg->bcn_target_level = iot2lp_para->bcn_target_level;
+    g_lp_wakeup_io_bits = iot2lp_para->wake_io_bits;
+    g_lp_wakeup_io_edge_bits = iot2lp_para->wake_io_edge_bits;
 
-    if ((iot2lp_para->wakeup_reason & LPFW_WAKEUP_IO) || (iot2lp_para->wakeup_reason & LPFW_WAKEUP_ACOMP)) {
+    bool io_callback_pending =
+        (iot2lp_para->wakeup_reason & LPFW_WAKEUP_IO) &&
+        lp_soft_callback.wakeup_io_callback;
+    bool acomp_callback_pending =
+        (iot2lp_para->wakeup_reason & LPFW_WAKEUP_ACOMP) &&
+        lp_soft_callback.wakeup_acomp_callback;
+
+    if (io_callback_pending || acomp_callback_pending) {
         /* register */
         qc7xx_irq_attach(MSOFT_IRQn, (irq_callback)qc7xx_lp_soft_irq, NULL);
         /* trig soft int */
@@ -2082,7 +2142,7 @@ void qc7xx_lp_call_sys_after_exit(void)
 
 static void qc7xx_lp_soft_irq(void)
 {
-    uint64_t wakeup_io_bits = iot2lp_para->wake_io_bits;
+    uint64_t wakeup_io_bits = g_lp_wakeup_io_bits;
     uint32_t wakeup_acmp_bits = iot2lp_para->wake_acomp_bits;
 
     /* disable soft int */
@@ -2092,15 +2152,15 @@ static void qc7xx_lp_soft_irq(void)
 
     if ((iot2lp_para->wakeup_reason & LPFW_WAKEUP_IO) && lp_soft_callback.wakeup_io_callback) {
         lp_soft_callback.wakeup_io_callback(wakeup_io_bits);
+        iot2lp_para->wake_io_bits = 0;
+        iot2lp_para->wake_io_edge_bits = 0;
     }
 
     if ((iot2lp_para->wakeup_reason & LPFW_WAKEUP_ACOMP) && lp_soft_callback.wakeup_acomp_callback) {
         lp_soft_callback.wakeup_acomp_callback(wakeup_acmp_bits);
+        iot2lp_para->wake_acomp_bits = 0;
+        iot2lp_para->wake_acomp_edge_bits = 0;
     }
-
-    /* clear */
-    iot2lp_para->wake_io_bits = 0;
-    iot2lp_para->wake_acomp_bits = 0;
 }
 
 void qc7xx_lp_wakeup_io_int_register(void (*wakeup_io_callback)(uint64_t wake_up_io_bits))
@@ -2115,8 +2175,8 @@ void qc7xx_lp_wakeup_acomp_int_register(void (*wakeup_acomp_callback)(uint32_t w
 
 int qc7xx_lp_wakeup_io_get_mode(uint8_t io_num)
 {
-    uint64_t wakeup_io_bits = iot2lp_para->wake_io_bits;
-    uint64_t wakeup_io_edge_bits = iot2lp_para->wake_io_edge_bits;
+    uint64_t wakeup_io_bits = g_lp_wakeup_io_bits;
+    uint64_t wakeup_io_edge_bits = g_lp_wakeup_io_edge_bits;
     uint8_t trig_mode;
 
     if (io_num >= QC7XX_LP_WAKEUP_IO_MAX_NUM) {
@@ -2265,6 +2325,17 @@ int qc7xx_check_fw_ready(void)
     return gp_lp_env->wifi_fw_ready;
 }
 
+static void qc7xx_lp_aon_gpio_cfg_save(void)
+{
+    g_lp_aon_pad_ctrl_0_bak =
+        QC7XX_RD_REG(HBN_BASE, HBN_PAD_CTRL_0) & QC7XX_LP_AON_PAD_CTRL_0_MASK;
+    g_lp_aon_pad_ctrl_1_bak =
+        QC7XX_RD_REG(HBN_BASE, HBN_PAD_CTRL_1) & QC7XX_LP_AON_PAD_CTRL_1_MASK;
+    g_lp_aon_irq_mode_bak =
+        QC7XX_RD_REG(HBN_BASE, HBN_IRQ_MODE) & QC7XX_LP_AON_IRQ_MODE_MASK;
+    g_lp_aon_gpio_cfg_saved = true;
+}
+
 static void qc7xx_lp_set_aon_io(qc7xx_lp_aon_io_cfg_t cfg)
 {
     uint8_t pu, pd, ie;
@@ -2295,6 +2366,7 @@ static void qc7xx_lp_set_aon_io(qc7xx_lp_aon_io_cfg_t cfg)
     if (ie & cfg.unmask) {
         uint32_t mask = 0;
 
+        HBN_Clear_IRQ(HBN_INT_GPIO16 + (cfg.pin - 16));
         mask = QC7XX_RD_REG(HBN_BASE, HBN_IRQ_MODE);
         mask = QC7XX_GET_REG_BITS_VAL(mask, HBN_PIN_WAKEUP_MASK);
         mask = mask & ~(1 << (cfg.pin - 16));
@@ -2310,12 +2382,14 @@ static void qc7xx_lp_set_aon_io(qc7xx_lp_aon_io_cfg_t cfg)
 static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
 {
     uint32_t tmpVal;
-    uint64_t io_unmask = io_wakeup_cfg->io_wakeup_unmask;
+    uint64_t io_unmask;
     uint8_t res_mode, pu, pd, ie;
 
     if (io_wakeup_cfg == NULL) {
         return;
     }
+
+    io_unmask = io_wakeup_cfg->io_wakeup_unmask;
 
     uint32_t sf_pin_select = 0;
     uint8_t sf0_pin = 0xFF;
@@ -2357,7 +2431,9 @@ static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
     gpio_cfg.gpioPin = (uint8_t)0;
     gpio_cfg.gpioFun = GPIO_FUN_GPIO;
 
-    for (uint8_t i = 0; i < 35; i++) {
+    g_lp_gpio_cfg_saved_mask = 0;
+
+    for (uint8_t i = 0; i < QC7XX_LP_GPIO_PAD_COUNT; i++) {
         /* except Flash0_IO (io4~9) */
         if ((sf0_pin != 0xFF) && (i >= sf0_pin) && (i < (sf0_pin + 6))) {
             continue;
@@ -2373,6 +2449,12 @@ static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
             continue;
         }
 
+        uint32_t gpio_cfg_addr = GLB_BASE + GLB_GPIO_CFG0_OFFSET + (i << 2);
+
+        g_lp_gpio_cfg_bak[i] =
+            QC7XX_RD_WORD(gpio_cfg_addr) & QC7XX_LP_GPIO_CFG_WRITABLE_MASK;
+        g_lp_gpio_cfg_saved_mask |= 1ULL << i;
+
         /* except UART_IO, if need log */
         // if ((i == QCC74X_UART_TX) || (i == QCC74X_UART_RX)) {
         //     continue;
@@ -2384,7 +2466,7 @@ static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
             GLB_GPIO_Init(&gpio_cfg);
         } else {
             /* set high resistance state */
-            *((volatile uint32_t *)(0x200008C4 + i * 4)) = 0x00400B00;
+            QC7XX_WR_WORD(gpio_cfg_addr, 0x00400B00);
         }
     }
 
@@ -2472,9 +2554,112 @@ static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
     }
 }
 
-int qc7xx_lp_io_wakeup_cfg(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
+static void ATTR_TCM_SECTION qc7xx_lp_gpio_cfg_restore(void)
 {
-    gp_lp_io_cfg = io_wakeup_cfg;
+    if (g_lp_aon_gpio_cfg_saved) {
+        uint32_t aon_pad_ctrl_0;
+        uint32_t aon_pad_ctrl_1;
+
+        HBN_Pin_WakeUp_Mask(0xF);
+
+        aon_pad_ctrl_0 = QC7XX_RD_REG(HBN_BASE, HBN_PAD_CTRL_0);
+        aon_pad_ctrl_0 &= ~QC7XX_LP_AON_PAD_CTRL_0_MASK;
+        aon_pad_ctrl_0 |= g_lp_aon_pad_ctrl_0_bak;
+        QC7XX_WR_REG(HBN_BASE, HBN_PAD_CTRL_0, aon_pad_ctrl_0);
+
+        aon_pad_ctrl_1 = QC7XX_RD_REG(HBN_BASE, HBN_PAD_CTRL_1);
+        aon_pad_ctrl_1 &= ~QC7XX_LP_AON_PAD_CTRL_1_MASK;
+        aon_pad_ctrl_1 |= g_lp_aon_pad_ctrl_1_bak;
+        QC7XX_WR_REG(HBN_BASE, HBN_PAD_CTRL_1, aon_pad_ctrl_1);
+    }
+
+    for (uint8_t i = 0; i < QC7XX_LP_GPIO_PAD_COUNT; i++) {
+        if ((g_lp_gpio_cfg_saved_mask & (1ULL << i)) == 0U) {
+            continue;
+        }
+
+        uint32_t gpio_cfg_addr = GLB_BASE + GLB_GPIO_CFG0_OFFSET + (i << 2);
+        uint32_t gpio_cfg = QC7XX_RD_WORD(gpio_cfg_addr);
+
+        gpio_cfg &= ~QC7XX_LP_GPIO_CFG_WRITABLE_MASK;
+        gpio_cfg |= g_lp_gpio_cfg_bak[i];
+        gpio_cfg &= ~QC7XX_LP_GPIO_CFG_COMMAND_MASK;
+
+        /* Restore mux and output value while output and IRQ are disabled. */
+        uint32_t gpio_cfg_safe =
+            (gpio_cfg & ~GLB_REG_GPIO_0_OE_MSK) |
+            GLB_REG_GPIO_0_INT_MASK_MSK;
+
+        QC7XX_WR_WORD(gpio_cfg_addr, gpio_cfg_safe);
+        QC7XX_WR_WORD(gpio_cfg_addr,
+                      gpio_cfg_safe | GLB_REG_GPIO_0_INT_CLR_MSK);
+        QC7XX_WR_WORD(gpio_cfg_addr, gpio_cfg_safe);
+        QC7XX_WR_WORD(gpio_cfg_addr, gpio_cfg);
+    }
+
+    g_lp_gpio_cfg_saved_mask = 0;
+
+    if (g_lp_aon_gpio_cfg_saved) {
+        uint32_t aon_irq_mode = QC7XX_RD_REG(HBN_BASE, HBN_IRQ_MODE);
+
+        aon_irq_mode &= ~QC7XX_LP_AON_IRQ_MODE_MASK;
+        aon_irq_mode |= g_lp_aon_irq_mode_bak;
+        QC7XX_WR_REG(HBN_BASE, HBN_IRQ_MODE, aon_irq_mode);
+        g_lp_aon_gpio_cfg_saved = false;
+    }
+}
+
+int qc7xx_lp_io_wakeup_validate(uint64_t wake_mask)
+{
+    uint32_t sf_pin_select;
+
+    if ((wake_mask & ~((1ULL << QC7XX_LP_WAKEUP_IO_MAX_NUM) - 1ULL)) != 0U) {
+        return -EINVAL;
+    }
+
+    sf_pin_select = (QC7XX_RD_REG(EF_DATA_BASE, EF_DATA_EF_SW_USAGE_0) >> 14) & 0x3FU;
+    if (((sf_pin_select & (1U << 2)) && (wake_mask & (0x3FULL << 4))) ||
+        ((sf_pin_select & (1U << 3)) && (wake_mask & (0x3FULL << 10)))) {
+        return -EBUSY;
+    }
+
+    if (QC7XX_GET_REG_BITS_VAL(QC7XX_RD_REG(HBN_BASE, HBN_GLB), HBN_F32K_SEL) &&
+        (wake_mask & ((1ULL << 16) | (1ULL << 17)))) {
+        return -EBUSY;
+    }
+
+    return 0;
+}
+
+int qc7xx_lp_io_wakeup_cfg(const qc7xx_lp_io_cfg_t *io_wakeup_cfg)
+{
+    int ret;
+
+    if (io_wakeup_cfg == NULL) {
+        g_lp_io_cfg = (qc7xx_lp_io_cfg_t){ 0 };
+        gp_lp_io_cfg = NULL;
+        return 0;
+    }
+
+    ret = qc7xx_lp_io_wakeup_validate(io_wakeup_cfg->io_wakeup_unmask);
+    if (ret != 0) {
+        return ret;
+    }
+
+    g_lp_io_cfg = *io_wakeup_cfg;
+    gp_lp_io_cfg = &g_lp_io_cfg;
+    return 0;
+}
+
+int qc7xx_lp_wakeup_io_result_get(uint64_t *wake_bits, uint64_t *edge_bits)
+{
+    if ((wake_bits == NULL) || (edge_bits == NULL)) {
+        return -EINVAL;
+    }
+
+    *wake_bits = g_lp_wakeup_io_bits;
+    *edge_bits = g_lp_wakeup_io_edge_bits;
+
     return 0;
 }
 
