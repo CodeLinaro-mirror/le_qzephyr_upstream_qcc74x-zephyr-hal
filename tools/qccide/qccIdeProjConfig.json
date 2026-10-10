@@ -14,7 +14,7 @@
     "sdkPath": "c:\\workspace\\qcc74x_sdk",
     "demoPath": "./qapp",
     "demoRTOS": "",
-    "demoChipBoard": "qcc748m_evk",
+    "demoChipBoard": "qcc748m3_evk",
     "demoBuildScriptWin": "",
     "demoBuildScriptLinux": "",
     "demoFlashScriptWin": "",
@@ -23,12 +23,12 @@
     "cfgSetScriptLinux": "",
     "defaultDemo": "",
     "defaultDemoPathName": "",
-    "board": "qcc748m_evk",
+    "board": "qcc748m3_evk",
     "boardMapping": {},
     "boardTagMapping": {
-      "qcc743m_evk": "743",
-      "qcc744m_evk": "744",
-      "qcc748m_evk": "748"
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
     },
     "osVariant": "zephyr",
     "useFullBreakpointPath": true,
@@ -40,11 +40,11 @@
     "elfName": "zephyr.elf",
     "elfPath": "./build/btDirectAdvApp/zephyr/zephyr.elf",
     "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
-    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m_evk/support/qcc748m_openocd_ch347.cfg",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
     "boardList": [
-      "qcc743m_evk",
-      "qcc744m_evk",
-      "qcc748m_evk"
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
     ],
     "incPaths": [
       "./qapp/qcc74x/samples/bluetooth/direct_adv"
@@ -115,7 +115,7 @@
     "sdkPath": "c:\\workspace\\qcc74x_sdk",
     "demoPath": "./qapp",
     "demoRTOS": "",
-    "demoChipBoard": "qcc748m_evk",
+    "demoChipBoard": "qcc748m3_evk",
     "demoBuildScriptWin": "",
     "demoBuildScriptLinux": "",
     "demoFlashScriptWin": "",
@@ -124,12 +124,12 @@
     "cfgSetScriptLinux": "",
     "defaultDemo": "",
     "defaultDemoPathName": "",
-    "board": "qcc748m_evk",
+    "board": "qcc748m3_evk",
     "boardMapping": {},
     "boardTagMapping": {
-      "qcc743m_evk": "743",
-      "qcc744m_evk": "744",
-      "qcc748m_evk": "748"
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
     },
     "osVariant": "zephyr",
     "useFullBreakpointPath": true,
@@ -141,11 +141,11 @@
     "elfName": "zephyr.elf",
     "elfPath": "./build/btShellApp/zephyr/zephyr.elf",
     "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
-    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m_evk/support/qcc748m_openocd_ch347.cfg",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
     "boardList": [
-      "qcc743m_evk",
-      "qcc744m_evk",
-      "qcc748m_evk"
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
     ],
     "incPaths": [
       "./qapp/qcc74x/samples/bluetooth/shell"
@@ -216,7 +216,7 @@
     "sdkPath": "c:\\workspace\\qcc74x_sdk",
     "demoPath": "./qapp",
     "demoRTOS": "",
-    "demoChipBoard": "qcc748m_evk",
+    "demoChipBoard": "qcc748m3_evk",
     "demoBuildScriptWin": "",
     "demoBuildScriptLinux": "",
     "demoFlashScriptWin": "",
@@ -225,12 +225,12 @@
     "cfgSetScriptLinux": "",
     "defaultDemo": "",
     "defaultDemoPathName": "",
-    "board": "qcc748m_evk",
+    "board": "qcc748m3_evk",
     "boardMapping": {},
     "boardTagMapping": {
-      "qcc743m_evk": "743",
-      "qcc744m_evk": "744",
-      "qcc748m_evk": "748"
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
     },
     "osVariant": "zephyr",
     "useFullBreakpointPath": true,
@@ -242,11 +242,11 @@
     "elfName": "zephyr.elf",
     "elfPath": "./build/wifiShellApp/zephyr/zephyr.elf",
     "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
-    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m_evk/support/qcc748m_openocd_ch347.cfg",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
     "boardList": [
-      "qcc743m_evk",
-      "qcc744m_evk",
-      "qcc748m_evk"
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
     ],
     "incPaths": [
       "./qapp/qcc74x/samples/net/wifi/shell"
