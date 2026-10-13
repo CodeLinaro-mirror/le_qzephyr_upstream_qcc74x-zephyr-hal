@@ -104,7 +104,7 @@
     "1": "Used and updated by extension, you should not change it manually if you don't know why",
     "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
     "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
-    "prjName": "btShellApp",
+    "prjName": "wifiShellApp",
     "sdkName": "qccsdk_qcc74x",
     "sdkVer": "1.0.0",
     "activated": false,
@@ -134,12 +134,12 @@
     "osVariant": "zephyr",
     "useFullBreakpointPath": true,
     "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
-    "buildDir": "${sdkPath}/build/btShellApp",
-    "buildRunPath": "./qapp/qcc74x/samples/bluetooth/shell",
-    "flashRunPath": "./qapp/qcc74x/samples/bluetooth/shell",
+    "buildDir": "${sdkPath}/build/wifiShellApp",
+    "buildRunPath": "./qapp/qcc74x/samples/net/wifi/shell",
+    "flashRunPath": "./qapp/qcc74x/samples/net/wifi/shell",
     "entryFun": "main",
     "elfName": "zephyr.elf",
-    "elfPath": "./build/btShellApp/zephyr/zephyr.elf",
+    "elfPath": "./build/wifiShellApp/zephyr/zephyr.elf",
     "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
     "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
     "boardList": [
@@ -148,7 +148,7 @@
       "qcc748m3_evk"
     ],
     "incPaths": [
-      "./qapp/qcc74x/samples/bluetooth/shell"
+      "./qapp/qcc74x/samples/net/wifi/shell"
     ],
     "debugCfg": {
       "gdbExecutables": [
@@ -205,7 +205,7 @@
     "1": "Used and updated by extension, you should not change it manually if you don't know why",
     "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
     "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
-    "prjName": "wifiShellApp",
+    "prjName": "qcliApp",
     "sdkName": "qccsdk_qcc74x",
     "sdkVer": "1.0.0",
     "activated": true,
@@ -235,12 +235,12 @@
     "osVariant": "zephyr",
     "useFullBreakpointPath": true,
     "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
-    "buildDir": "${sdkPath}/build/wifiShellApp",
-    "buildRunPath": "./qapp/qcc74x/samples/net/wifi/shell",
-    "flashRunPath": "./qapp/qcc74x/samples/net/wifi/shell",
+    "buildDir": "${sdkPath}/build/qcliApp",
+    "buildRunPath": "./qapp/qcc74x/qcli_app",
+    "flashRunPath": "./qapp/qcc74x/qcli_app",
     "entryFun": "main",
     "elfName": "zephyr.elf",
-    "elfPath": "./build/wifiShellApp/zephyr/zephyr.elf",
+    "elfPath": "./build/qcliApp/zephyr/zephyr.elf",
     "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
     "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
     "boardList": [
@@ -249,7 +249,613 @@
       "qcc748m3_evk"
     ],
     "incPaths": [
-      "./qapp/qcc74x/samples/net/wifi/shell"
+      "./qapp/qcc74x/qcli_app"
+    ],
+    "debugCfg": {
+      "gdbExecutables": [
+        "riscv64-zephyr-elf-gdb"
+      ]
+    },
+    "SET_CFG_PATTERN": {
+      "win": [
+        ""
+      ],
+      "linux": [
+        ""
+      ]
+    },
+    "BUILD_IMAGE_PATTERN": {
+      "win": [
+        "west build -b ${board} -d ${buildDir}"
+      ],
+      "linux": [
+        "west build -b ${board} -d ${buildDir}"
+      ]
+    },
+    "CLEAN_IMAGE_PATTERN": {
+      "win": [
+        "west build -d ${buildDir} -t pristine"
+      ],
+      "linux": [
+        "west build -d ${buildDir} -t pristine"
+      ]
+    },
+    "FLASH_PATTERN": {
+      "win": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ],
+      "linux": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ]
+    },
+    "FLASH_PATTERN_LABELS": {
+      "win": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ],
+      "linux": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ]
+    },
+    "needsPortWakeupBeforeDebug": true
+  },
+  {
+    "1": "Used and updated by extension, you should not change it manually if you don't know why",
+    "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
+    "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
+    "prjName": "qcliWifiApp",
+    "sdkName": "qccsdk_qcc74x",
+    "sdkVer": "1.0.0",
+    "activated": false,
+    "chipID": "QCC74X",
+    "chipVersion": "v1",
+    "chipTarget": "QCC748",
+    "toolchainName": "riscv64-zephyr-elf-gcc",
+    "sdkPath": "c:\\workspace\\qcc74x_sdk",
+    "demoPath": "./qapp",
+    "demoRTOS": "",
+    "demoChipBoard": "qcc748m3_evk",
+    "demoBuildScriptWin": "",
+    "demoBuildScriptLinux": "",
+    "demoFlashScriptWin": "",
+    "demoFlashScriptLinux": "",
+    "cfgSetScriptWin": "",
+    "cfgSetScriptLinux": "",
+    "defaultDemo": "",
+    "defaultDemoPathName": "",
+    "board": "qcc748m3_evk",
+    "boardMapping": {},
+    "boardTagMapping": {
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
+    },
+    "osVariant": "zephyr",
+    "useFullBreakpointPath": true,
+    "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
+    "buildDir": "${sdkPath}/build/qcliWifiApp",
+    "buildRunPath": "./qapp/qcc74x/qcli_app",
+    "flashRunPath": "./qapp/qcc74x/qcli_app",
+    "entryFun": "main",
+    "elfName": "zephyr.elf",
+    "elfPath": "./build/qcliWifiApp/zephyr/zephyr.elf",
+    "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
+    "boardList": [
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
+    ],
+    "incPaths": [
+      "./qapp/qcc74x/qcli_app"
+    ],
+    "debugCfg": {
+      "gdbExecutables": [
+        "riscv64-zephyr-elf-gdb"
+      ]
+    },
+    "SET_CFG_PATTERN": {
+      "win": [
+        ""
+      ],
+      "linux": [
+        ""
+      ]
+    },
+    "BUILD_IMAGE_PATTERN": {
+      "win": [
+        "west build -b ${board} -d ${buildDir} --extra-conf wifi_overlay.conf"
+      ],
+      "linux": [
+        "west build -b ${board} -d ${buildDir} --extra-conf wifi_overlay.conf"
+      ]
+    },
+    "CLEAN_IMAGE_PATTERN": {
+      "win": [
+        "west build -d ${buildDir} -t pristine"
+      ],
+      "linux": [
+        "west build -d ${buildDir} -t pristine"
+      ]
+    },
+    "FLASH_PATTERN": {
+      "win": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ],
+      "linux": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ]
+    },
+    "FLASH_PATTERN_LABELS": {
+      "win": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ],
+      "linux": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ]
+    },
+    "needsPortWakeupBeforeDebug": true
+  },
+  {
+    "1": "Used and updated by extension, you should not change it manually if you don't know why",
+    "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
+    "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
+    "prjName": "qcliBtApp",
+    "sdkName": "qccsdk_qcc74x",
+    "sdkVer": "1.0.0",
+    "activated": false,
+    "chipID": "QCC74X",
+    "chipVersion": "v1",
+    "chipTarget": "QCC748",
+    "toolchainName": "riscv64-zephyr-elf-gcc",
+    "sdkPath": "c:\\workspace\\qcc74x_sdk",
+    "demoPath": "./qapp",
+    "demoRTOS": "",
+    "demoChipBoard": "qcc748m3_evk",
+    "demoBuildScriptWin": "",
+    "demoBuildScriptLinux": "",
+    "demoFlashScriptWin": "",
+    "demoFlashScriptLinux": "",
+    "cfgSetScriptWin": "",
+    "cfgSetScriptLinux": "",
+    "defaultDemo": "",
+    "defaultDemoPathName": "",
+    "board": "qcc748m3_evk",
+    "boardMapping": {},
+    "boardTagMapping": {
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
+    },
+    "osVariant": "zephyr",
+    "useFullBreakpointPath": true,
+    "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
+    "buildDir": "${sdkPath}/build/qcliBtApp",
+    "buildRunPath": "./qapp/qcc74x/qcli_app",
+    "flashRunPath": "./qapp/qcc74x/qcli_app",
+    "entryFun": "main",
+    "elfName": "zephyr.elf",
+    "elfPath": "./build/qcliBtApp/zephyr/zephyr.elf",
+    "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
+    "boardList": [
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
+    ],
+    "incPaths": [
+      "./qapp/qcc74x/qcli_app"
+    ],
+    "debugCfg": {
+      "gdbExecutables": [
+        "riscv64-zephyr-elf-gdb"
+      ]
+    },
+    "SET_CFG_PATTERN": {
+      "win": [
+        ""
+      ],
+      "linux": [
+        ""
+      ]
+    },
+    "BUILD_IMAGE_PATTERN": {
+      "win": [
+        "west build -b ${board} -d ${buildDir} --extra-conf bt_overlay.conf"
+      ],
+      "linux": [
+        "west build -b ${board} -d ${buildDir} --extra-conf bt_overlay.conf"
+      ]
+    },
+    "CLEAN_IMAGE_PATTERN": {
+      "win": [
+        "west build -d ${buildDir} -t pristine"
+      ],
+      "linux": [
+        "west build -d ${buildDir} -t pristine"
+      ]
+    },
+    "FLASH_PATTERN": {
+      "win": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ],
+      "linux": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ]
+    },
+    "FLASH_PATTERN_LABELS": {
+      "win": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ],
+      "linux": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ]
+    },
+    "needsPortWakeupBeforeDebug": true
+  },
+  {
+    "1": "Used and updated by extension, you should not change it manually if you don't know why",
+    "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
+    "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
+    "prjName": "qcliLowpowerApp",
+    "sdkName": "qccsdk_qcc74x",
+    "sdkVer": "1.0.0",
+    "activated": false,
+    "chipID": "QCC74X",
+    "chipVersion": "v1",
+    "chipTarget": "QCC748",
+    "toolchainName": "riscv64-zephyr-elf-gcc",
+    "sdkPath": "c:\\workspace\\qcc74x_sdk",
+    "demoPath": "./qapp",
+    "demoRTOS": "",
+    "demoChipBoard": "qcc748m3_evk",
+    "demoBuildScriptWin": "",
+    "demoBuildScriptLinux": "",
+    "demoFlashScriptWin": "",
+    "demoFlashScriptLinux": "",
+    "cfgSetScriptWin": "",
+    "cfgSetScriptLinux": "",
+    "defaultDemo": "",
+    "defaultDemoPathName": "",
+    "board": "qcc748m3_evk",
+    "boardMapping": {},
+    "boardTagMapping": {
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
+    },
+    "osVariant": "zephyr",
+    "useFullBreakpointPath": true,
+    "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
+    "buildDir": "${sdkPath}/build/qcliLowpowerApp",
+    "buildRunPath": "./qapp/qcc74x/qcli_app",
+    "flashRunPath": "./qapp/qcc74x/qcli_app",
+    "entryFun": "main",
+    "elfName": "zephyr.elf",
+    "elfPath": "./build/qcliLowpowerApp/zephyr/zephyr.elf",
+    "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
+    "boardList": [
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
+    ],
+    "incPaths": [
+      "./qapp/qcc74x/qcli_app"
+    ],
+    "debugCfg": {
+      "gdbExecutables": [
+        "riscv64-zephyr-elf-gdb"
+      ]
+    },
+    "SET_CFG_PATTERN": {
+      "win": [
+        ""
+      ],
+      "linux": [
+        ""
+      ]
+    },
+    "BUILD_IMAGE_PATTERN": {
+      "win": [
+        "west build -b ${board} -d ${buildDir} --extra-conf lowpower_overlay.conf"
+      ],
+      "linux": [
+        "west build -b ${board} -d ${buildDir} --extra-conf lowpower_overlay.conf"
+      ]
+    },
+    "CLEAN_IMAGE_PATTERN": {
+      "win": [
+        "west build -d ${buildDir} -t pristine"
+      ],
+      "linux": [
+        "west build -d ${buildDir} -t pristine"
+      ]
+    },
+    "FLASH_PATTERN": {
+      "win": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ],
+      "linux": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ]
+    },
+    "FLASH_PATTERN_LABELS": {
+      "win": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ],
+      "linux": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ]
+    },
+    "needsPortWakeupBeforeDebug": true
+  },
+  {
+    "1": "Used and updated by extension, you should not change it manually if you don't know why",
+    "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
+    "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
+    "prjName": "lowpowerApp",
+    "sdkName": "qccsdk_qcc74x",
+    "sdkVer": "1.0.0",
+    "activated": false,
+    "chipID": "QCC74X",
+    "chipVersion": "v1",
+    "chipTarget": "QCC748",
+    "toolchainName": "riscv64-zephyr-elf-gcc",
+    "sdkPath": "c:\\workspace\\qcc74x_sdk",
+    "demoPath": "./qapp",
+    "demoRTOS": "",
+    "demoChipBoard": "qcc748m3_evk",
+    "demoBuildScriptWin": "",
+    "demoBuildScriptLinux": "",
+    "demoFlashScriptWin": "",
+    "demoFlashScriptLinux": "",
+    "cfgSetScriptWin": "",
+    "cfgSetScriptLinux": "",
+    "defaultDemo": "",
+    "defaultDemoPathName": "",
+    "board": "qcc748m3_evk",
+    "boardMapping": {},
+    "boardTagMapping": {
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
+    },
+    "osVariant": "zephyr",
+    "useFullBreakpointPath": true,
+    "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
+    "buildDir": "${sdkPath}/build/lowpowerApp",
+    "buildRunPath": "./qapp/qcc74x/samples/subsys/pm/lowpower",
+    "flashRunPath": "./qapp/qcc74x/samples/subsys/pm/lowpower",
+    "entryFun": "main",
+    "elfName": "zephyr.elf",
+    "elfPath": "./build/lowpowerApp/zephyr/zephyr.elf",
+    "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
+    "boardList": [
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
+    ],
+    "incPaths": [
+      "./qapp/qcc74x/samples/subsys/pm/lowpower"
+    ],
+    "debugCfg": {
+      "gdbExecutables": [
+        "riscv64-zephyr-elf-gdb"
+      ]
+    },
+    "SET_CFG_PATTERN": {
+      "win": [
+        ""
+      ],
+      "linux": [
+        ""
+      ]
+    },
+    "BUILD_IMAGE_PATTERN": {
+      "win": [
+        "west build -b ${board} -d ${buildDir}"
+      ],
+      "linux": [
+        "west build -b ${board} -d ${buildDir}"
+      ]
+    },
+    "CLEAN_IMAGE_PATTERN": {
+      "win": [
+        "west build -d ${buildDir} -t pristine"
+      ],
+      "linux": [
+        "west build -d ${buildDir} -t pristine"
+      ]
+    },
+    "FLASH_PATTERN": {
+      "win": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ],
+      "linux": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ]
+    },
+    "FLASH_PATTERN_LABELS": {
+      "win": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ],
+      "linux": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ]
+    },
+    "needsPortWakeupBeforeDebug": true
+  },
+  {
+    "1": "Used and updated by extension, you should not change it manually if you don't know why",
+    "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
+    "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
+    "prjName": "bleProvWifiApp",
+    "sdkName": "qccsdk_qcc74x",
+    "sdkVer": "1.0.0",
+    "activated": false,
+    "chipID": "QCC74X",
+    "chipVersion": "v1",
+    "chipTarget": "QCC748",
+    "toolchainName": "riscv64-zephyr-elf-gcc",
+    "sdkPath": "c:\\workspace\\qcc74x_sdk",
+    "demoPath": "./qapp",
+    "demoRTOS": "",
+    "demoChipBoard": "qcc748m3_evk",
+    "demoBuildScriptWin": "",
+    "demoBuildScriptLinux": "",
+    "demoFlashScriptWin": "",
+    "demoFlashScriptLinux": "",
+    "cfgSetScriptWin": "",
+    "cfgSetScriptLinux": "",
+    "defaultDemo": "",
+    "defaultDemoPathName": "",
+    "board": "qcc748m3_evk",
+    "boardMapping": {},
+    "boardTagMapping": {
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
+    },
+    "osVariant": "zephyr",
+    "useFullBreakpointPath": true,
+    "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
+    "buildDir": "${sdkPath}/build/bleProvWifiApp",
+    "buildRunPath": "./qapp/qcc74x/provision/ble_prov_wifi",
+    "flashRunPath": "./qapp/qcc74x/provision/ble_prov_wifi",
+    "entryFun": "main",
+    "elfName": "zephyr.elf",
+    "elfPath": "./build/bleProvWifiApp/zephyr/zephyr.elf",
+    "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
+    "boardList": [
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
+    ],
+    "incPaths": [
+      "./qapp/qcc74x/provision/ble_prov_wifi"
+    ],
+    "debugCfg": {
+      "gdbExecutables": [
+        "riscv64-zephyr-elf-gdb"
+      ]
+    },
+    "SET_CFG_PATTERN": {
+      "win": [
+        ""
+      ],
+      "linux": [
+        ""
+      ]
+    },
+    "BUILD_IMAGE_PATTERN": {
+      "win": [
+        "west build -b ${board} -d ${buildDir}"
+      ],
+      "linux": [
+        "west build -b ${board} -d ${buildDir}"
+      ]
+    },
+    "CLEAN_IMAGE_PATTERN": {
+      "win": [
+        "west build -d ${buildDir} -t pristine"
+      ],
+      "linux": [
+        "west build -d ${buildDir} -t pristine"
+      ]
+    },
+    "FLASH_PATTERN": {
+      "win": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ],
+      "linux": [
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild",
+        "west flash -d ${buildDir} --port=${flashPort} --runner qconn_flash --no-rebuild --reset"
+      ]
+    },
+    "FLASH_PATTERN_LABELS": {
+      "win": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ],
+      "linux": [
+        "Flash (no reset)",
+        "Flash and reset"
+      ]
+    },
+    "needsPortWakeupBeforeDebug": true
+  },
+  {
+    "1": "Used and updated by extension, you should not change it manually if you don't know why",
+    "2": "Keep sdkPath (workspace root) short - long paths can exceed Windows MAX_PATH (260 chars) when combined with deep build paths, e.g. wifiShellApp's wpa_supplicant module",
+    "$comment": "Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries. SPDX-License-Identifier: BSD-3-Clause",
+    "prjName": "helloWorldApp",
+    "sdkName": "qccsdk_qcc74x",
+    "sdkVer": "1.0.0",
+    "activated": false,
+    "chipID": "QCC74X",
+    "chipVersion": "v1",
+    "chipTarget": "QCC748",
+    "toolchainName": "riscv64-zephyr-elf-gcc",
+    "sdkPath": "c:\\workspace\\qcc74x_sdk",
+    "demoPath": "./qapp",
+    "demoRTOS": "",
+    "demoChipBoard": "qcc748m3_evk",
+    "demoBuildScriptWin": "",
+    "demoBuildScriptLinux": "",
+    "demoFlashScriptWin": "",
+    "demoFlashScriptLinux": "",
+    "cfgSetScriptWin": "",
+    "cfgSetScriptLinux": "",
+    "defaultDemo": "",
+    "defaultDemoPathName": "",
+    "board": "qcc748m3_evk",
+    "boardMapping": {},
+    "boardTagMapping": {
+      "qcc743m1r_evk": "7431",
+      "qcc744m2r_evk": "7442",
+      "qcc748m3_evk": "7483"
+    },
+    "osVariant": "zephyr",
+    "useFullBreakpointPath": true,
+    "ideToolsDir": "modules/hal/qcom/qcc74x/tools/qccide",
+    "buildDir": "${sdkPath}/build/helloWorldApp",
+    "buildRunPath": "./zephyr/samples/hello_world",
+    "flashRunPath": "./zephyr/samples/hello_world",
+    "entryFun": "main",
+    "elfName": "zephyr.elf",
+    "elfPath": "./build/helloWorldApp/zephyr/zephyr.elf",
+    "gdbInitFilePath": "./qcc74x-zephyr/boards/qcom/common/qcc74x_gdb_for_qccide.gdbinit",
+    "openocdGdbServerFilePath": "./qcc74x-zephyr/boards/qcom/qcc748m3_evk/support/qcc748m_openocd_ch347.cfg",
+    "boardList": [
+      "qcc743m1r_evk",
+      "qcc744m2r_evk",
+      "qcc748m3_evk"
+    ],
+    "incPaths": [
+      "./zephyr/samples/hello_world"
     ],
     "debugCfg": {
       "gdbExecutables": [
