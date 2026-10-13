@@ -1,7 +1,7 @@
 # Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries
 # SPDX-License-Identifier: BSD-3-Clause
 
-if(CONFIG_SOC_SERIES_QCR373)
+if(CONFIG_SOC_SERIES_QCR3XX)
   zephyr_compile_options(-fstrict-volatile-bitfields)
   zephyr_compile_definitions_ifndef(asm asm=__asm__)
   zephyr_compile_definitions(CONFIG_IRQ_NUM=117)
