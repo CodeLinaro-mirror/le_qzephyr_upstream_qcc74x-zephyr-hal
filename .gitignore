@@ -12,6 +12,9 @@ tools/qc7xx_tools/QConn_Secure/QConn_Secure*
 !tools/qc7xx_tools/QConn_Flash/*
 tools/qc7xx_tools/QConn_Flash/QConn_Flash*
 tools/qc7xx_tools/QConn_Flash/chips/qcc74x/efuse_bootheader/flash_para.bin
+!tools/qc7xx_tools/QConn_Production_Tool/
+!tools/qc7xx_tools/QConn_Production_Tool/*
+tools/qc7xx_tools/QConn_Production_Tool/QConn_Production_Tool*
 !tools/qc7xx_tools/openocd/
 !tools/qc7xx_tools/openocd/*
 tools/qc7xx_tools/openocd/openocd
