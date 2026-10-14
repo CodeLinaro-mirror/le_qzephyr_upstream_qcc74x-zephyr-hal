@@ -112,13 +112,15 @@ int rtos_task_init(void)
     static k_thread_stack_t *idle_stack;
     static struct k_thread idle_thread;
 
-    idle_stack = soc_multi_malloc(IDLE_STACK_SIZE);
+    const size_t idle_stack_size = K_THREAD_STACK_LEN(IDLE_STACK_SIZE);
+
+    idle_stack = soc_multi_malloc(idle_stack_size);
     if (!idle_stack) {
         user_err("soc_multi_malloc NULL\r\n");
         return -ENOMEM;
     }
 
-    k_thread_create(&idle_thread, idle_stack, IDLE_STACK_SIZE,
+    k_thread_create(&idle_thread, idle_stack, idle_stack_size,
                    recycle_task, NULL, NULL, NULL,
                    RTOS_IDLE_TASK_PRI, 0, K_NO_WAIT);
 	if (IS_ENABLED(CONFIG_THREAD_NAME)) {
@@ -143,8 +145,14 @@ int rtos_task_create(rtos_task_fct func,
     /* 初始化检查 */
     rtos_task_init();
 
-    /* 分配栈空间 */
-    k_thread_stack_t *stack = soc_multi_malloc(stack_depth * 4);
+    /*
+     * k_thread_create() treats its size argument as a Zephyr stack object,
+     * which can be larger than the requested stack buffer after architecture
+     * alignment.  Allocate that complete object so TLS initialization remains
+     * within the allocation.
+     */
+    const size_t stack_size = K_THREAD_STACK_LEN((size_t)stack_depth * sizeof(uint32_t));
+    k_thread_stack_t *stack = soc_multi_malloc(stack_size);
     user_debug("alloc stack:%p\r\n", stack);
     if (!stack) {
         return -ENOMEM;
@@ -172,11 +180,11 @@ int rtos_task_create(rtos_task_fct func,
         .thread = thread,
         .stack = stack,
         // .task_id = task_id,
-        .stack_size = stack_depth * 4
+        .stack_size = stack_size
     };
 
     /* 创建线程 */
-    k_tid_t tid = k_thread_create(thread, stack, stack_depth * 4,
+    k_tid_t tid = k_thread_create(thread, stack, stack_size,
                                  (k_thread_entry_t)func, params, handle, NULL,// p1, p2_handle, p3
                                  prio, 0, K_NO_WAIT);
     if (!tid) {
