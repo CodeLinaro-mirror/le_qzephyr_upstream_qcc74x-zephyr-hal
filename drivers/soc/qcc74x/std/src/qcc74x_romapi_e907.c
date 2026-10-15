@@ -1644,7 +1644,7 @@ QC7XX_Err_Type PDS_Enable(PDS_CTL_Type *cfg, PDS_CTL4_Type *cfg4, uint32_t pdsSl
 }
 #endif
 
-/* PDS_CTL2_Type， PDS_CTL3_Type，PDS_CTL5_Type  do not include enum type */
+/* PDS_CTL2_Type, PDS_CTL3_Type, PDS_CTL5_Type  do not include enum type */
 __ALWAYS_INLINE ATTR_TCM_SECTION
 QC7XX_Err_Type PDS_Force_Config(PDS_CTL2_Type *cfg2, PDS_CTL3_Type *cfg3, PDS_CTL5_Type *cfg5){
     return RomDriver_PDS_Force_Config(cfg2,cfg3,cfg5);
@@ -1660,7 +1660,7 @@ QC7XX_Err_Type PDS_IntMask(uint8_t intType, QC7XX_Mask_Type intMask){
     return RomDriver_PDS_IntMask(intType,intMask);
 }
 
-/* PDS_CTRL_RAM1_Type， PDS_CTRL_RAM2_Type，PDS_CTRL_RAM3_Type，PDS_CTRL_RAM4_Type do not include enum type */
+/* PDS_CTRL_RAM1_Type, PDS_CTRL_RAM2_Type, PDS_CTRL_RAM3_Type, PDS_CTRL_RAM4_Type do not include enum type */
 __ALWAYS_INLINE ATTR_TCM_SECTION
 QC7XX_Err_Type PDS_RAM_Config(PDS_CTRL_RAM1_Type *ram1Cfg, PDS_CTRL_RAM2_Type *ram2Cfg, PDS_CTRL_RAM3_Type *ram3Cfg, PDS_CTRL_RAM4_Type *ram4Cfg){
     return RomDriver_PDS_RAM_Config(ram1Cfg,ram2Cfg,ram3Cfg,ram4Cfg);
@@ -1756,7 +1756,7 @@ int qc7xx_sf_cfg_deinit_ext_flash_gpio(uint8_t ext_flash_pin){
     return RomDriver_SF_Cfg_Deinit_Ext_Flash_Gpio(ext_flash_pin);
 }
 
-/* sf_ctrl_cfg_type，sf_ctrl_bank2_cfg do not include enum type */
+/* sf_ctrl_cfg_type, sf_ctrl_bank2_cfg do not include enum type */
 __ALWAYS_INLINE ATTR_TCM_SECTION
 int qc7xx_sf_cfg_flash_init(uint8_t sel, const struct sf_ctrl_cfg_type *p_sf_ctrl_cfg, const struct sf_ctrl_bank2_cfg *p_bank2_cfg){
     return RomDriver_SF_Cfg_Flash_Init(sel,p_sf_ctrl_cfg,p_bank2_cfg);

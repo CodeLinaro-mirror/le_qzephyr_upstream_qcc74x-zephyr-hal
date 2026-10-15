@@ -310,19 +310,19 @@ void cmd_tg(int argc, char **argv) {
     char *str = NULL;
     uint32_t i, len = 0;
 
-    // 计算字符串总长度
+    // Calculate the total string length.
     for (i = 1; i < argc; i++) {
-        len += strlen(argv[i]) + 1; // 加上空格
+        len += strlen(argv[i]) + 1; // Include a separating space.
     }
 
-    // 分配内存
+    // Allocate memory.
     str = rtos_malloc(1 + len * sizeof(char));
     if (!str) {
         fhost_printf("cmd_tg alloc failed\r\n");
         return;
     }
 
-    // 连接字符串
+    // Concatenate the strings.
     str[0] = '\0';
     for (i = 1; i < argc; i++) {
         strcat(str, argv[i]);
@@ -330,7 +330,7 @@ void cmd_tg(int argc, char **argv) {
             strcat(str, " ");
         }
     }
-    //fhost_printf("tg cmd：%s\n", str);
+    //fhost_printf("tg cmd: %s\n", str);
 
     char *token, *next = str;
 
@@ -529,7 +529,7 @@ void cmd_fhost_ping(int argc, char **argv)
             strcat(str, " ");
         }
     }
-    fhost_printf("ping cmd：%s\n", str);
+    fhost_printf("ping cmd: %s\n", str);
 
     char *token, *next = str;
     uint32_t rip = 0, ret;

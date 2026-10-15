@@ -745,10 +745,10 @@ ATTR_ROM_WIFI_SECTION void lp_clock_init(void)
         /* Gate CPU Bus Master Clock (BCLK) */
         /* En CPU Bus Master Clock (BCLK) */
         *((volatile uint32_t *)0x20000580) = 1;
-        /* Gate I2S、CAN、I2C1、MIPI_DBI、Checksum、IR、TIMER、PWM、I2C0、SPI、UART1、USB、DMA、SF_CTRL、EF_CTRL、TZ、SEC、GPIP */
+        /* Gate I2S, CAN, I2C1, MIPI_DBI, Checksum, IR, TIMER, PWM, I2C0, SPI, UART1, USB, DMA, SF_CTRL, EF_CTRL, TZ, SEC, GPIP */
         /* En UART0 and uart_clk_0 */
         *((volatile uint32_t *)0x20000584) = (1 << 16);
-        /* Gate PIO、EMAC、SDH、AUDIO、PSRAM1_CTRL、MM_MISC、wifi */
+        /* Gate PIO, EMAC, SDH, AUDIO, PSRAM1_CTRL, MM_MISC, wifi */
         *((volatile uint32_t *)0x20000588) = 0;
 
         /* power off aupll */

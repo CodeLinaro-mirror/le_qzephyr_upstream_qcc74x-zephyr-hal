@@ -59,13 +59,13 @@ int platform_get_mac(uint8_t *mac)
 
 /**
  ****************************************************************************************
- * @brief 获取真随机数（使用硬件TRNG）
+ * @brief Generate true random data using the hardware TRNG.
  ****************************************************************************************
  */
 int platform_get_random(unsigned char *buf, size_t len)
 {
     int ret;
-    unsigned int key = irq_lock();  // 替换临界区保护
+    unsigned int key = irq_lock();  // Protect the critical section with IRQ locking.
 
     ret = qc7xx_trng_readlen(buf, len);
 
@@ -75,7 +75,7 @@ int platform_get_random(unsigned char *buf, size_t len)
 
 /**
  ****************************************************************************************
- * @brief 内存管理适配层
+ * @brief Memory management adaptation layer.
  ****************************************************************************************
  */
 void *rtos_malloc(uint32_t size)
@@ -109,7 +109,7 @@ void platform_free(void *mem_ptr)
 
 /**
  ****************************************************************************************
- * @brief 异步事件处理（Zephyr工作队列实现）
+ * @brief Asynchronous event handling using a Zephyr work queue.
  ****************************************************************************************
  */
 
@@ -119,10 +119,10 @@ typedef struct async_work {
     uint32_t code2;
 } async_work_t;
 
-/* 预分配线程栈 */
+/* Preallocate the thread stack. */
 K_THREAD_STACK_DEFINE(wifi_work_q_stack, 2048);
 
-/* 定义工作队列和工作项 */
+/* Define the work queue and work items. */
 static struct k_work_q wifi_work_queue;
 
 extern void qc7xx_wifi_event_handler(uint32_t code, uint32_t code1);
@@ -130,7 +130,7 @@ static void async_work_handler(struct k_work *work)
 {
     struct async_work *aw = CONTAINER_OF(work, struct async_work, work);
 
-    /* 执行事件处理 */
+    /* Handle the event. */
     qc7xx_wifi_event_handler(aw->code1, aw->code2);
 
     soc_multi_free(aw);
@@ -138,7 +138,7 @@ static void async_work_handler(struct k_work *work)
 
 /**
  ****************************************************************************************
- * @brief 事件投递接口（线程安全）
+ * @brief Thread-safe event submission interface.
  ****************************************************************************************
  */
 void platform_post_event(int catalogue, int code1, int code2)
@@ -160,14 +160,14 @@ static int platform_workqueue_init(void)
         .name = "wifiworkq",
     };
 
-    /* 1. 初始化工作队列 */
+    /* 1. Initialize the work queue. */
     k_work_queue_init(&wifi_work_queue);
 
-    /* 2. 启动工作队列线程 */
+    /* 2. Start the work queue thread. */
     k_work_queue_start(&wifi_work_queue,
                       wifi_work_q_stack,
                       K_THREAD_STACK_SIZEOF(wifi_work_q_stack),
-                      -1,  // 优先级
+                      -1,  // Priority
                       &cfg);
 
     return 0;

@@ -169,7 +169,7 @@
 #define PEC_CR_SM_IN_BASE_4_SHIFT                              (24U)
 #define PEC_CR_SM_IN_BASE_4_MASK                               (0x3f<<PEC_CR_SM_IN_BASE_4_SHIFT)
 
-/* 0x5C ：State machine fifo threshold control and level status register */
+/* 0x5C : State machine fifo threshold control and level status register */
 #define PEC_ST_SM_TX_LEVEL_SHIFT                               (0U)
 #define PEC_ST_SM_TX_LEVEL_MASK                                (0x3f<<PEC_ST_SM_TX_LEVEL_SHIFT)
 #define PEC_ST_SM_RX_LEVEL_SHIFT                               (6U)

@@ -1,8 +1,8 @@
 #include "rtos_def.h"
 #include "rtos_al.h"
 
-#include <zephyr/kernel.h>  // Zephyr核心头文件
-#include <zephyr/irq.h>     // 中断相关
+#include <zephyr/kernel.h>  // Zephyr kernel definitions
+#include <zephyr/irq.h>     // Interrupt support
 
 #include <stdbool.h>
 
@@ -14,7 +14,7 @@
 #define user_debug(...) //printf
 #define user_err        printf
 
-/* 定义任务句柄结构体 */
+/* Task handle structure. */
 struct rtos_task_handle_internal {
     struct k_thread *thread;
     k_thread_stack_t *stack;
@@ -22,17 +22,17 @@ struct rtos_task_handle_internal {
     size_t stack_size;
 } rtos_task_handle_internal_t;
 
-/* 回收队列和初始化标志 */
+/* Reclamation queue and initialization flag. */
 static K_FIFO_DEFINE(recycle_fifo);
 static volatile int rtos_initialized = 0;
 rtos_queue g_idle_queue;
 
-/* 空闲任务栈大小 */
+/* Idle task stack size. */
 #define IDLE_STACK_SIZE 4096
 
 #define RTOS_IDLE_TASK_PRI       (15)
 
-// Zephyr优先级转换（根据实际需求调整数值）
+// Map priorities to Zephyr priorities; adjust values as needed.
 #undef RTOS_TASK_PRIORITY
 #define RTOS_TASK_PRIORITY(prio) K_PRIO_PREEMPT(32 - prio)
 
@@ -59,10 +59,10 @@ const int fhost_ping_priority = RTOS_TASK_PRIORITY(27);
  */
 uint32_t rtos_now(bool isr)
 {
-    return k_uptime_ticks(); // 获取系统tick数
+    return k_uptime_ticks(); // Get the system tick count.
 }
 
-/* 内存回收任务 */
+/* Memory reclamation task. */
 static void recycle_task(void *p1, void *p2, void *p3)
 {
     struct rtos_task_handle_internal *handle = NULL;
@@ -79,11 +79,11 @@ static void recycle_task(void *p1, void *p2, void *p3)
         user_debug("===========\r\n");
         // k_msleep(100);
 
-        /* 等待线程完全退出 */
+        /* Wait for the thread to exit completely. */
         // user_debug("-------------abort handle->thread :%p\r\n", handle->thread);
         // k_thread_abort(handle->thread);
         if (k_thread_join(handle->thread, K_FOREVER) == 0) {
-            /* 释放资源 */
+            /* Release resources. */
             if (handle->stack) {
                 user_debug("free stack:%p\r\n", handle->stack);
                 soc_multi_free(handle->stack);
@@ -108,7 +108,7 @@ int rtos_task_init(void)
 
     user_debug("rtos_task_init\r\n");
 
-    /* 创建内存回收线程 */
+    /* Create the memory reclamation thread. */
     static k_thread_stack_t *idle_stack;
     static struct k_thread idle_thread;
 
@@ -142,7 +142,7 @@ int rtos_task_create(rtos_task_fct func,
     rtos_task_handle * const task_handle)
 {
     ARG_UNUSED(task_id);
-    /* 初始化检查 */
+    /* Check initialization. */
     rtos_task_init();
 
     /*
@@ -158,7 +158,7 @@ int rtos_task_create(rtos_task_fct func,
         return -ENOMEM;
     }
 
-    /* 分配线程控制块 */
+    /* Allocate the thread control block. */
     struct k_thread *thread = soc_multi_malloc(sizeof(struct k_thread));
     user_debug("alloc thread:%p\r\n", thread);
     if (!thread) {
@@ -166,7 +166,7 @@ int rtos_task_create(rtos_task_fct func,
         return -ENOMEM;
     }
 
-    /* 分配句柄结构体 */
+    /* Allocate the handle structure. */
     struct rtos_task_handle_internal *handle = soc_multi_malloc(sizeof(*handle));
     user_debug("alloc handle:%p\r\n", handle);
     if (!handle) {
@@ -175,7 +175,7 @@ int rtos_task_create(rtos_task_fct func,
         return -ENOMEM;
     }
 
-    /* 初始化线程 */
+    /* Initialize the thread. */
     *handle = (struct rtos_task_handle_internal){
         .thread = thread,
         .stack = stack,
@@ -183,7 +183,7 @@ int rtos_task_create(rtos_task_fct func,
         .stack_size = stack_size
     };
 
-    /* 创建线程 */
+    /* Create the thread. */
     k_tid_t tid = k_thread_create(thread, stack, stack_size,
                                  (k_thread_entry_t)func, params, handle, NULL,// p1, p2_handle, p3
                                  prio, 0, K_NO_WAIT);
@@ -198,7 +198,7 @@ int rtos_task_create(rtos_task_fct func,
 		k_thread_name_set(tid, name);
 	}
 
-    /* 设置任务ID到自定义数据 */
+    /* Store the task ID in the thread's custom data. */
     k_thread_custom_data_set(handle);
 
     user_debug("-------------create handle->thread :%p\r\n", handle->thread);
@@ -217,7 +217,7 @@ void rtos_task_delete(void *task_handle)
         return;
     }
 
-    /* 终止线程并加入回收队列 */
+    /* Abort the thread and enqueue it for reclamation. */
     // k_fifo_put(&recycle_fifo, task_handle);
     rtos_queue_write(g_idle_queue, &task_handle, -1, 0);
     user_debug("fifo put handler:%p end\r\n", task_handle);
@@ -228,7 +228,7 @@ void rtos_task_delete(void *task_handle)
 
 void rtos_task_suspend(int duration)
 {
-    k_sleep(K_MSEC(duration)); // 任务休眠
+    k_sleep(K_MSEC(duration)); // Sleep the task.
 }
 
 int g_wifitask_sem_valid = 0;
@@ -274,7 +274,7 @@ void rtos_task_notify(rtos_task_handle task, bool isr)
     k_sem_give(&g_wifitask_sem);
 }
 
-// 中断管理
+// Interrupt management
 uint32_t rtos_protect(void)
 {
     return irq_lock();
@@ -382,7 +382,7 @@ int rtos_delete_timer(rtos_timer_t timer)
 
 
 /*--------------------------------------------------
- *                    互斥量
+ *                    Mutexes
  *--------------------------------------------------*/
 int rtos_mutex_create(rtos_mutex *mutex)
 {
@@ -410,11 +410,11 @@ void rtos_mutex_unlock(rtos_mutex mutex)
 }
 
 /*--------------------------------------------------
- *                    信号量
+ *                    Semaphores
  *--------------------------------------------------*/
 int rtos_semaphore_create(rtos_semaphore *semaphore, int max_count, int init_count)
 {
-    /* Zephyr 信号量统一使用 k_sem */
+    /* Use k_sem for all Zephyr semaphores. */
     *semaphore = soc_multi_malloc(sizeof(struct k_sem));
     if (*semaphore) {
         k_sem_init(*semaphore, init_count, max_count);
@@ -460,15 +460,15 @@ int rtos_semaphore_wait(rtos_semaphore semaphore, int timeout)
 
 int rtos_semaphore_signal(rtos_semaphore semaphore, bool isr)
 {
-    /* Zephyr 允许在 ISR 中直接释放信号量 */
+    /* Zephyr allows a semaphore to be given directly from an ISR. */
     k_sem_give(semaphore);
     return 0;
 }
 
 /*--------------------------------------------------
- *                    队列操作
+ *                    Queue operations
  *--------------------------------------------------*/
-/* 队列结构体 */
+/* Queue structure. */
 typedef struct {
     struct k_msgq msgq;
     void *buffer;
@@ -476,7 +476,7 @@ typedef struct {
     int nb_elt;
 } zephyr_queue_t;
 
-/* 创建队列 */
+/* Create a queue. */
 int rtos_queue_create(int elt_size, int nb_elt, rtos_queue *queue)
 {
     zephyr_queue_t *q = soc_multi_malloc(sizeof(zephyr_queue_t));
@@ -496,7 +496,7 @@ int rtos_queue_create(int elt_size, int nb_elt, rtos_queue *queue)
     return 0;
 }
 
-/* 删除队列 */
+/* Delete a queue. */
 void rtos_queue_delete(rtos_queue queue)
 {
     zephyr_queue_t *q = (zephyr_queue_t *)queue;
@@ -506,7 +506,7 @@ void rtos_queue_delete(rtos_queue queue)
     }
 }
 
-/* 判断队列空 */
+/* Check whether the queue is empty. */
 bool rtos_queue_is_empty(rtos_queue queue)
 {
     zephyr_queue_t *q = (zephyr_queue_t *)queue;
@@ -520,7 +520,7 @@ bool rtos_queue_is_empty(rtos_queue queue)
     return ret;
 }
 
-/* 判断队列满 */
+/* Check whether the queue is full. */
 bool rtos_queue_is_full(rtos_queue queue)
 {
     zephyr_queue_t *q = (zephyr_queue_t *)queue;
@@ -534,7 +534,7 @@ bool rtos_queue_is_full(rtos_queue queue)
     return ret;
 }
 
-/* 获取队列数量 */
+/* Get the number of queued messages. */
 int rtos_queue_cnt(rtos_queue queue)
 {
     zephyr_queue_t *q = (zephyr_queue_t *)queue;
@@ -548,7 +548,7 @@ int rtos_queue_cnt(rtos_queue queue)
     return ret;
 }
 
-/* 写入队列 */
+/* Write to the queue. */
 int rtos_queue_write(rtos_queue queue, void *msg, int timeout, bool isr)
 {
     zephyr_queue_t *q = (zephyr_queue_t *)queue;
@@ -575,10 +575,10 @@ int rtos_queue_write(rtos_queue queue, void *msg, int timeout, bool isr)
         ret = k_msgq_put(&q->msgq, msg, t);
     }
 
-    return (ret != 0); // 0:成功 1:失败
+    return (ret != 0); // 0: success, 1: failure
 }
 
-/* 读取队列 */
+/* Read from the queue. */
 int rtos_queue_read(rtos_queue queue, void *msg, int timeout, bool isr)
 {
     zephyr_queue_t *q = (zephyr_queue_t *)queue;
@@ -599,5 +599,5 @@ int rtos_queue_read(rtos_queue queue, void *msg, int timeout, bool isr)
         ret = k_msgq_get(&q->msgq, msg, t);
     }
 
-    return (ret != 0); // 0:成功 1:失败
+    return (ret != 0); // 0: success, 1: failure
 }
