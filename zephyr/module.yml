@@ -15,7 +15,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/bin/qcc74x_lp_fw.bin
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/bin/qcc74x_lp_fw.bin
     description: "QCC743 LP firmware image for PDS15 Wi-Fi low power mode"
 
   - path: qcc74x/bin/boot2_qcc743_isp_release_v8.1.9.bin
@@ -23,7 +23,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/bin/boot2_qcc743_isp_release_v8.1.9.bin
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/bin/boot2_qcc743_isp_release_v8.1.9.bin
     description: "QCC743 ISP boot2 bootloader image v8.1.9"
 
   - path: qcc74x/bin/flash_para.bin
@@ -31,7 +31,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/bin/flash_para.bin
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/bin/flash_para.bin
     description: "QCC74x flash parameter data for QConn_Flash tool"
 
   # ── Wi-Fi prebuilt libraries ──────────────────────────────────────────────
@@ -41,7 +41,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/default/libqcc743_wifi_macsw.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/default/libqcc743_wifi_macsw.a
     description: "QCC743 Wi-Fi MAC SW prebuilt library (default)"
 
   - path: qcc74x/lib/lp/libqcc743_wifi_macsw.a
@@ -49,7 +49,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/lp/libqcc743_wifi_macsw.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/lp/libqcc743_wifi_macsw.a
     description: "QCC743 Wi-Fi MAC SW prebuilt library (low power)"
 
   - path: qcc74x/lib/default/libqcc743_wifi_fhost.a
@@ -57,7 +57,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/default/libqcc743_wifi_fhost.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/default/libqcc743_wifi_fhost.a
     description: "QCC743 Wi-Fi fhost prebuilt library (default)"
 
   - path: qcc74x/lib/lp/libqcc743_wifi_fhost.a
@@ -65,7 +65,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/lp/libqcc743_wifi_fhost.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/lp/libqcc743_wifi_fhost.a
     description: "QCC743 Wi-Fi fhost prebuilt library (low power)"
 
   # ── BT/BLE prebuilt library ───────────────────────────────────────────────
@@ -75,7 +75,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/libbtblecontroller.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libbtblecontroller.a
     description: "QCC743 BT/BLE controller prebuilt library"
 
   - path: qcc74x/lib/liblmac154_qcc743.a
@@ -83,7 +83,7 @@ blobs:
     type: lib
     version: '2.1.11'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/liblmac154_qcc743.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/liblmac154_qcc743.a
     description: "QCC743 IEEE 802.15.4 low-level MAC prebuilt library"
 
   # ── PHY RF prebuilt libraries ─────────────────────────────────────────────
@@ -93,7 +93,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/libqcc743_phyrf.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libqcc743_phyrf.a
     description: "QCC743 PHY RF prebuilt library (default)"
 
   - path: qcc74x/lib/libqcc743_lpphyrf.a
@@ -101,7 +101,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/libqcc743_lpphyrf.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libqcc743_lpphyrf.a
     description: "QCC743 PHY RF prebuilt library (low power)"
 
   - path: qcc74x/lib/libqcc743_phyrf4mfg.a
@@ -109,7 +109,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/libqcc743_phyrf4mfg.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libqcc743_phyrf4mfg.a
     description: "QCC743 PHY RF prebuilt library (manufacturing)"
 
   # ── DSP prebuilt library ──────────────────────────────────────────────────
@@ -119,7 +119,7 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/lib/libcsi_xt900p32f_dsp.a
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libcsi_xt900p32f_dsp.a
     description: "T-Head XT900P32F DSP prebuilt library"
 
   # ── QConn_Flash host tools ────────────────────────────────────────────────
@@ -129,7 +129,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Flash.exe
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash.exe
     description: "QConn Flash GUI tool for Windows"
 
   - path: qcc74x/tool/QConn_Flash_Cmd.exe
@@ -137,7 +137,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Flash_Cmd.exe
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash_Cmd.exe
     description: "QConn Flash command-line tool for Windows"
 
   - path: qcc74x/tool/QConn_Flash-ubuntu
@@ -145,7 +145,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Flash-ubuntu
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash-ubuntu
     description: "QConn Flash GUI tool for Linux (Ubuntu)"
 
   - path: qcc74x/tool/QConn_Flash_Cmd-ubuntu
@@ -153,7 +153,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Flash_Cmd-ubuntu
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash_Cmd-ubuntu
     description: "QConn Flash command-line tool for Linux (Ubuntu)"
 
   - path: qcc74x/tool/QConn_Flash-macos
@@ -161,7 +161,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Flash-macos
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash-macos
     description: "QConn Flash GUI tool for macOS"
 
   - path: qcc74x/tool/QConn_Flash_Cmd-macos
@@ -169,7 +169,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Flash_Cmd-macos
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash_Cmd-macos
     description: "QConn Flash command-line tool for macOS"
 
   # ── QConn_Secure host tools ───────────────────────────────────────────────
@@ -179,7 +179,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Secure.exe
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Secure.exe
     description: "QConn Secure tool for Windows"
 
   - path: qcc74x/tool/QConn_Secure-ubuntu
@@ -187,7 +187,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Secure-ubuntu
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Secure-ubuntu
     description: "QConn Secure tool for Linux (Ubuntu)"
 
   - path: qcc74x/tool/QConn_Secure-macos
@@ -195,7 +195,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Secure-macos
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Secure-macos
     description: "QConn Secure tool for macOS"
 
   # ── QConn_Mem_Map host tools ──────────────────────────────────────────────
@@ -205,7 +205,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Mem_Map.exe
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Mem_Map.exe
     description: "QConn Memory Map tool for Windows"
 
   - path: qcc74x/tool/QConn_Mem_Map-ubuntu
@@ -213,7 +213,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Mem_Map-ubuntu
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Mem_Map-ubuntu
     description: "QConn Memory Map tool for Linux (Ubuntu)"
 
   - path: qcc74x/tool/QConn_Mem_Map-macos
@@ -221,7 +221,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Mem_Map-macos
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Mem_Map-macos
     description: "QConn Memory Map tool for macOS"
 
   # ── QConn_Production_Tool host tools ─────────────────────────────────────
@@ -231,7 +231,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Production_Tool.exe
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Production_Tool.exe
     description: "QConn Production Tool for Windows"
 
   - path: qcc74x/tool/QConn_Production_Tool-ubuntu
@@ -239,7 +239,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Production_Tool-ubuntu
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Production_Tool-ubuntu
     description: "QConn Production Tool for Linux (Ubuntu)"
 
   - path: qcc74x/tool/QConn_Production_Tool-macos
@@ -247,7 +247,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_Production_Tool-macos
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Production_Tool-macos
     description: "QConn Production Tool for macOS"
 
   # ── QConn_RCT host tools ──────────────────────────────────────────────────
@@ -257,7 +257,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_RCT.exe
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_RCT.exe
     description: "QConn RCT tool for Windows"
 
   - path: qcc74x/tool/QConn_RCT-ubuntu
@@ -265,7 +265,7 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_RCT-ubuntu
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_RCT-ubuntu
     description: "QConn RCT tool for Linux (Ubuntu)"
 
   - path: qcc74x/tool/QConn_RCT-macos
@@ -273,5 +273,5 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00003.1/IOT.OPALZE.1.0.R1/tool/QConn_RCT-macos
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00004.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_RCT-macos
     description: "QConn RCT tool for macOS"
