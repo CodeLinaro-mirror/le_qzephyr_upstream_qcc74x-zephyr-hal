@@ -50,17 +50,59 @@ struct qc7xx_rx_external_context {
     void *net_buf;
 };
 
-static void qc7xx_rx_external_destroy(struct net_buf *buf)
-{
-    struct qc7xx_rx_external_context *ctx = net_buf_user_data(buf);
-
-    ctx->free_fn(ctx->net_buf);
-    net_buf_destroy(buf);
-}
+static void qc7xx_rx_external_destroy(struct net_buf *buf);
 
 NET_BUF_POOL_HEAP_DEFINE(qc7xx_rx_external_pool, CONFIG_NET_PKT_RX_COUNT,
-                         sizeof(struct qc7xx_rx_external_context),
+                         sizeof(uint32_t),
                          qc7xx_rx_external_destroy);
+
+/*
+ * TCP stores its out-of-order receive sequence number in the first word of
+ * net_buf user data.  The zero-copy release callback used to live there too,
+ * so tcp_set_seq() replaced free_fn with a sequence number.  Keep the Wi-Fi
+ * ownership data outside the net_buf slot and reserve user data for TCP.
+ */
+static struct qc7xx_rx_external_context
+    qc7xx_rx_context[CONFIG_NET_PKT_RX_COUNT];
+
+static struct qc7xx_rx_external_context *
+qc7xx_rx_external_context_get(struct net_buf *buf)
+{
+    uintptr_t base = (uintptr_t)&_net_buf_qc7xx_rx_external_pool[0];
+    uintptr_t addr = (uintptr_t)buf;
+    size_t stride = sizeof(_net_buf_qc7xx_rx_external_pool[0]);
+    size_t offset;
+
+    if (addr < base) {
+        return NULL;
+    }
+
+    offset = addr - base;
+    if ((offset % stride) != 0U ||
+        (offset / stride) >= CONFIG_NET_PKT_RX_COUNT) {
+        return NULL;
+    }
+
+    return &qc7xx_rx_context[offset / stride];
+}
+
+static void qc7xx_rx_external_destroy(struct net_buf *buf)
+{
+    struct qc7xx_rx_external_context *ctx =
+        qc7xx_rx_external_context_get(buf);
+    net_buf_free_fn free_fn;
+    void *net_buf;
+
+    __ASSERT_NO_MSG(ctx != NULL);
+    __ASSERT_NO_MSG(ctx->free_fn != NULL);
+
+    free_fn = ctx->free_fn;
+    net_buf = ctx->net_buf;
+    ctx->free_fn = NULL;
+    ctx->net_buf = NULL;
+    free_fn(net_buf);
+    net_buf_destroy(buf);
+}
 #endif
 
 #if defined(CONFIG_NET_STATISTICS_WIFI)
@@ -132,7 +174,17 @@ static int qc7xx_wifi_recv(void *net_buf, void *payload, uint16_t length, uint8_
     }
 
 #if defined(CONFIG_QCC74X_WIFI_RX_ZERO_COPY)
-    external_ctx = net_buf_user_data(external);
+    external_ctx = qc7xx_rx_external_context_get(external);
+    if (external_ctx == NULL) {
+        /*
+        * external has not been appended to pkt and has no initialized
+        * zero-copy ownership context. Do not net_buf_unref(): that invokes
+        * qc7xx_rx_external_destroy() and requires free_fn to be valid.
+        */
+        net_buf_destroy(external);
+        net_pkt_unref(pkt);
+        goto out;
+    }
     external_ctx->free_fn = free_fn;
     external_ctx->net_buf = net_buf;
     net_pkt_append_buffer(pkt, external);
