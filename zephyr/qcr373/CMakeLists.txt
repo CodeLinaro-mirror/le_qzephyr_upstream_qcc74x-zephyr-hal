@@ -66,7 +66,7 @@ if(CONFIG_SOC_SERIES_QCR3XX)
     ../../drivers/lhal/src/qc7xx_clock.c
   )
 
-  zephyr_link_libraries(${CMAKE_CURRENT_LIST_DIR}/../../drivers/lhal/src/pka/libpka_qc7xx.a)
+  zephyr_link_libraries(${QCC74X_BLOB_BASE}/lib/libpka_qc7xx.a)
 
   zephyr_sources_ifdef(CONFIG_AUDIO_ADC_QCC74X ../../drivers/lhal/src/qc7xx_auadc.c)
   zephyr_sources_ifdef(CONFIG_AUDIO_DAC_QCC74X ../../drivers/lhal/src/qc7xx_audac.c)

@@ -73,7 +73,7 @@ if(CONFIG_SOC_SERIES_QCC74X)
   zephyr_sources_ifdef(CONFIG_VIDEO_QCC74X_JPEG ../../drivers/lhal/src/qc7xx_mjpeg.c)
   if(CONFIG_QCC74X_SEC_PKA)
     zephyr_link_libraries(
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../drivers/lhal/src/pka/libpka_qc7xx.a
+      ${QCC74X_BLOB_BASE}/lib/libpka_qc7xx.a
     )
   endif()
 if(CONFIG_ROMAPI)
