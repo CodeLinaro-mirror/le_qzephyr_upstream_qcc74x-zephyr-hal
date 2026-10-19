@@ -23,6 +23,7 @@
 #if RW_MESH_EN
 #include "mesh_mpm.h"
 #include "export/mac/mac_types.h"
+#include "export/mac/mac.h"
 #endif
 
 #include "eloop_rtos.h"
@@ -2056,54 +2057,192 @@ static int wpa_rwnx_driver_set_ap(void *priv, struct wpa_driver_ap_params *param
 	return res;
 }
 
-/*
- * mac_chan_op offsets inside the firmware's private struct vif_info_tag. The
- * firmware switches the AP itself, taking the destination from vif->csa_channel,
- * which is only ever written on the STA path; an AP would move to whatever that
- * field held.
- *
- * No header to take offsetof() from, so these were read out of the linked image,
- * from vif_mgmt_switch_channel():
- *
- *     addi s2,s0,1132        <- &vif->csa_channel
- *     addi a0,s0,428         <- &vif->bss_info.chan
- *     li   a2,10             <- sizeof(struct mac_chan_op)
- *
- * The preceding fields are guarded by NX_MFP, NX_UMAC_PRESENT and others, so a
- * differently configured blob shifts them and the write would corrupt unrelated
- * VIF state. Hence the runtime layout check below. Drop all of this once the
- * firmware exposes the CSA target channel.
- */
-#define RWNX_VIF_CSA_CHANNEL_OFT 1132
-#define RWNX_VIF_BSS_CHANNEL_OFT 428
+/* Mirror of the firmware's private struct vif_info_tag, up to csa_channel.
+ * Layout of the macsw library built with power save (two int64_t in u.sta). */
+struct rwnx_txdesc_mirror {
+	struct co_list_hdr list_hdr;
+	struct {
+		uint32_t hostid;
+		uint32_t packet_addr;
+		uint16_t packet_len;
+		struct mac_addr eth_dest_addr;
+		struct mac_addr eth_src_addr;
+		uint16_t ethertype;
+		uint16_t flags;
+		uint16_t sn_for_retry;
+		uint8_t tid;
+		uint8_t vif_idx;
+		uint8_t staid;
+		struct {
+			int8_t credits;
+			uint8_t ampdu_size;
+			uint32_t status;
+		} cfm;
+	} host;
+	struct {
+		uint16_t sn;
+		uint16_t sn_win;
+		uint32_t flags;
+		uint32_t phy_flags;
+		void *buf_control;
+		uint16_t payl_len;
+		uint8_t machead_len;
+		uint8_t head_len;
+		uint8_t hdr_len_802_2;
+		uint8_t tail_len;
+		uint8_t rc_control;
+		uint16_t pn[4];
+		uint16_t timestamp;
+		uint16_t retry_cnt;
+	} umac;
+	struct {
+		void *agg_desc;
+		void *buffer;
+		void *hw_desc;
+		uint16_t status;
+	} lmac;
+};
 
-/**
- * Point the firmware at the channel the AP moves to when the CSA counter
- * expires. Returns -1 without writing anything if the layout is unconfirmed.
- */
+struct rwnx_me_bss_info_mirror {
+	uint32_t mode;
+	struct mac_htcapability ht_cap;
+	struct mac_vhtcapability vht_cap;
+	struct mac_hecapability he_cap;
+	struct mac_mu_edca_param_set mu_edca_param;
+	struct mac_addr bssid;
+	struct mac_ssid ssid;
+	uint8_t bssid_index;
+	uint8_t max_bssid_ind;
+	uint16_t bsstype;
+	struct mac_chan_op chan;
+	uint16_t beacon_period;
+	uint16_t cap_info;
+	struct mac_rateset rate_set;
+	uint16_t rate_set_bitmap;
+	struct mac_edca_param_set edca_param;
+	uint8_t auth;
+	int8_t rssi;
+	uint8_t high_11b_rate;
+	uint8_t low_supported_rate;
+	uint16_t prot_status;
+	uint8_t power_constraint;
+	uint32_t he_oper;
+	uint32_t capa_flags;
+};
+
+struct rwnx_vif_info_mirror {
+	struct co_list_hdr list_hdr;
+	uint32_t prevent_sleep;
+	uint32_t txq_params[AC_MAX];
+	struct mm_timer_tag tbtt_timer;
+	int64_t tsf_offset;
+	struct mm_timer_tag tmr_bcn_to;
+	struct mm_timer_tag tmr_bcn_wait_to;
+	struct mac_addr bssid;
+	void *chan_ctxt;
+	struct {
+		struct co_list_hdr list_hdr;
+		uint32_t time;
+		uint8_t vif_index;
+		uint8_t status;
+	} tbtt_switch;
+	struct mac_addr mac_addr;
+	uint8_t type;
+	uint8_t index;
+	bool active;
+	int8_t tx_power;
+	int8_t user_tx_power;
+	union {
+		struct {
+			uint16_t listen_interval;
+			bool dont_wait_bcmc;
+			uint8_t ps_retry;
+			uint8_t ps_null_data_fail;
+			int64_t ps_rtc_tsf_offset;
+			uint64_t ps_rtc_offset_update_tsf;
+			uint8_t ap_id;
+			uint8_t bssid_index;
+			uint8_t max_bssid_ind;
+			uint32_t uapsd_last_rxtx;
+			uint8_t uapsd_queues;
+			uint8_t uapsd_tid;
+			uint32_t mon_last_tx;
+			uint32_t mon_last_crc;
+			uint8_t beacon_loss_cnt;
+			int8_t rssi;
+			int8_t rssi_thold;
+			uint8_t rssi_hyst;
+			bool rssi_status;
+			uint8_t csa_count;
+			bool csa_occured;
+			uint8_t disconnect_status_code;
+		} sta;
+		struct {
+			uint32_t dummy;
+			struct {
+				struct rwnx_txdesc_mirror txdesc;
+				struct {
+					void *cfm_func;
+					void *env;
+				} cfm;
+				uint8_t type;
+				bool postponed;
+				bool keep_desc;
+			} bcn_desc;
+			uint16_t bcn_len;
+			uint16_t tim_len;
+			uint16_t tim_bitmap_set;
+			uint16_t bcn_int;
+			uint8_t bcn_tbtt_ratio;
+			uint8_t bcn_tbtt_cnt;
+			bool bcn_configured;
+			uint8_t dtim_count;
+			uint8_t tim_n1;
+			uint8_t tim_n2;
+			uint8_t bc_mc_status;
+			uint8_t csa_count;
+			uint8_t csa_oft[BCN_MAX_CSA_CPT];
+			uint8_t ps_sta_cnt;
+			uint16_t ctrl_port_ethertype;
+		} ap;
+	} u;
+	struct co_list sta_list;
+	struct rwnx_me_bss_info_mirror bss_info;
+	struct key_info_tag key_info[MAC_DEFAULT_MFP_KEY_COUNT];
+	struct key_info_tag *default_key;
+	struct key_info_tag *default_mgmt_key;
+	uint32_t flags;
+	struct mac_chan_op csa_channel;
+	uint16_t txop_dur_rts_thres;
+	uint16_t count_ignore_bcmc;
+	uint16_t count_bcmc;
+};
+
+/* Set the channel the AP moves to when the CSA counter expires, which the
+ * firmware only fills in for a STA. Refuses if the VIF layout does not match. */
 static int wpa_rwnx_set_csa_target_channel(struct wpa_rwnx_driver_itf_data *drv,
 					   struct hostapd_freq_params *freq)
 {
-	void *macvif = fhost_to_mac_vif(drv->fhost_vif_idx);
+	struct rwnx_vif_info_mirror *macvif = fhost_to_mac_vif(drv->fhost_vif_idx);
 	struct mac_chan_op current_chan;
 	struct mac_chan_op target;
-	uint8_t *bss_chan;
 
 	if (!macvif)
 		return -1;
 
-	/* mac_vif_get_channel() reaches the operating channel through the VIF's
-	 * channel context, so it confirms RWNX_VIF_BSS_CHANNEL_OFT independently.
-	 * csa_channel is in the same struct, so this covers both constants. */
+	if ((uint8_t *)vif_info_get_vif(1) - (uint8_t *)vif_info_get_vif(0) !=
+	    sizeof(*macvif)) {
+		printf("[WPA] CSA: VIF stride %d != mirror %d, refusing to set the"
+		       " target channel\r\n",
+		       (int)((uint8_t *)vif_info_get_vif(1) - (uint8_t *)vif_info_get_vif(0)),
+		       (int)sizeof(*macvif));
+		return -1;
+	}
+
 	os_memset(&current_chan, 0, sizeof(current_chan));
 	mac_vif_get_channel(macvif, &current_chan);
-	if (current_chan.prim20_freq == 0)
-		return -1;
-
-	bss_chan = (uint8_t *)macvif + RWNX_VIF_BSS_CHANNEL_OFT;
-	if (os_memcmp(bss_chan, &current_chan, sizeof(current_chan)) != 0) {
-		TRACE_FHOST(ERR, "[WPA] CSA: unexpected VIF layout, refusing to set"
-				 " the target channel");
+	if (current_chan.prim20_freq == 0) {
+		printf("[WPA] CSA: AP has no operating channel\r\n");
 		return -1;
 	}
 
@@ -2123,7 +2262,7 @@ static int wpa_rwnx_set_csa_target_channel(struct wpa_rwnx_driver_itf_data *drv,
 	}
 	target.tx_power = current_chan.tx_power;
 
-	os_memcpy((uint8_t *)macvif + RWNX_VIF_CSA_CHANNEL_OFT, &target, sizeof(target));
+	macvif->csa_channel = target;
 	return 0;
 }
 
@@ -2171,8 +2310,7 @@ static int wpa_rwnx_driver_switch_channel(void *priv,
 	if (!(drv->status & RWNX_AP_STARTED))
 		return -1;
 
-	/* Store the destination first: the firmware starts counting down as soon
-	 * as the beacon below carries the CSA IE. */
+	/* The firmware starts counting down once the beacon carries the CSA IE. */
 	if (wpa_rwnx_set_csa_target_channel(drv, &settings->freq_params))
 		return -1;
 
@@ -2219,8 +2357,10 @@ static int wpa_rwnx_driver_switch_channel(void *priv,
 		cmd.csa_oft[i] = (uint8_t)oft;
 	}
 
-	if (fhost_cntrl_cfgrwnx_cmd_send(&cmd.hdr, &resp.hdr) || resp.status != CFGRWNX_SUCCESS)
+	if (fhost_cntrl_cfgrwnx_cmd_send(&cmd.hdr, &resp.hdr) || resp.status != CFGRWNX_SUCCESS) {
+		printf("[WPA] CSA: beacon update failed, status %d\r\n", (int)resp.status);
 		res = -1;
+	}
 
 	os_free(cmd.bcn);
 
