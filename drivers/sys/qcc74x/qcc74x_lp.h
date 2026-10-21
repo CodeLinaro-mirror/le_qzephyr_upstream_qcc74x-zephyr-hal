@@ -19,15 +19,13 @@ extern int32_t (*shared_aon_set_ldo11_soc_sstart_delay)(uint32_t);
 extern int32_t (*shared_pds_default_level_config)(uint32_t*, uint32_t);
 #endif
 
-/* Diagnostic build only: uncached APP-side breadcrumbs, no LPFW ABI change. */
-#ifdef CONFIG_QCC74X_PDS1_DEBUG_TRACE
-extern volatile uint32_t qcc74x_pds1_debug_stage;
-#define QCC74X_PDS1_TRACE(value) do { \
-    qcc74x_pds1_debug_stage = (value); \
-    __asm__ volatile("fence rw, rw" ::: "memory"); \
-} while (0)
-#else
-#define QCC74X_PDS1_TRACE(value) do { } while (0)
+/*
+ * PDS1 crosses into a low-power state immediately after WFI. A retained,
+ * uncached transaction plus an ordering fence on each side of WFI makes that
+ * transition deterministic when APP code and data execute from PSRAM.
+ */
+#ifdef CONFIG_QCC74X_PM_PDS1
+extern volatile uint32_t qcc74x_pds1_wfi_ordering_token;
 #endif
 
 #define IOT2LP_PARA_ADDR          0x20010400

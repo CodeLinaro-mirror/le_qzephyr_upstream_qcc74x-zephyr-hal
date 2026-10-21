@@ -31,8 +31,8 @@
 // #include <utils_crc.h>
 #include "qc7xx_sec_sha.h"
 
-#ifdef CONFIG_QCC74X_PDS1_DEBUG_TRACE
-ATTR_NOCACHE_NOINIT_RAM_SECTION volatile uint32_t qcc74x_pds1_debug_stage;
+#ifdef CONFIG_QCC74X_PM_PDS1
+ATTR_NOCACHE_NOINIT_RAM_SECTION volatile uint32_t qcc74x_pds1_wfi_ordering_token;
 #endif
 
 #if defined(CFG_QCC74x_WIFI_PS_ENABLE) && !defined(CFG_QC7XX_WIFI_PS_ENABLE)
@@ -292,8 +292,6 @@ ATTR_HBN_CODE_SECTION void lp_fw_pre(void)
 {
     uint32_t tmpVal;
 
-    QCC74X_PDS1_TRACE(5);
-
     /* xclk  select XTAL40M */
     (*(volatile uint32_t *)0x2000f030) |= (1 << 0);
 
@@ -322,7 +320,6 @@ ATTR_HBN_CODE_SECTION void lp_fw_pre(void)
     void (*pFunc)(void);
     uint32_t lpfw_addr = ((uint32_t)__lpfw_share_start__ & 0x0FFFFFFF) | 0x60000000; /* cacheable */
     pFunc = (void (*)(void))lpfw_addr;
-    QCC74X_PDS1_TRACE(6);
     pFunc();
 }
 
@@ -1846,7 +1843,6 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
     }
 
 #if defined(CONFIG_QCC74X_PM_PDS1)
-    QCC74X_PDS1_TRACE(7);
     /* Do not send a later HBN/software reset into the stale LPFW context. */
     QC7XX_WR_REG(PDS_BASE, PDS_CPU_CORE_CFG14, g_lp_cpu_reset_address);
 #endif
@@ -1916,9 +1912,7 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
 
     qc7xx_lp_gpio_cfg_restore();
 
-    QCC74X_PDS1_TRACE(8);
     LP_HOOK(post_sys, iot2lp_para);
-    QCC74X_PDS1_TRACE(9);
 
     /* try to use app mtimer to cal rc32,so make beacon_stamp_mtimer_valid=0 and init rc32k auto cal
        if xtal32 used, following code is also ok */
@@ -2511,12 +2505,6 @@ static void qc7xx_lp_io_wakeup_init(qc7xx_lp_io_cfg_t *io_wakeup_cfg)
     g_lp_gpio_cfg_saved_mask = 0;
 
     for (uint8_t i = 0; i < QC7XX_LP_GPIO_PAD_COUNT; i++) {
-#ifdef CONFIG_QCC74X_PDS1_DEBUG_TRACE
-        /* Reserve GPIO0..3 for pre-attached JTAG in the diagnostic image. */
-        if (i < 4) {
-            continue;
-        }
-#endif
         /* except Flash0_IO (io4~9) */
         if ((sf0_pin != 0xFF) && (i >= sf0_pin) && (i < (sf0_pin + 6))) {
             continue;

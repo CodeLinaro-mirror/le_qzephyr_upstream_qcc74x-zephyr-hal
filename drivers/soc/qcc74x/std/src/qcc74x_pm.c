@@ -777,9 +777,13 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
 
     PDS_Default_Level_Config(pPdsCfg, sleep_time);
 
-    QCC74X_PDS1_TRACE(1);
+#if defined(CONFIG_QCC74X_PM_PDS1)
+    qcc74x_pds1_wfi_ordering_token = 1;
+#endif
     __WFI();
-    QCC74X_PDS1_TRACE(2);
+#if defined(CONFIG_QCC74X_PM_PDS1)
+    qcc74x_pds1_wfi_ordering_token = 2;
+#endif
 
 /******************************* Wakeup Flow *******************************/
 #if PM_PDS_PLL_POWER_OFF && defined(CONFIG_QCC74X_PM_PDS1)
@@ -939,7 +943,6 @@ void ATTR_TCM_SECTION pm_pds_wakeup_irq_ack(void)
 
 int ATTR_TCM_SECTION pm_reset_cpu_to_lpfw(void)
 {
-    QCC74X_PDS1_TRACE(3);
     uint32_t callback = QC7XX_RD_REG(HBN_BASE, HBN_RSV1);
 
     if (QC7XX_RD_REG(HBN_BASE, HBN_RSV0) != HBN_STATUS_ENTER_FLAG ||
@@ -954,7 +957,6 @@ int ATTR_TCM_SECTION pm_reset_cpu_to_lpfw(void)
     }
     __DSB();
     __ISB();
-    QCC74X_PDS1_TRACE(4);
     GLB_SW_CPU_Reset();
     return -3;
 }
