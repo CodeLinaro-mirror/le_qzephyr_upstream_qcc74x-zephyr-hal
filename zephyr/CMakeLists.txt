@@ -5,14 +5,23 @@
 
 # Define blob base path using CMAKE_CURRENT_SOURCE_DIR (reliable, no dependency on
 # ZEPHYR_HAL_QCOM_MODULE_DIR whose value depends on west manifest naming convention)
-set(QCC74X_BLOB_BASE "${CMAKE_CURRENT_SOURCE_DIR}/blobs/qcc74x" CACHE PATH "" FORCE)
+set(QCC7XX_BLOB_BASE "${CMAKE_CURRENT_SOURCE_DIR}/blobs" CACHE PATH "" FORCE)
+set(QCC7XX_BLOB_COMMON "${QCC7XX_BLOB_BASE}/common")
+if(CONFIG_SOC_SERIES_QCC74X)
+  set(QCC74X_BLOB_BASE "${QCC7XX_BLOB_BASE}/qcc74x")
+  set(QCC7XX_BLOB_SOC "${QCC74X_BLOB_BASE}")
+endif()
+if(CONFIG_SOC_SERIES_QCR3XX)
+  set(QCR373_BLOB_BASE "${QCC7XX_BLOB_BASE}/qcr373")
+  set(QCC7XX_BLOB_SOC "${QCR373_BLOB_BASE}")
+endif()
 
 # Copy platform host tool binaries from blobs to tools/ directory.
 # Runs at cmake configure time so tool checks in soc CMakeLists can find executables.
 # Blobs must be fetched first: west blobs fetch hal_qcom
-set(QCC74X_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../tools/qc7xx_tools")
+set(QCC7XX_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../tools/qc7xx_tools")
 
-macro(qcc74x_copy_tool SRC DST)
+macro(qcc7xx_copy_tool SRC DST)
   if(EXISTS ${SRC})
     configure_file(${SRC} ${DST} COPYONLY)
     if(NOT CMAKE_HOST_WIN32)
@@ -28,66 +37,59 @@ endmacro()
 
 # Populate blobs from the proprietary binary drop (prop/qcc74x-bin) if present,
 # so builds can pick up binaries without requiring "west blobs fetch".
-set(QCC74X_BIN_BASE "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../prop/qcc74x-bin")
-if(EXISTS ${QCC74X_BIN_BASE})
-  if(NOT EXISTS ${QCC74X_BLOB_BASE})
-    file(MAKE_DIRECTORY ${QCC74X_BLOB_BASE})
-    file(COPY ${QCC74X_BIN_BASE}/bin ${QCC74X_BIN_BASE}/lib ${QCC74X_BIN_BASE}/tool
-         DESTINATION ${QCC74X_BLOB_BASE})
+set(QCC7XX_BIN_BASE "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../prop/qcc74x-bin")
+set(QCC7XX_BIN_COMMON "${QCC7XX_BIN_BASE}/common")
+if(CONFIG_SOC_SERIES_QCC74X)
+  set(QCC7XX_BIN_SOC "${QCC7XX_BIN_BASE}")
+endif()
+if(CONFIG_SOC_SERIES_QCR3XX)
+  set(QCC7XX_BIN_SOC "${QCC7XX_BIN_BASE}/qcr373")
+endif()
+
+if(EXISTS ${QCC7XX_BIN_SOC})
+  if(NOT EXISTS ${QCC7XX_BLOB_SOC})
+    file(MAKE_DIRECTORY ${QCC7XX_BLOB_SOC})
+    file(COPY ${QCC7XX_BIN_SOC}/bin ${QCC7XX_BIN_SOC}/lib ${QCC7XX_BIN_SOC}/tool
+         DESTINATION ${QCC7XX_BLOB_SOC})
   else()
-    message(STATUS "qcc74x binaries existed, skip the copy")
+    message(STATUS "binaries existed, skip the copy")
     message(STATUS "If require to replace: please run prop_blobs_fetch.py manually")
   endif()
 endif()
 
-if(CONFIG_SOC_SERIES_QCR3XX)
-  set(QCR373_BLOB_BASE ${QCC74X_BLOB_BASE}/../qcr373)
-endif()
+
 
 if(CMAKE_HOST_WIN32)
-  if(CONFIG_SOC_SERIES_QCC74X)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash.exe             ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash.exe)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash_Cmd.exe         ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd.exe)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Secure.exe            ${QCC74X_TOOLS_DIR}/QConn_Secure/QConn_Secure.exe)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Production_Tool.exe   ${QCC74X_TOOLS_DIR}/QConn_Production_Tool/QConn_Production_Tool.exe)
-  elseif(CONFIG_SOC_SERIES_QCR3XX)
-    qcc74x_copy_tool(${QCR373_BLOB_BASE}/tool/QConn_Flash_Cmd.exe ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd.exe)
-    qcc74x_copy_tool(${QCR373_BLOB_BASE}/tool/QConn_Secure.exe    ${QCC74X_TOOLS_DIR}/QConn_Secure/QConn_Secure.exe)
-  endif()
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Flash.exe             ${QCC7XX_TOOLS_DIR}/QConn_Flash/QConn_Flash.exe)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Flash_Cmd.exe         ${QCC7XX_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd.exe)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Secure.exe            ${QCC7XX_TOOLS_DIR}/QConn_Secure/QConn_Secure.exe)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Production_Tool.exe   ${QCC7XX_TOOLS_DIR}/QConn_Production_Tool/QConn_Production_Tool.exe)
 elseif(CMAKE_HOST_APPLE)
-  if(CONFIG_SOC_SERIES_QCC74X)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash-macos                ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash-macos)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash_Cmd-macos            ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd-macos)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Secure-macos               ${QCC74X_TOOLS_DIR}/QConn_Secure/QConn_Secure-macos)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Production_Tool-macos      ${QCC74X_TOOLS_DIR}/QConn_Production_Tool/QConn_Production_Tool-macos)
-  elseif(CONFIG_SOC_SERIES_QCR3XX)
-    qcc74x_copy_tool(${QCR373_BLOB_BASE}/tool/QConn_Flash_Cmd-macos  ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd-macos)
-    qcc74x_copy_tool(${QCR373_BLOB_BASE}/tool/QConn_Secure-macos     ${QCC74X_TOOLS_DIR}/QConn_Secure/QConn_Secure-macos)
-  endif()
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Flash-macos                ${QCC7XX_TOOLS_DIR}/QConn_Flash/QConn_Flash-macos)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Flash_Cmd-macos            ${QCC7XX_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd-macos)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Secure-macos               ${QCC7XX_TOOLS_DIR}/QConn_Secure/QConn_Secure-macos)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Production_Tool-macos      ${QCC7XX_TOOLS_DIR}/QConn_Production_Tool/QConn_Production_Tool-macos)
 else()
-  if(CONFIG_SOC_SERIES_QCC74X)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash-ubuntu              ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash-ubuntu)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Flash_Cmd-ubuntu          ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd-ubuntu)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Secure-ubuntu             ${QCC74X_TOOLS_DIR}/QConn_Secure/QConn_Secure-ubuntu)
-    qcc74x_copy_tool(${QCC74X_BLOB_BASE}/tool/QConn_Production_Tool-ubuntu    ${QCC74X_TOOLS_DIR}/QConn_Production_Tool/QConn_Production_Tool-ubuntu)
-  elseif(CONFIG_SOC_SERIES_QCR3XX)
-    qcc74x_copy_tool(${QCR373_BLOB_BASE}/tool/QConn_Flash_Cmd-ubuntu ${QCC74X_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd-ubuntu)
-    qcc74x_copy_tool(${QCR373_BLOB_BASE}/tool/QConn_Secure-ubuntu    ${QCC74X_TOOLS_DIR}/QConn_Secure/QConn_Secure-ubuntu)
-  endif()
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Flash-ubuntu              ${QCC7XX_TOOLS_DIR}/QConn_Flash/QConn_Flash-ubuntu)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Flash_Cmd-ubuntu          ${QCC7XX_TOOLS_DIR}/QConn_Flash/QConn_Flash_Cmd-ubuntu)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Secure-ubuntu             ${QCC7XX_TOOLS_DIR}/QConn_Secure/QConn_Secure-ubuntu)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/tool/QConn_Production_Tool-ubuntu    ${QCC7XX_TOOLS_DIR}/QConn_Production_Tool/QConn_Production_Tool-ubuntu)
 endif()
-qcc74x_copy_tool(${QCC74X_BLOB_BASE}/bin/flash_para.bin
-                 ${QCC74X_TOOLS_DIR}/QConn_Flash/chips/qcc74x/efuse_bootheader/flash_para.bin)
+if(CONFIG_SOC_SERIES_QCC74X)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/bin/flash_para.bin
+                 ${QCC7XX_TOOLS_DIR}/QConn_Flash/chips/qcc74x/efuse_bootheader/flash_para.bin)
+endif()
 if(CONFIG_SOC_SERIES_QCR3XX)
-  qcc74x_copy_tool(${QCR373_BLOB_BASE}/bin/flash_para.bin
-                   ${QCC74X_TOOLS_DIR}/QConn_Flash/chips/qcr373/efuse_bootheader/flash_para.bin)
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/bin/flash_para.bin
+                   ${QCC7XX_TOOLS_DIR}/QConn_Flash/chips/qcr373/efuse_bootheader/flash_para.bin)
 endif()
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/zephyr)
 if(CONFIG_SOC_SERIES_QCC74X)
-  qcc74x_copy_tool(${QCC74X_BLOB_BASE}/bin/boot2_qcc743_isp_release_v8.1.9.bin
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/bin/boot2_qcc743_isp_release_v8.1.9.bin
                    ${CMAKE_BINARY_DIR}/zephyr/boot2_qcc743_isp_release_v8.1.9.bin)
 endif()
 if(CONFIG_SOC_SERIES_QCR3XX)
-  qcc74x_copy_tool(${QCR373_BLOB_BASE}/bin/boot2_qcr373_isp_release_v8.2.4.bin
+  qcc7xx_copy_tool(${QCC7XX_BLOB_SOC}/bin/boot2_qcr373_isp_release_v8.2.4.bin
                    ${CMAKE_BINARY_DIR}/zephyr/boot2_qcr373_isp_release_v8.2.4.bin)
 endif()
 
