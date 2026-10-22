@@ -377,3 +377,90 @@ blobs:
     fetcher: gitiles
     description: "QCC748 Wi-Fi FHOST PDS1 prebuilt library"
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748_lowpower/libqcc748_wifi_fhost.a
+  
+  # ── QCR373 Firmware images ───────────────────────────────────────────────────────
+
+  - path: qcr373/bin/boot2_qcr373_isp_release_v8.2.4.bin
+    sha256: 5b381a7e65e0c06d742e0fcf9692eeeae4dcf7fd81da6e8e03a3a289dc352a86
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/boot2_qcr373_isp_release_v8.2.4.bin?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 ISP boot2 bootloader image v8.2.4"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/boot2_qcr373_isp_release_v8.2.4.bin
+
+  - path: qcr373/bin/flash_para.bin
+    sha256: 002c41f38bb652bdaf89136183aaef70ae11abbf85f554a59d7242748f32e1e0
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/flash_para.bin?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 flash parameter data for QConn_Flash tool"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/flash_para.bin
+
+  # ── QCR373 QConn_Flash_Cmd host tools ────────────────────────────────────
+
+  - path: qcr373/tool/QConn_Flash_Cmd.exe
+    sha256: 1edc2dd5d3a3e3212d063205bb16b7d7afdba19fda1f1f03064b280c2105996c
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd.exe?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 QConn Flash command-line tool for Windows"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd.exe
+
+  - path: qcr373/tool/QConn_Flash_Cmd-ubuntu
+    sha256: 5a678697e893bf6c2fc677a58c42e27017307d7a4e27b4b8fd338e333a89f747
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-ubuntu?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 QConn Flash command-line tool for Linux (Ubuntu)"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-ubuntu
+
+  - path: qcr373/tool/QConn_Flash_Cmd-macos
+    sha256: 80efd68324032354c3e17cadd16c9198a373430239d37caf57433f414c0041aa
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-macos?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 QConn Flash command-line tool for macOS"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-macos
+
+  # ── QCR373 QConn_Secure host tools ───────────────────────────────────────
+
+  - path: qcr373/tool/QConn_Secure.exe
+    sha256: c4fe2f03710a37aeaa71d27408f6b014d005cbd5a63d671abecedfc3e61956c8
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure.exe?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 QConn Secure tool for Windows"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure.exe
+
+  - path: qcr373/tool/QConn_Secure-ubuntu
+    sha256: b0a153bb63893ee0d65eb9f2dec481f63a674bc744ca0a92e039f2cd4bd99292
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-ubuntu?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 QConn Secure tool for Linux (Ubuntu)"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-ubuntu
+
+  - path: qcr373/tool/QConn_Secure-macos
+    sha256: 199728a054d9f07fdcd28309848f3e8b32770c324851b0d30e6d9f936e21f588
+    type: img
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-macos?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 QConn Secure tool for macOS"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-macos
+
