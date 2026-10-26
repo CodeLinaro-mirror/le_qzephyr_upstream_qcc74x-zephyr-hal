@@ -31,9 +31,7 @@
 // #include <utils_crc.h>
 #include "qc7xx_sec_sha.h"
 
-#ifdef CONFIG_QCC74X_PM_PDS1
 ATTR_NOCACHE_NOINIT_RAM_SECTION volatile uint32_t qcc74x_pds1_wfi_ordering_token;
-#endif
 
 #if defined(CFG_QCC74x_WIFI_PS_ENABLE) && !defined(CFG_QC7XX_WIFI_PS_ENABLE)
 #define CFG_QC7XX_WIFI_PS_ENABLE 1
