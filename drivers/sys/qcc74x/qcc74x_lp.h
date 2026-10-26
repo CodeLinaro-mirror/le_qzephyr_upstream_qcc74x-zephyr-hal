@@ -20,8 +20,10 @@ extern int32_t (*shared_pds_default_level_config)(uint32_t*, uint32_t);
 #endif
 
 /*
- * All PDS levels enter through the CPU WFI path. Keep this retained, uncached
- * token observable across the low-power transition.
+ * Every PDS level enters through pm_pds_mode_enter() and crosses into a
+ * low-power state immediately after WFI. A retained, uncached transaction
+ * plus an ordering fence on each side of WFI makes that transition
+ * deterministic when APP code and data execute from PSRAM.
  */
 extern volatile uint32_t qcc74x_pds1_wfi_ordering_token;
 
