@@ -20,13 +20,10 @@ extern int32_t (*shared_pds_default_level_config)(uint32_t*, uint32_t);
 #endif
 
 /*
- * PDS1 crosses into a low-power state immediately after WFI. A retained,
- * uncached transaction plus an ordering fence on each side of WFI makes that
- * transition deterministic when APP code and data execute from PSRAM.
+ * All PDS levels enter through the CPU WFI path. Keep this retained, uncached
+ * token observable across the low-power transition.
  */
-#ifdef CONFIG_QCC74X_PM_PDS1
 extern volatile uint32_t qcc74x_pds1_wfi_ordering_token;
-#endif
 
 #define IOT2LP_PARA_ADDR          0x20010400
 // #define LP_FW_MAX_SIZE            30 * 1024

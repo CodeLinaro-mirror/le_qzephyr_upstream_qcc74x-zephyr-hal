@@ -777,13 +777,12 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
 
     PDS_Default_Level_Config(pPdsCfg, sleep_time);
 
-#if defined(CONFIG_QCC74X_PM_PDS1)
+    /* This WFI transition is shared by all PDS levels. Keep the uncached
+     * token observable across the low-power transition.
+     */
     qcc74x_pds1_wfi_ordering_token = 1;
-#endif
     __WFI();
-#if defined(CONFIG_QCC74X_PM_PDS1)
     qcc74x_pds1_wfi_ordering_token = 2;
-#endif
 
 /******************************* Wakeup Flow *******************************/
 #if PM_PDS_PLL_POWER_OFF && defined(CONFIG_QCC74X_PM_PDS1)
