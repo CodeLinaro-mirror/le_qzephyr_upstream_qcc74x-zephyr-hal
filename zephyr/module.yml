@@ -400,6 +400,18 @@ blobs:
     description: "QCR373 flash parameter data for QConn_Flash tool"
     doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/flash_para.bin
 
+  # ── QCR373 prebuilt library readme ───────────────────────────────────────
+
+  - path: qcr373/lib/readme.txt
+    sha256: 8fdea9611cfa674b0f534bbbfb317e81080b9d9e8305add27ba0f3cca61d0f8b
+    type: lib
+    version: '1.0.0'
+    license-path: zephyr/blobs/license.txt
+    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/lib/readme.txt?format=TEXT
+    fetcher: gitiles
+    description: "QCR373 prebuilt library blobs readme"
+    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/lib/readme.txt
+
   # ── QCR373 QConn_Flash_Cmd host tools ────────────────────────────────────
 
   - path: qcr373/tool/QConn_Flash_Cmd.exe
