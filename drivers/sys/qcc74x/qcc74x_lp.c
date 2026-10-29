@@ -31,6 +31,8 @@
 // #include <utils_crc.h>
 #include "qc7xx_sec_sha.h"
 
+ATTR_NOCACHE_NOINIT_RAM_SECTION volatile uint32_t qcc74x_pds1_wfi_ordering_token;
+
 #if defined(CFG_QCC74x_WIFI_PS_ENABLE) && !defined(CFG_QC7XX_WIFI_PS_ENABLE)
 #define CFG_QC7XX_WIFI_PS_ENABLE 1
 #endif
@@ -182,6 +184,9 @@ static uint32_t g_lp_aon_irq_mode_bak;
 static bool g_lp_aon_gpio_cfg_saved;
 static uint64_t g_lp_wakeup_io_bits;
 static uint64_t g_lp_wakeup_io_edge_bits;
+#if defined(CONFIG_QCC74X_PM_PDS1)
+static uint32_t g_lp_cpu_reset_address;
+#endif
 static qc7xx_lp_acomp_cfg_t *gp_lp_acomp_cfg = NULL;
 static qc7xx_lp_acomp_cfg_t g_lp_acomp_cfg_bak;
 static void qc7xx_lp_soft_irq(void);
@@ -264,8 +269,24 @@ static void qc7xx_lp_hbn_memzero(volatile void *addr, uint32_t len)
     }
 }
 
-/* jump to lpfw form bootrom */
+/* CPU-only reset bypasses BootROM stack setup. Never use a PSRAM stack here. */
+#if defined(CONFIG_QCC74X_PM_PDS1)
+static void __attribute__((used, noinline, section(".hbn_code.body"))) lp_fw_pre_body(void);
+void __attribute__((naked, used, section(".hbn_code.entry"))) lp_fw_pre(void)
+{
+    __asm volatile(
+        "csrci mstatus, 8\n"
+        ".option push\n.option norelax\n"
+        "la gp, __global_pointer$\n"
+        ".option pop\n"
+        "la sp, __StackTop\n"
+        "csrw mscratch, sp\n"
+        "j lp_fw_pre_body\n");
+}
+static void __attribute__((used, noinline, section(".hbn_code.body"))) lp_fw_pre_body(void)
+#else
 ATTR_HBN_CODE_SECTION void lp_fw_pre(void)
+#endif
 {
     uint32_t tmpVal;
 
@@ -362,9 +383,23 @@ void lp_fw_save_cpu_para(uint32_t save_addr)
         "sw      x30, 120(a0)\n\t"
         "sw      x31, 124(a0)\n\t");
 }
+#ifdef CONFIG_QCC74X_PM_PDS1
+/* LPFW gates the controller clock. Reopen it before returning to PSRAM code. */
+ATTR_TCM_SECTION
+#endif
 void lp_fw_restore_cpu_para(uint32_t save_addr)
 {
     __asm__ __volatile__(
+#ifdef CONFIG_QCC74X_PM_PDS1
+        "li      t0, 0x20000588\n\t" /* GLB_CGEN_CFG2 */
+        "lw      t1, 0(t0)\n\t"
+        "li      t2, 0x40000\n\t"    /* GLB_CGEN_S1_EXT_PSRAM_CTRL */
+        "or      t1, t1, t2\n\t"
+        "sw      t1, 0(t0)\n\t"
+        "lw      t1, 0(t0)\n\t"
+        "fence   iorw, iorw\n\t"
+        "fence.i\n\t"
+#endif
         "lw      x0, 0(a0)\n\t"
         "lw      x1, 4(a0)\n\t"
         "lw      x2, 8(a0)\n\t"
@@ -499,6 +534,12 @@ int qc7xx_lpfw_bin_check(void)
     if (lpfw_info->magic_code != 0x7766706C) {
         printf("lpfw magic code error\r\n");
         return -1;
+    }
+
+    if (memcmp(lpfw_info->lpfw_version_str, QC7XX_LPFW_ABI_VERSION,
+               sizeof(QC7XX_LPFW_ABI_VERSION)) != 0) {
+        printf("lpfw shared ABI mismatch\r\n");
+        return -4;
     }
 
     if ((lpfw_info->lpfw_memory_start & 0x0FFFFFFF) != ((uint32_t)__lpfw_share_start__ & 0x0FFFFFFF)) {
@@ -1434,6 +1475,13 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
         return -1;
     }
 
+#if defined(CONFIG_QCC74X_PM_PDS1)
+    iot2lp_para->pds_level = PM_PDS_LEVEL_1;
+#else
+    iot2lp_para->pds_level = PM_PDS_LEVEL_15;
+#endif
+    iot2lp_para->handoff_failure = 0;
+
     /* A failed entry must not expose GPIO wake data from the previous pass. */
     g_lp_wakeup_io_bits = 0;
     g_lp_wakeup_io_edge_bits = 0;
@@ -1731,11 +1779,20 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
 
     qc7xx_lp_vtime_before_sleep();
 
+#if defined(CONFIG_QCC74X_PM_PDS1)
+    g_lp_cpu_reset_address = QC7XX_RD_REG(PDS_BASE, PDS_CPU_CORE_CFG14);
+#endif
     L1C_DCache_Clean_All();
 
     lp_fw_save_cpu_para(GET_OFFSET(iot2lp_para_t, cpu_regs) + IOT2LP_PARA_ADDR);
 
     if (iot2lp_para->wakeup_flag == 0) {
+#if defined(CONFIG_QCC74X_PM_PDS1)
+        /* MIE remains masked. WFI needs the wake line enabled, not an ISR. */
+        pm_pds_wakeup_irq_quiesce();
+        PDS_IntMask(PDS_INT_WAKEUP, UNMASK);
+        qc7xx_irq_enable(PDS_WAKEUP_IRQn);
+#endif
         /* Check io_stat , judge whether to enter PDS mode */
         /* if io_stat isn't 0x0, will sleep 2ms */
         if (1 == qc7xx_lp_wakeup_check()) {
@@ -1750,7 +1807,7 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
             /* enable rtc wakeup source */
             QC7XX_WR_REG(PDS_BASE, PDS_INT, QC7XX_RD_REG(PDS_BASE, PDS_INT) | (0x00000001 << 11));
             /* pds15 enter */
-            pm_pds_mode_enter(PM_PDS_LEVEL_15, QC7XX_US_TO_PDS_CNT(pds_sleep_us));
+            pm_pds_mode_enter(iot2lp_para->pds_level, QC7XX_US_TO_PDS_CNT(pds_sleep_us));
 
         } else if (qc7xx_lp_fw_cfg->tim_wakeup_en) {
             /* disable rtc comp */
@@ -1759,7 +1816,7 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
             tmpVal = tmpVal & 0xfffffff1;
             QC7XX_WR_REG(HBN_BASE, HBN_CTL, tmpVal);
             /* pds15 enter */
-            pm_pds_mode_enter(PM_PDS_LEVEL_15, QC7XX_US_TO_PDS_CNT(pds_sleep_us));
+            pm_pds_mode_enter(iot2lp_para->pds_level, QC7XX_US_TO_PDS_CNT(pds_sleep_us));
 
         } else if (rtc_wakeup_cmp_cnt || rtc_sleep_us) {
             /* rtc cfg */
@@ -1768,13 +1825,25 @@ int ATTR_TCM_SECTION qc7xx_lp_fw_enter(qc7xx_lp_fw_cfg_t *qc7xx_lp_fw_cfg)
             /* enable rtc wakeup source */
             QC7XX_WR_REG(PDS_BASE, PDS_INT, QC7XX_RD_REG(PDS_BASE, PDS_INT) | (0x00000001 << 11));
             /* pds15 enter */
-            pm_pds_mode_enter(PM_PDS_LEVEL_15, 0);
+            pm_pds_mode_enter(iot2lp_para->pds_level, 0);
         }
 
+#if defined(CONFIG_QCC74X_PM_PDS1)
+        /* A failed post-WFI handoff is not a rollback or a PDS15 fallback. */
+        iot2lp_para->handoff_failure = (uint32_t)-pm_reset_cpu_to_lpfw();
+        pm_pds_wakeup_irq_quiesce();
+        for (;;) {
+            __WFI();
+        }
+#endif
         iot2lp_para->wakeup_flag = 1;
         lp_fw_restore_cpu_para(GET_OFFSET(iot2lp_para_t, cpu_regs) + IOT2LP_PARA_ADDR);
     }
 
+#if defined(CONFIG_QCC74X_PM_PDS1)
+    /* Do not send a later HBN/software reset into the stale LPFW context. */
+    QC7XX_WR_REG(PDS_BASE, PDS_CPU_CORE_CFG14, g_lp_cpu_reset_address);
+#endif
 #if defined(__riscv_flen)
     __asm__ __volatile__(
         "lw      x0, 0(a0)\n\t"

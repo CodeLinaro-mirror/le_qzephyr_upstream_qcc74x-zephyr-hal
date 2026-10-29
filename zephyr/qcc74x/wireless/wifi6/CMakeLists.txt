@@ -17,7 +17,7 @@ zephyr_compile_definitions(-DCFG_WIFI_DBG=2)
 zephyr_compile_definitions(-DCFG_REC)
 zephyr_compile_definitions(-DCFG_BCN) # NX_BEACONING
 zephyr_compile_definitions(-DCFG_AGG) # NX_MAX_BA_TX(CFG_BATX)
-if(CONFIG_BOARD_QCC74X_DEVKITP OR CONFIG_BOARD_QCC743_DEVKITP OR CONFIG_QCC74X_PM_PDS15)
+if(CONFIG_BOARD_QCC743M_EVK OR CONFIG_QCC74X_PM_LPFW)
     # PDS15 reserves the top 0xF000 of WIFI_RAM for LPFW/runtime state, so
     # qcc744 needs the smaller qcc743-style Wi-Fi footprint to keep STA+PS
     # buildable alongside low-power support.
@@ -64,7 +64,7 @@ if(CONFIG_WFA)
 else()
     zephyr_compile_definitions(-DCFG_BARX=2)
     zephyr_compile_definitions(-DCFG_BATX=1)
-if(CONFIG_BOARD_QCC74X_DEVKITP OR CONFIG_BOARD_QCC743_DEVKITP OR CONFIG_QCC74X_PM_PDS15)
+if(CONFIG_BOARD_QCC743M_EVK OR CONFIG_QCC74X_PM_LPFW)
     zephyr_compile_definitions(-DCFG_REORD_BUF=12)
 else()
     zephyr_compile_definitions(-DCFG_REORD_BUF=18)

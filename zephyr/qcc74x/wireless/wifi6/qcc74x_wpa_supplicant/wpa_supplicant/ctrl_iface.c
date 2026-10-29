@@ -12647,6 +12647,9 @@ char * wpa_supplicant_ctrl_iface_process(struct wpa_supplicant *wpa_s,
 	} else if (os_strncmp(buf, "DISASSOCIATE ", 13) == 0) {
 		if (ap_ctrl_iface_sta_disassociate(wpa_s, buf + 13))
 			reply_len = -1;
+	} else if (os_strncmp(buf, "CHAN_SWITCH ", 12) == 0) {
+		if (ap_ctrl_iface_chanswitch(wpa_s, buf + 12))
+			reply_len = -1;
 #endif
      } else if (os_strncmp(buf, "ACCEPT_ACL ", 11) == 0) {
          if (os_strncmp(buf + 11, "ADD_MAC ", 8) == 0) {

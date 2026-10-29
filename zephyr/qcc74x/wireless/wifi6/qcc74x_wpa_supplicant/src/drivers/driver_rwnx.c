@@ -23,6 +23,7 @@
 #if RW_MESH_EN
 #include "mesh_mpm.h"
 #include "export/mac/mac_types.h"
+#include "export/mac/mac.h"
 #endif
 
 #include "eloop_rtos.h"
@@ -76,6 +77,12 @@ struct wpa_rwnx_driver_itf_data {
 	u8 ssid_len;
 	// Next authentication alg to try (used when connect with several algos)
 	int next_auth_alg;
+	// DTIM period of the started AP, to rebuild the beacon on channel switch
+	u8 dtim_period;
+	// Beacon interval of the started AP, in TU, to time the CSA completion
+	int beacon_int;
+	// Frequency the AP moves to when the CSA counter expires, 0 when idle
+	int csa_target_freq;
 };
 
 /**
@@ -1526,7 +1533,7 @@ static int wpa_rwnx_driver_get_capa(void *priv, struct wpa_driver_capa *capa)
 		       WPA_DRIVER_FLAGS_AP_MLME |
 		       WPA_DRIVER_FLAGS_AP_UAPSD;
 #endif
-		       //WPA_DRIVER_FLAGS_AP_CSA;
+	capa->flags |= WPA_DRIVER_FLAGS_AP_CSA;
 #endif
 #if NX_CRYPTOLIB
 	capa->flags |= WPA_DRIVER_FLAGS_SAE;
@@ -2004,6 +2011,9 @@ static int wpa_rwnx_driver_set_ap(void *priv, struct wpa_driver_ap_params *param
     g_ap_drv = drv;
 #endif
 
+	drv->dtim_period = params->dtim_period;
+	drv->beacon_int = params->beacon_int;
+
 	if (drv->status & RWNX_AP_STARTED)
 		return wpa_rwnx_driver_update_bcn(drv, params);
 
@@ -2047,11 +2057,342 @@ static int wpa_rwnx_driver_set_ap(void *priv, struct wpa_driver_ap_params *param
 	return res;
 }
 
+/* Mirror of the firmware's private struct vif_info_tag, up to csa_channel.
+ * Layout of the macsw library built with power save (two int64_t in u.sta). */
+struct rwnx_txdesc_mirror {
+	struct co_list_hdr list_hdr;
+	struct {
+		uint32_t hostid;
+		uint32_t packet_addr;
+		uint16_t packet_len;
+		struct mac_addr eth_dest_addr;
+		struct mac_addr eth_src_addr;
+		uint16_t ethertype;
+		uint16_t flags;
+		uint16_t sn_for_retry;
+		uint8_t tid;
+		uint8_t vif_idx;
+		uint8_t staid;
+		struct {
+			int8_t credits;
+			uint8_t ampdu_size;
+			uint32_t status;
+		} cfm;
+	} host;
+	struct {
+		uint16_t sn;
+		uint16_t sn_win;
+		uint32_t flags;
+		uint32_t phy_flags;
+		void *buf_control;
+		uint16_t payl_len;
+		uint8_t machead_len;
+		uint8_t head_len;
+		uint8_t hdr_len_802_2;
+		uint8_t tail_len;
+		uint8_t rc_control;
+		uint16_t pn[4];
+		uint16_t timestamp;
+		uint16_t retry_cnt;
+	} umac;
+	struct {
+		void *agg_desc;
+		void *buffer;
+		void *hw_desc;
+		uint16_t status;
+	} lmac;
+};
+
+struct rwnx_me_bss_info_mirror {
+	uint32_t mode;
+	struct mac_htcapability ht_cap;
+	struct mac_vhtcapability vht_cap;
+	struct mac_hecapability he_cap;
+	struct mac_mu_edca_param_set mu_edca_param;
+	struct mac_addr bssid;
+	struct mac_ssid ssid;
+	uint8_t bssid_index;
+	uint8_t max_bssid_ind;
+	uint16_t bsstype;
+	struct mac_chan_op chan;
+	uint16_t beacon_period;
+	uint16_t cap_info;
+	struct mac_rateset rate_set;
+	uint16_t rate_set_bitmap;
+	struct mac_edca_param_set edca_param;
+	uint8_t auth;
+	int8_t rssi;
+	uint8_t high_11b_rate;
+	uint8_t low_supported_rate;
+	uint16_t prot_status;
+	uint8_t power_constraint;
+	uint32_t he_oper;
+	uint32_t capa_flags;
+};
+
+struct rwnx_vif_info_mirror {
+	struct co_list_hdr list_hdr;
+	uint32_t prevent_sleep;
+	uint32_t txq_params[AC_MAX];
+	struct mm_timer_tag tbtt_timer;
+	int64_t tsf_offset;
+	struct mm_timer_tag tmr_bcn_to;
+	struct mm_timer_tag tmr_bcn_wait_to;
+	struct mac_addr bssid;
+	void *chan_ctxt;
+	struct {
+		struct co_list_hdr list_hdr;
+		uint32_t time;
+		uint8_t vif_index;
+		uint8_t status;
+	} tbtt_switch;
+	struct mac_addr mac_addr;
+	uint8_t type;
+	uint8_t index;
+	bool active;
+	int8_t tx_power;
+	int8_t user_tx_power;
+	union {
+		struct {
+			uint16_t listen_interval;
+			bool dont_wait_bcmc;
+			uint8_t ps_retry;
+			uint8_t ps_null_data_fail;
+			int64_t ps_rtc_tsf_offset;
+			uint64_t ps_rtc_offset_update_tsf;
+			uint8_t ap_id;
+			uint8_t bssid_index;
+			uint8_t max_bssid_ind;
+			uint32_t uapsd_last_rxtx;
+			uint8_t uapsd_queues;
+			uint8_t uapsd_tid;
+			uint32_t mon_last_tx;
+			uint32_t mon_last_crc;
+			uint8_t beacon_loss_cnt;
+			int8_t rssi;
+			int8_t rssi_thold;
+			uint8_t rssi_hyst;
+			bool rssi_status;
+			uint8_t csa_count;
+			bool csa_occured;
+			uint8_t disconnect_status_code;
+		} sta;
+		struct {
+			uint32_t dummy;
+			struct {
+				struct rwnx_txdesc_mirror txdesc;
+				struct {
+					void *cfm_func;
+					void *env;
+				} cfm;
+				uint8_t type;
+				bool postponed;
+				bool keep_desc;
+			} bcn_desc;
+			uint16_t bcn_len;
+			uint16_t tim_len;
+			uint16_t tim_bitmap_set;
+			uint16_t bcn_int;
+			uint8_t bcn_tbtt_ratio;
+			uint8_t bcn_tbtt_cnt;
+			bool bcn_configured;
+			uint8_t dtim_count;
+			uint8_t tim_n1;
+			uint8_t tim_n2;
+			uint8_t bc_mc_status;
+			uint8_t csa_count;
+			uint8_t csa_oft[BCN_MAX_CSA_CPT];
+			uint8_t ps_sta_cnt;
+			uint16_t ctrl_port_ethertype;
+		} ap;
+	} u;
+	struct co_list sta_list;
+	struct rwnx_me_bss_info_mirror bss_info;
+	struct key_info_tag key_info[MAC_DEFAULT_MFP_KEY_COUNT];
+	struct key_info_tag *default_key;
+	struct key_info_tag *default_mgmt_key;
+	uint32_t flags;
+	struct mac_chan_op csa_channel;
+	uint16_t txop_dur_rts_thres;
+	uint16_t count_ignore_bcmc;
+	uint16_t count_bcmc;
+};
+
+/* Set the channel the AP moves to when the CSA counter expires, which the
+ * firmware only fills in for a STA. Refuses if the VIF layout does not match. */
+static int wpa_rwnx_set_csa_target_channel(struct wpa_rwnx_driver_itf_data *drv,
+					   struct hostapd_freq_params *freq)
+{
+	struct rwnx_vif_info_mirror *macvif = fhost_to_mac_vif(drv->fhost_vif_idx);
+	struct mac_chan_op current_chan;
+	struct mac_chan_op target;
+
+	if (!macvif)
+		return -1;
+
+	if ((uint8_t *)vif_info_get_vif(1) - (uint8_t *)vif_info_get_vif(0) !=
+	    sizeof(*macvif)) {
+		printf("[WPA] CSA: VIF stride %d != mirror %d, refusing to set the"
+		       " target channel\r\n",
+		       (int)((uint8_t *)vif_info_get_vif(1) - (uint8_t *)vif_info_get_vif(0)),
+		       (int)sizeof(*macvif));
+		return -1;
+	}
+
+	os_memset(&current_chan, 0, sizeof(current_chan));
+	mac_vif_get_channel(macvif, &current_chan);
+	if (current_chan.prim20_freq == 0) {
+		printf("[WPA] CSA: AP has no operating channel\r\n");
+		return -1;
+	}
+
+	/* freq_params.mode is not set on the CSA path, so derive the band from
+	 * the frequency rather than using hostapd_to_rwnx_op_channel(). */
+	os_memset(&target, 0, sizeof(target));
+	target.band = (freq->freq > 2484) ? PHY_BAND_5G : PHY_BAND_2G4;
+	target.prim20_freq = freq->freq;
+	if (freq->bandwidth == 40 || freq->sec_channel_offset) {
+		target.type = PHY_CHNL_BW_40;
+		target.center1_freq = freq->center_freq1 ?
+			freq->center_freq1 :
+			freq->freq + 10 * freq->sec_channel_offset;
+	} else {
+		target.type = PHY_CHNL_BW_20;
+		target.center1_freq = freq->center_freq1 ? freq->center_freq1 : freq->freq;
+	}
+	target.tx_power = current_chan.tx_power;
+
+	macvif->csa_channel = target;
+	return 0;
+}
+
+/*
+ * Report the end of a channel switch. The firmware signals completion
+ * internally (MM_CSA_FINISH_IND) but nothing forwards it across the cfgrwnx
+ * boundary, so EVENT_CH_SWITCH never reaches hostapd_event_ch_switch() and two
+ * things stay undone: csa_in_progress is never cleared, which makes every later
+ * request fail, and the beacon keeps carrying an expired announcement, which
+ * drops associated stations a few seconds later.
+ *
+ * Synthesise the event on a timer instead. Erring late is safe, erring early is
+ * not: hostapd only accepts a frequency matching cs_freq_params.
+ */
+static void wpa_rwnx_csa_finish_timeout(void *eloop_ctx, void *timeout_ctx)
+{
+	struct wpa_rwnx_driver_itf_data *drv = eloop_ctx;
+	union wpa_event_data event;
+
+	(void)timeout_ctx;
+
+	if (!drv->csa_target_freq)
+		return;
+
+	os_memset(&event, 0, sizeof(event));
+	event.ch_switch.freq = drv->csa_target_freq;
+	event.ch_switch.cf1 = drv->csa_target_freq;
+	event.ch_switch.ht_enabled = 1;
+	event.ch_switch.ch_offset = 0;
+	event.ch_switch.ch_width = CHAN_WIDTH_20;
+	drv->csa_target_freq = 0;
+
+	wpa_supplicant_event(drv->ctx, EVENT_CH_SWITCH, &event);
+}
+
+static int wpa_rwnx_driver_switch_channel(void *priv,
+					  struct csa_settings *settings)
+{
+	struct wpa_rwnx_driver_itf_data *drv = priv;
+	struct cfgrwnx_bcn_update cmd;
+	struct cfgrwnx_resp resp;
+	struct wpa_driver_ap_params params;
+	int res = 0;
+
+	if (!(drv->status & RWNX_AP_STARTED))
+		return -1;
+
+	/* The firmware starts counting down once the beacon carries the CSA IE. */
+	if (wpa_rwnx_set_csa_target_channel(drv, &settings->freq_params))
+		return -1;
+
+	/* wpa_rwnx_build_bcn() only consumes head/tail/dtim. */
+	os_memset(&params, 0, sizeof(params));
+	params.head = settings->beacon_csa.head;
+	params.head_len = settings->beacon_csa.head_len;
+	params.tail = settings->beacon_csa.tail;
+	params.tail_len = settings->beacon_csa.tail_len;
+	params.dtim_period = drv->dtim_period;
+
+	wpa_rwnx_msg_hdr_init(drv, &cmd.hdr, CFGRWNX_BCN_UPDATE_CMD, sizeof(cmd));
+	wpa_rwnx_msg_hdr_init(drv, &resp.hdr, CFGRWNX_BCN_UPDATE_RESP, sizeof(resp));
+
+	cmd.fhost_vif_idx = drv->fhost_vif_idx;
+	cmd.bcn = wpa_rwnx_build_bcn(&params, &cmd.bcn_len, &cmd.tim_oft, &cmd.tim_len);
+	if (!cmd.bcn)
+		return -1;
+
+	/* hostapd's offsets are relative to the beacon tail, the firmware wants
+	 * them from the start of the buffer, laid out as [head][TIM][tail].
+	 *
+	 * csa_oft is a uint8_t, so refuse an offset it cannot represent rather
+	 * than truncating: at a wrong offset the firmware decrements arbitrary
+	 * beacon bytes every TBTT and the BSS disappears from scans. */
+	for (int i = 0; i < BCN_MAX_CSA_CPT; i++) {
+		unsigned int oft;
+
+		if (!settings->counter_offset_beacon[i]) {
+			cmd.csa_oft[i] = 0;
+			continue;
+		}
+
+		oft = (unsigned int)cmd.tim_oft + (unsigned int)cmd.tim_len +
+		      settings->counter_offset_beacon[i];
+		if (oft > UINT8_MAX) {
+			TRACE_FHOST(ERR, "[WPA] CSA counter %d at offset %u exceeds the %u byte"
+					 " range of the beacon update command",
+				    i, oft, (unsigned int)UINT8_MAX);
+			os_free(cmd.bcn);
+			return -1;
+		}
+
+		cmd.csa_oft[i] = (uint8_t)oft;
+	}
+
+	if (fhost_cntrl_cfgrwnx_cmd_send(&cmd.hdr, &resp.hdr) || resp.status != CFGRWNX_SUCCESS) {
+		printf("[WPA] CSA: beacon update failed, status %d\r\n", (int)resp.status);
+		res = -1;
+	}
+
+	os_free(cmd.bcn);
+
+	if (res == 0) {
+		int bcn_int = drv->beacon_int > 0 ? drv->beacon_int : 100;
+		unsigned int ms;
+
+		/* One beacon interval of margin past the announced count. The
+		 * interval is in TU, so add the 2.4% a TU exceeds a millisecond
+		 * by: from cs_count 42 up that outgrows the margin and the event
+		 * would land early. */
+		ms = (unsigned int)(settings->cs_count + 1) * (unsigned int)bcn_int;
+		ms += (ms * 24U) / 1000U;
+
+		drv->csa_target_freq = settings->freq_params.freq;
+		eloop_cancel_timeout(wpa_rwnx_csa_finish_timeout, drv, NULL);
+		eloop_register_timeout(ms / 1000, (ms % 1000) * 1000,
+				       wpa_rwnx_csa_finish_timeout, drv, NULL);
+	}
+
+	return res;
+}
+
 static int wpa_rwnx_driver_deinit_ap(void *priv)
 {
 	struct wpa_rwnx_driver_itf_data *drv = priv;
 	struct cfgrwnx_resp resp;
 	struct cfgrwnx_set_vif_type cmd;
+
+	/* A pending CSA completion would report a switch for an AP that is gone. */
+	eloop_cancel_timeout(wpa_rwnx_csa_finish_timeout, drv, NULL);
+	drv->csa_target_freq = 0;
 
 	// Always reset to STA filter whatever initial interface type
 	fhost_wpa_set_mgmt_rx_filter(drv->fhost_vif_idx, STA_MGMT_RX_FILTER);
@@ -2633,6 +2974,7 @@ const struct wpa_driver_ops wpa_driver_rwnx_ops = {
 	.send_mlme = wpa_rwnx_driver_send_mlme,
 	.send_external_auth_status = wpa_rwnx_driver_send_external_auth_status,
 	.set_ap = wpa_rwnx_driver_set_ap,
+	.switch_channel = wpa_rwnx_driver_switch_channel,
 	.deinit_ap = wpa_rwnx_driver_deinit_ap,
 	.set_tx_queue_params = wpa_rwnx_driver_set_tx_queue_params,
 	.hapd_send_eapol = wpa_rwnx_driver_hapd_send_eapol,

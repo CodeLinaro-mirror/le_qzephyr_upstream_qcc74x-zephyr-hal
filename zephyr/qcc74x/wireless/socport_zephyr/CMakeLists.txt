@@ -4,7 +4,6 @@ zephyr_library_sources(src/utils_getopt.c)
 zephyr_library_sources(src/wifi_drv_lower.c)
 zephyr_library_sources(src/soc_wifi_mgmt.c)
 zephyr_library_sources_ifdef(CONFIG_QCC74X_WIFI_LOW_POWER src/qcc74x_wifi_lowpower.c)
-zephyr_library_sources_ifdef(CONFIG_QCC74X_PM_PDS15_BLE src/qcc74x_ble_lowpower.c)
 
 zephyr_include_directories(include)
 zephyr_include_directories(src)

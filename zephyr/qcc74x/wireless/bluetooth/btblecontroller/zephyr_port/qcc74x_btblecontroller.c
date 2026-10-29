@@ -29,7 +29,11 @@ int btblecontroller_task_new(btblecontroller_TaskFunction_t taskFunction,const c
 {
     LOG_DBG("");
     g_func = taskFunction;
+#if defined(CONFIG_QCC74X_WIFI_COEX)
+    static K_KERNEL_STACK_DEFINE(ctrl_thread_stack, 4096);
+#else
     static K_KERNEL_STACK_DEFINE(ctrl_thread_stack, 2048);
+#endif
     k_tid_t kid = k_thread_create(&controller_tread, ctrl_thread_stack,
     K_KERNEL_STACK_SIZEOF(ctrl_thread_stack),
     controller_thread_func, (void *)arg, NULL, NULL,

@@ -11,6 +11,7 @@
 #include "qcc74x_hbn.h"
 #include "qcc74x_pds.h"
 #include "ef_data_reg.h"
+#include "qcc74x_lp.h"
 
 #ifndef PM_PDS_GPIO_KEEP_EN
 #define PM_PDS_GPIO_KEEP_EN 0
@@ -611,8 +612,7 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
         return;
     }
 
-    /* To make it simple and safe*/
-    __ASM volatile("csrc mstatus, 8");
+    uintptr_t irq_flags = qc7xx_irq_save();
 
     /* Must Disable ADC, Otherwise, the current increase 1mA  */
     /* adc disable */
@@ -662,8 +662,16 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
             pPdsCfg = &pdsCfgLevel15;
             break;
         default:
+            qc7xx_irq_restore(irq_flags);
             return;
     }
+
+#if defined(CONFIG_QCC74X_PM_PDS1)
+    if (pds_level == PM_PDS_LEVEL_1) {
+        pPdsCfg->pdsCtl.bgSysOff = 0;
+        pPdsCfg->pdsCtl5.ldo18ioOff = 0;
+    }
+#endif
 
 #if PM_PDS_FLASH_POWER_OFF
     uint32_t flash_cfg_len;
@@ -769,13 +777,25 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
 
     PDS_Default_Level_Config(pPdsCfg, sleep_time);
 
+    /* All PDS levels share this WFI transition. Keep the uncached token
+     * stores ordered so they have reached OCRAM before entering low power. */
+    qcc74x_pds1_wfi_ordering_token = 1;
+    __asm__ volatile("fence iorw, iorw" ::: "memory");
+
     __WFI();
 
+    qcc74x_pds1_wfi_ordering_token = 2;
+    __asm__ volatile("fence iorw, iorw" ::: "memory");
+
 /******************************* Wakeup Flow *******************************/
-#if 0
-    GLB_Power_On_XTAL_And_PLL_CLK(GLB_XTAL_40M, GLB_PLL_WIFIPLL | GLB_PLL_AUPLL);
-    GLB_Set_MCU_System_CLK(GLB_MCU_SYS_CLK_TOP_WIFIPLL_320M);
-    HBN_Set_MCU_XCLK_Sel(HBN_MCU_XCLK_XTAL);
+#if PM_PDS_PLL_POWER_OFF && defined(CONFIG_QCC74X_PM_PDS1)
+    /* PDS1 returns through WFI, unlike the PDS15 reset wake path. Preserve
+     * BL's clock-before-flash recovery order before the LPFW reset handoff.
+     */
+    if (pds_level == PM_PDS_LEVEL_1) {
+        GLB_Power_On_XTAL_And_PLL_CLK(GLB_XTAL_40M, GLB_PLL_WIFIPLL);
+        GLB_Set_MCU_System_CLK(GLB_MCU_SYS_CLK_TOP_WIFIPLL_320M);
+    }
 #endif
 
 #if PM_PDS_FLASH_POWER_OFF
@@ -788,8 +808,8 @@ void ATTR_TCM_SECTION pm_pds_mode_enter(enum pm_pds_sleep_level pds_level,
     }
 #endif
 
-    /* enable global interrupts */
-    __asm volatile("csrs mstatus, 8");
+    /* System PM must retain its IRQ lock until all devices have resumed. */
+    qc7xx_irq_restore(irq_flags);
 
     /*************************************************************************/
 }
@@ -907,6 +927,40 @@ void pm_set_wakeup_callback(void (*wakeup_callback)(void))
     QC7XX_WR_REG(HBN_BASE, HBN_RSV1, (uint32_t)wakeup_callback);
     /* Set HBN flag */
     QC7XX_WR_REG(HBN_BASE, HBN_RSV0, HBN_STATUS_ENTER_FLAG);
+}
+
+void ATTR_TCM_SECTION pm_pds_wakeup_irq_quiesce(void)
+{
+    qc7xx_irq_disable(PDS_WAKEUP_IRQn);
+    PDS_IntMask(PDS_INT_WAKEUP, MASK);
+    qc7xx_irq_clear_pending(PDS_WAKEUP_IRQn);
+}
+
+void ATTR_TCM_SECTION pm_pds_wakeup_irq_ack(void)
+{
+    pm_pds_wakeup_irq_quiesce();
+    PDS_IntClear();
+    qc7xx_irq_clear_pending(PDS_WAKEUP_IRQn);
+}
+
+int ATTR_TCM_SECTION pm_reset_cpu_to_lpfw(void)
+{
+    uint32_t callback = QC7XX_RD_REG(HBN_BASE, HBN_RSV1);
+
+    if (QC7XX_RD_REG(HBN_BASE, HBN_RSV0) != HBN_STATUS_ENTER_FLAG ||
+        callback != 0x20010000U) {
+        return -1;
+    }
+    __asm volatile("csrci mstatus, 8" ::: "memory");
+    pm_pds_wakeup_irq_quiesce();
+    L1C_DCache_Clean_All();
+    if (GLB_Set_CPU_Reset_Address(GLB_CORE_ID_M0, callback) != SUCCESS) {
+        return -2;
+    }
+    __DSB();
+    __ISB();
+    GLB_SW_CPU_Reset();
+    return -3;
 }
 
 void pm_set_boot2_app_jump_para(uint32_t para)

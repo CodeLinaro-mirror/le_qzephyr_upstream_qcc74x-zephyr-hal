@@ -306,7 +306,8 @@ static void ATTR_TCM_SECTION qc7xx_ef_ctrl_program_efuse_r1(struct qc7xx_device_
 *******************************************************************************/
 static void ATTR_TCM_SECTION qc7xx_ef_ctrl_clear_data_reg0(struct qc7xx_device_s *dev)
 {
-    uint32_t *pefuse_start = (uint32_t *)(QC7XX_EF_CTRL_BASE + 0x00);
+    /* MMIO stores must not become a libc call before PSRAM code is copied. */
+    volatile uint32_t *pefuse_start = (volatile uint32_t *)(QC7XX_EF_CTRL_BASE + 0x00);
     uint32_t i = 0;
 
     /* Switch to AHB clock */

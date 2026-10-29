@@ -58,12 +58,12 @@
 #define SF_IO_EXT_SF2_SWAP_IO3IO0                       0x4  /*!< SF select external flash SF2 use gpio4-9 and SF2 swap io3 with io0 */
 #define SF_IO_EXT_SF3                                   0x8  /*!< SF select external flash SF3 use gpio10-15 */
 #define SF_IO_EMB_SWAP_IO3IO0_AND_SF2_SWAP_IO3IO0       0x14 /*!< SF select embedded flash swap io3 with io0 and SF2 swap io3 with io0*/
-#define SF_IO_EMB_SWAP_IO3IO0_IO2CS_AND_SF2_SWAP_IO3IO0 0x15 /*!< SF select embedded flash swap io3 with io0、io2 with cs and SF2 swap io3 with io0 */
+#define SF_IO_EMB_SWAP_IO3IO0_IO2CS_AND_SF2_SWAP_IO3IO0 0x15 /*!< SF select embedded flash swap io3 with io0, io2 with cs and SF2 swap io3 with io0 */
 #define SF_IO_EMB_SWAP_NONE_AND_SF2_SWAP_IO3IO0         0x16 /*!< SF select embedded flash no swap and SF2 swap io3 with io0 */
 #define SF_IO_EMB_SWAP_IO2CS_AND_SF2_SWAP_IO3IO0        0x17 /*!< SF select embedded flash swap io2 with cs, and SF2 swap io3 with io0 */
 #define SF_IO_EXT_SF2                                   0x24 /*!< SF select external flash SF2 use gpio4-9 */
 #define SF_IO_EMB_SWAP_IO3IO0_AND_SF2                   0x34 /*!< SF select embedded flash swap io3 with io0 and SF2 use gpio4-9 */
-#define SF_IO_EMB_SWAP_IO3IO0_IO2CS_AND_SF2             0x35 /*!< SF select embedded flash swap io3 with io0、io2 with cs and SF2 use gpio4-9 */
+#define SF_IO_EMB_SWAP_IO3IO0_IO2CS_AND_SF2             0x35 /*!< SF select embedded flash swap io3 with io0, io2 with cs and SF2 use gpio4-9 */
 #define SF_IO_EMB_SWAP_NONE_AND_SF2                     0x36 /*!< SF select embedded flash no swap and SF2 use gpio4-9 */
 #define SF_IO_EMB_SWAP_IO2CS_AND_SF2                    0x37 /*!< SF select embedded flash swap io2 with cs and SF2 use gpio4-9 */
 #endif
