@@ -15,30 +15,24 @@ blobs:
     type: img
     version: 'qcc74x-pds1-abi2'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/bin/qcc74x_lp_fw.bin?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/bin/qcc74x_lp_fw.bin
     description: "QCC74x LPFW ABI2 for PDS1 PSRAM retention and PDS15"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/bin/qcc74x_lp_fw.bin
 
   - path: qcc74x/bin/boot2_qcc743_isp_release_v8.1.9.bin
     sha256: 289ba1cdf5cdca2e0fc79b67a34c04eee08f1bffaaf6146e8ec9f6b6da40a65f
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/bin/boot2_qcc743_isp_release_v8.1.9.bin?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/bin/boot2_qcc743_isp_release_v8.1.9.bin
     description: "QCC743 ISP boot2 bootloader image v8.1.9"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/bin/boot2_qcc743_isp_release_v8.1.9.bin
 
   - path: qcc74x/bin/flash_para.bin
     sha256: 002c41f38bb652bdaf89136183aaef70ae11abbf85f554a59d7242748f32e1e0
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/bin/flash_para.bin?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/bin/flash_para.bin
     description: "QCC74x flash parameter data for QConn_Flash tool"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/bin/flash_para.bin
 
   # ── Wi-Fi prebuilt libraries ──────────────────────────────────────────────
 
@@ -47,40 +41,32 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_macsw.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/default/libqcc743_wifi_macsw.a
     description: "QCC743 Wi-Fi MAC SW prebuilt library (default)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_macsw.a
     sha256: e29be300f24c94f7ae94eac02194e5e09b5ca34b7db308709da4a62f5e222ccd
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_macsw.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/lp/libqcc743_wifi_macsw.a
     description: "QCC743 Wi-Fi MAC SW prebuilt library (low power)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_macsw.a
 
   - path: qcc74x/lib/default/libqcc743_wifi_fhost.a
     sha256: 1a05e2543029f46bcd19424ce79a247b5556ddc25ff8928c0460091c228cb887
     type: lib
     version: '2.1.16'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_fhost.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/default/libqcc743_wifi_fhost.a
     description: "QCC743 Wi-Fi fhost prebuilt library (default)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/default/libqcc743_wifi_fhost.a
 
   - path: qcc74x/lib/lp/libqcc743_wifi_fhost.a
     sha256: 7ad2f43acc3d67a276d64e62429f563d758f27133f355afc0ccc963a63e0f382
     type: lib
     version: '2.1.16'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_fhost.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/lp/libqcc743_wifi_fhost.a
     description: "QCC743 Wi-Fi fhost prebuilt library (low power)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/lp/libqcc743_wifi_fhost.a
 
   # ── BT/BLE prebuilt library ───────────────────────────────────────────────
 
@@ -89,20 +75,16 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libbtblecontroller.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libbtblecontroller.a
     description: "QCC743 BT/BLE controller prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libbtblecontroller.a
 
   - path: qcc74x/lib/liblmac154_qcc743.a
     sha256: e1679f4633234eebd31490233e524b15807a57d9de6848320ab4d3bc52f8d1c2
     type: lib
     version: '2.1.11'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/liblmac154_qcc743.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/liblmac154_qcc743.a
     description: "QCC743 IEEE 802.15.4 low-level MAC prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/liblmac154_qcc743.a
 
   # ── PHY RF prebuilt libraries ─────────────────────────────────────────────
 
@@ -111,30 +93,24 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libqcc743_phyrf.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libqcc743_phyrf.a
     description: "QCC743 PHY RF prebuilt library (default)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libqcc743_phyrf.a
 
   - path: qcc74x/lib/libqcc743_lpphyrf.a
     sha256: e352a3896e88727e9783ca41c6d92cbf91267d6eac4ffaaf4fae7900a13cfddf
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libqcc743_lpphyrf.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libqcc743_lpphyrf.a
     description: "QCC743 PHY RF prebuilt library (low power)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libqcc743_lpphyrf.a
 
   - path: qcc74x/lib/libqcc743_phyrf4mfg.a
     sha256: dba76e40ed7118ac693d72d9c9f20a92ca5a0ac881e57cdf83deb861698bebf8
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libqcc743_phyrf4mfg.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libqcc743_phyrf4mfg.a
     description: "QCC743 PHY RF prebuilt library (manufacturing)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libqcc743_phyrf4mfg.a
 
   # ── DSP prebuilt library ──────────────────────────────────────────────────
 
@@ -143,10 +119,8 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libcsi_xt900p32f_dsp.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/libcsi_xt900p32f_dsp.a
     description: "T-Head XT900P32F DSP prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/libcsi_xt900p32f_dsp.a
 
   # ── QConn_Flash host tools ────────────────────────────────────────────────
 
@@ -155,60 +129,48 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash.exe
     description: "QConn Flash GUI tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash.exe
 
   - path: qcc74x/tool/QConn_Flash_Cmd.exe
     sha256: 8434ec9817fcc59a05485ab0623788d3303fe68431918452565779a53f0153e3
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash_Cmd.exe
     description: "QConn Flash command-line tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd.exe
 
   - path: qcc74x/tool/QConn_Flash-ubuntu
     sha256: b828905d858a6b3020f9b1091819f9f597188c10c01b1d6bcf82ee62ee574546
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash-ubuntu
     description: "QConn Flash GUI tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash-ubuntu
 
   - path: qcc74x/tool/QConn_Flash_Cmd-ubuntu
     sha256: 01d6458b36196499ea4b253d1e763f9bef85855bd2298ab2c840a32e974bfd33
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash_Cmd-ubuntu
     description: "QConn Flash command-line tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd-ubuntu
 
   - path: qcc74x/tool/QConn_Flash-macos
     sha256: 0cdc91c75074fbfb5626b3133c13e07c2dd162c73ceeed1a8b4703a404a51085
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash-macos
     description: "QConn Flash GUI tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash-macos
 
   - path: qcc74x/tool/QConn_Flash_Cmd-macos
     sha256: 732164f9fb40e6312031b5a2a0b7369e74cc2c82e61ba4821cdca6895464c132
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Flash_Cmd-macos
     description: "QConn Flash command-line tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Flash_Cmd-macos
 
   # ── QConn_Secure host tools ───────────────────────────────────────────────
 
@@ -217,30 +179,24 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Secure.exe
     description: "QConn Secure tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure.exe
 
   - path: qcc74x/tool/QConn_Secure-ubuntu
     sha256: 0576e066a6e4fd25befff59fd17b29320cc33867ef8877857fe9f59483d7c5b9
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Secure-ubuntu
     description: "QConn Secure tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure-ubuntu
 
   - path: qcc74x/tool/QConn_Secure-macos
     sha256: 244e2289423d293c7d76001ac87efec65f46025d859ea674149c922e544170b5
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Secure-macos
     description: "QConn Secure tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Secure-macos
 
   # ── QConn_Mem_Map host tools ──────────────────────────────────────────────
 
@@ -249,30 +205,24 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Mem_Map.exe
     description: "QConn Memory Map tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map.exe
 
   - path: qcc74x/tool/QConn_Mem_Map-ubuntu
     sha256: e5dbbd862caa884b1ed0f96d7f4a97ad59a93f33dae4748fd3bd39644935a97f
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Mem_Map-ubuntu
     description: "QConn Memory Map tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-ubuntu
 
   - path: qcc74x/tool/QConn_Mem_Map-macos
     sha256: 768abd34bddcdb956bac6d88152c49d1b42406eea52fd566de4141f469fa4b00
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Mem_Map-macos
     description: "QConn Memory Map tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Mem_Map-macos
 
   # ── QConn_Production_Tool host tools ─────────────────────────────────────
 
@@ -281,30 +231,24 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Production_Tool.exe
     description: "QConn Production Tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool.exe
 
   - path: qcc74x/tool/QConn_Production_Tool-ubuntu
     sha256: a5b080cc70cd6f66db9bee0a16f621c71b557c57873d724600ee7b37f2ffe800
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Production_Tool-ubuntu
     description: "QConn Production Tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-ubuntu
 
   - path: qcc74x/tool/QConn_Production_Tool-macos
     sha256: 283bfa8563d8a61855a565cf97ec272a7fdc69890741588269990fa5ebdf433c
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_Production_Tool-macos
     description: "QConn Production Tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_Production_Tool-macos
 
   # ── QConn_RCT host tools ──────────────────────────────────────────────────
 
@@ -313,70 +257,56 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_RCT.exe
     description: "QConn RCT tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT.exe
 
   - path: qcc74x/tool/QConn_RCT-ubuntu
     sha256: d70115159ba7f9ef7fba0a38f6f3ebeb9787376774670ed45d0bde8c077f5408
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_RCT-ubuntu
     description: "QConn RCT tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-ubuntu
 
   - path: qcc74x/tool/QConn_RCT-macos
     sha256: e238106c0acc83ac38de96e84bf219a72be47b0cf66f88ca239c6369e8ed50bb
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/tool/QConn_RCT-macos
     description: "QConn RCT tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/tool/QConn_RCT-macos
 
   - path: qcc74x/lib/qcc748/libqcc748_wifi_macsw.a
     sha256: 36a053c59d76c71ddeb82374506befdd1a6ebc5c06ea3b12ee447001e61c6c9b
     type: lib
     version: '2.1.16'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748/libqcc748_wifi_macsw.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/qcc748/libqcc748_wifi_macsw.a
     description: "QCC748 Wi-Fi MACSW high-performance prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748/libqcc748_wifi_macsw.a
 
   - path: qcc74x/lib/qcc748/libqcc748_wifi_fhost.a
     sha256: 8de0d795cb8868ac91e8515afcdcbe35695f8cb6207864746624787584e829a6
     type: lib
     version: '2.1.16'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748/libqcc748_wifi_fhost.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/qcc748/libqcc748_wifi_fhost.a
     description: "QCC748 Wi-Fi FHOST high-performance prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748/libqcc748_wifi_fhost.a
 
   - path: qcc74x/lib/qcc748_lowpower/libqcc748_wifi_macsw.a
     sha256: 1f5327736b7239841071bd6233afb3ee284bda406f39fdf09c7513da064a3ac5
     type: lib
     version: '2.1.16'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748_lowpower/libqcc748_wifi_macsw.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/qcc748_lowpower/libqcc748_wifi_macsw.a
     description: "QCC748 Wi-Fi MACSW PDS1 prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748_lowpower/libqcc748_wifi_macsw.a
 
   - path: qcc74x/lib/qcc748_lowpower/libqcc748_wifi_fhost.a
     sha256: c30876f6d7830887891279170e663864760b12be418ca9a992c2a86028d64658
     type: lib
     version: '2.1.16'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748_lowpower/libqcc748_wifi_fhost.a?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/lib/qcc748_lowpower/libqcc748_wifi_fhost.a
     description: "QCC748 Wi-Fi FHOST PDS1 prebuilt library"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/lib/qcc748_lowpower/libqcc748_wifi_fhost.a
   
   # ── QCR373 Firmware images ───────────────────────────────────────────────────────
 
@@ -385,20 +315,16 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/boot2_qcr373_isp_release_v8.2.4.bin?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/bin/boot2_qcr373_isp_release_v8.2.4.bin
     description: "QCR373 ISP boot2 bootloader image v8.2.4"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/boot2_qcr373_isp_release_v8.2.4.bin
 
   - path: qcr373/bin/flash_para.bin
     sha256: 002c41f38bb652bdaf89136183aaef70ae11abbf85f554a59d7242748f32e1e0
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/flash_para.bin?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/bin/flash_para.bin
     description: "QCR373 flash parameter data for QConn_Flash tool"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/bin/flash_para.bin
 
   # ── QCR373 prebuilt library readme ───────────────────────────────────────
 
@@ -407,10 +333,8 @@ blobs:
     type: lib
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/lib/readme.txt?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/lib/readme.txt
     description: "QCR373 prebuilt library blobs readme"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/lib/readme.txt
 
   # ── QCR373 QConn_Flash_Cmd host tools ────────────────────────────────────
 
@@ -419,30 +343,24 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/tool/QConn_Flash_Cmd.exe
     description: "QCR373 QConn Flash command-line tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd.exe
 
   - path: qcr373/tool/QConn_Flash_Cmd-ubuntu
     sha256: 5a678697e893bf6c2fc677a58c42e27017307d7a4e27b4b8fd338e333a89f747
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/tool/QConn_Flash_Cmd-ubuntu
     description: "QCR373 QConn Flash command-line tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-ubuntu
 
   - path: qcr373/tool/QConn_Flash_Cmd-macos
     sha256: 80efd68324032354c3e17cadd16c9198a373430239d37caf57433f414c0041aa
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/tool/QConn_Flash_Cmd-macos
     description: "QCR373 QConn Flash command-line tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Flash_Cmd-macos
 
   # ── QCR373 QConn_Secure host tools ───────────────────────────────────────
 
@@ -451,28 +369,22 @@ blobs:
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure.exe?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/tool/QConn_Secure.exe
     description: "QCR373 QConn Secure tool for Windows"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure.exe
 
   - path: qcr373/tool/QConn_Secure-ubuntu
     sha256: b0a153bb63893ee0d65eb9f2dec481f63a674bc744ca0a92e039f2cd4bd99292
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-ubuntu?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/tool/QConn_Secure-ubuntu
     description: "QCR373 QConn Secure tool for Linux (Ubuntu)"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-ubuntu
 
   - path: qcr373/tool/QConn_Secure-macos
     sha256: 199728a054d9f07fdcd28309848f3e8b32770c324851b0d30e6d9f936e21f588
     type: img
     version: '1.0.0'
     license-path: zephyr/blobs/license.txt
-    url: https://review-android.quicinc.com/a/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-macos?format=TEXT
-    fetcher: gitiles
+    url: https://softwarecenter.qualcomm.com/nexus/generic/product/chip/software-product/QCC740.ZE.1.0/qcc740.ze.1.0-qca-oem-sdk-art/r00005.1/IOT.OPALZE.1.0.R1/apps_proc/qcr373/tool/QConn_Secure-macos
     description: "QCR373 QConn Secure tool for macOS"
-    doc-url: https://review-android.quicinc.com/plugins/gitiles/qzephyr/prop/qcc74x-bin/+/refs/heads/qcc740.qzephyr.1.0/qcr373/tool/QConn_Secure-macos
 
